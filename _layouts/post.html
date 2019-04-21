@@ -28,11 +28,7 @@ layout: default
 				{{ content }}
 
                 <hr>
-
-                <!-- facebook comments --> 
-                <!--
-                <div class="fb-comments" data-href="{{ site.url }}{{ page.url }}" data-width="100%"></div>
-                -->
+                
                 {% if page.comments %}
                     {% include comments.html %}
                 {% endif %}
