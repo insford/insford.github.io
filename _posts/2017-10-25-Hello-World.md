@@ -4,6 +4,7 @@ title:      "Hello World"
 subtitle:   " \"Hello World, Hello Blog\""
 date:       2017-10-25 00:10:00
 author:     "insford"
+comments:   true
 header-img: "img/post-bg-04.jpg"
 ---
 
