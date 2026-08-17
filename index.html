@@ -1085,7 +1085,7 @@
       </a>
 
       <!-- Card 4: Yacht License & Family Leisure Master Portal -->
-      <a href="yacht-license-guide.html" class="portal-card card-yacht" data-category="yacht" data-keywords="요트 자격증 조종면허 동력수상레저기구 면제교육 화성요트학교 아라마리나 전곡항 카타마란 쌍동선 스키퍼 멀미 kca 무선통신사 제부도 케이블카 asa 레가타">
+      <a href="/yacht-license-guide/" id="yachtCardLink" class="portal-card card-yacht" data-category="yacht" data-keywords="요트 자격증 조종면허 동력수상레저기구 면제교육 화성요트학교 아라마리나 전곡항 카타마란 쌍동선 스키퍼 멀미 kca 무선통신사 제부도 케이블카 asa 레가타">
         <div class="card-top">
           <div class="card-icon-wrap">⛵</div>
           <div class="card-badge-group">
@@ -1196,7 +1196,7 @@
           <span class="doc-arrow">↗</span>
         </a>
 
-        <a href="https://github.com/insford/antigravity/blob/main/요트자격증/Epic_01_Research/T1.1_요트_조종면허_취득_가이드.md" class="doc-item doc-link" data-local="../요트자격증/Epic_01_Research/T1.1_요트_조종면허_취득_가이드.md" target="_blank" rel="noopener">
+        <a href="https://github.com/insford/yacht-license-guide/blob/main/Epic_01_Research/T1.1_요트_조종면허_취득_가이드.md" class="doc-item doc-link" data-local="../yacht-license-guide/Epic_01_Research/T1.1_요트_조종면허_취득_가이드.md" target="_blank" rel="noopener">
           <div class="doc-info">
             <span class="doc-icon">🧭</span>
             <div>
@@ -1207,7 +1207,7 @@
           <span class="doc-arrow">↗</span>
         </a>
 
-        <a href="https://github.com/insford/antigravity/blob/main/요트자격증/Epic_03_Practice/T3.4_첫_가족_요트_체험_기획서.md" class="doc-item doc-link" data-local="../요트자격증/Epic_03_Practice/T3.4_첫_가족_요트_체험_기획서.md" target="_blank" rel="noopener">
+        <a href="https://github.com/insford/yacht-license-guide/blob/main/Epic_03_Practice/T3.4_첫_가족_요트_체험_기획서.md" class="doc-item doc-link" data-local="../yacht-license-guide/Epic_03_Practice/T3.4_첫_가족_요트_체험_기획서.md" target="_blank" rel="noopener">
           <div class="doc-info">
             <span class="doc-icon">👨‍👩‍👧‍👦</span>
             <div>
@@ -1230,7 +1230,7 @@
         <a href="/my-stock/" id="footerStockLink">주식 리밸런싱 대시보드</a>
         <a href="sydney-year-life.html">시드니 가족 브리핑</a>
         <a href="sydney-year-life-research.html">시드니 마스터 백서</a>
-        <a href="yacht-license-guide.html">요트 면허 & 가족 세일링</a>
+        <a href="/yacht-license-guide/" id="footerYachtLink">요트 면허 & 가족 세일링</a>
       </div>
       <div class="keyboard-bar">
         <span>단축키: <span class="kbd">1</span> 주식대시보드</span>
@@ -1250,12 +1250,19 @@
     // ==========================================
     const isLocalFile = window.location.protocol === 'file:';
     const stockUrl = isLocalFile ? '../my-stock/index.html' : '/my-stock/';
+    const yachtUrl = isLocalFile ? '../yacht-license-guide/index.html' : '/yacht-license-guide/';
 
     const stockCardLink = document.getElementById('stockCardLink');
     if (stockCardLink) stockCardLink.href = stockUrl;
 
     const footerStockLink = document.getElementById('footerStockLink');
     if (footerStockLink) footerStockLink.href = stockUrl;
+
+    const yachtCardLink = document.getElementById('yachtCardLink');
+    if (yachtCardLink) yachtCardLink.href = yachtUrl;
+
+    const footerYachtLink = document.getElementById('footerYachtLink');
+    if (footerYachtLink) footerYachtLink.href = yachtUrl;
 
     if (isLocalFile) {
       document.querySelectorAll('.doc-link').forEach(link => {
@@ -1416,7 +1423,7 @@
       } else if (e.key === '3') {
         window.location.href = 'sydney-year-life-research.html';
       } else if (e.key === '4') {
-        window.location.href = 'yacht-license-guide.html';
+        window.location.href = yachtUrl;
       } else if (e.key === '/') {
         e.preventDefault();
         searchInput.focus();
