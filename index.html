@@ -1,36 +1,1347 @@
----
-layout: page
-description: ""
----
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Workspace Portal | 통합 프로젝트 & 대시보드 포털</title>
+  
+  <!-- SEO & Meta -->
+  <meta name="description" content="국내주식 실시간 리밸런싱 대시보드 및 2027 시드니 1년 살기 프로젝트 통합 포털 허브">
+  <meta name="author" content="Workspace Hub">
 
-{% for post in paginator.posts %}
-<div class="post-preview">
-    <a href="{{ post.url | prepend: site.baseurl }}">
-        <h2 class="post-title">            {{ post.title }}
-        </h2>
-        {% if post.subtitle %}
-        <h3 class="post-subtitle">
-            {{ post.subtitle }}
-        </h3>
-        {% endif %}
-    </a>
-    <p class="post-meta">Posted by {% if post.author %}{{ post.author }}{% else %}{{ site.title }}{% endif %} on {{ post.date | date: "%B %-d, %Y" }}</p>
-</div>
-<hr>
-{% endfor %}
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-<!-- Pager -->
-{% if paginator.total_pages > 1 %}
-<ul class="pager">
-    {% if paginator.previous_page %}
-    <li class="previous">
-        <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&larr; Newer Posts</a>
-    </li>
-    {% endif %}
-    {% if paginator.next_page %}
-    <li class="next">
-        <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Older Posts &rarr;</a>
-    </li>
-    {% endif %}
-</ul>
-{% endif %}
+  <style>
+    :root {
+      /* Theme - Dark Default */
+      --bg-gradient: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                     radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+                     radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%),
+                     #0a0d14;
+      --bg-surface: #0a0d14;
+      --card-bg: rgba(18, 24, 38, 0.7);
+      --card-bg-hover: rgba(26, 34, 52, 0.85);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(56, 189, 248, 0.4);
+      --card-inner-bg: rgba(0, 0, 0, 0.25);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --accent-cyan: #38bdf8;
+      --accent-cyan-glow: rgba(56, 189, 248, 0.25);
+      --accent-emerald: #10b981;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.25);
+      --accent-purple: #a855f7;
+      --accent-purple-glow: rgba(168, 85, 247, 0.25);
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      
+      --header-bg: rgba(10, 13, 20, 0.85);
+      --badge-bg: rgba(255, 255, 255, 0.06);
+      --tag-bg: rgba(255, 255, 255, 0.05);
+      --tag-border: rgba(255, 255, 255, 0.08);
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 26px;
+      
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --shadow-hover: 0 20px 40px -15px rgba(0, 0, 0, 0.7);
+      
+      --font-heading: 'Outfit', sans-serif;
+      --font-kr: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg-gradient: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.1) 0%, transparent 40%),
+                     radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+                     #f8fafc;
+      --bg-surface: #f8fafc;
+      --card-bg: rgba(255, 255, 255, 0.85);
+      --card-bg-hover: #ffffff;
+      --card-border: rgba(226, 232, 240, 0.9);
+      --card-border-hover: rgba(37, 99, 235, 0.4);
+      --card-inner-bg: rgba(241, 245, 249, 0.7);
+      
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+      
+      --accent-cyan: #0284c7;
+      --accent-cyan-glow: rgba(2, 132, 199, 0.2);
+      --accent-emerald: #059669;
+      --accent-emerald-glow: rgba(5, 150, 105, 0.2);
+      --accent-purple: #7c3aed;
+      --accent-purple-glow: rgba(124, 58, 237, 0.2);
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      
+      --header-bg: rgba(255, 255, 255, 0.88);
+      --badge-bg: rgba(15, 23, 42, 0.05);
+      --tag-bg: rgba(15, 23, 42, 0.04);
+      --tag-border: rgba(15, 23, 42, 0.08);
+      
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 4px 10px -2px rgba(0, 0, 0, 0.03);
+      --shadow-hover: 0 20px 35px -10px rgba(0, 0, 0, 0.12), 0 8px 16px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-surface);
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: var(--font-kr);
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Ambient animated lighting */
+    .ambient-glow {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.12) 0%, rgba(168, 85, 247, 0.06) 50%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Layout Container */
+    .container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: var(--header-bg);
+      border-bottom: 1px solid var(--card-border);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #0284c7, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.3);
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      background: linear-gradient(135deg, var(--text-main) 30%, var(--accent-cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-text p {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Header Widgets & Controls */
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Dual Clocks Widget */
+    .time-widget {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--badge-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 9999px;
+      padding: 0.4rem 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .clock-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .clock-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-cyan);
+    }
+
+    .clock-tag.sydney {
+      background: rgba(168, 85, 247, 0.15);
+      color: var(--accent-purple);
+    }
+
+    .clock-divider {
+      color: var(--text-dim);
+      opacity: 0.5;
+    }
+
+    .theme-toggle-btn {
+      background: var(--badge-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle-btn:hover {
+      background: var(--card-inner-bg);
+      transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      padding: 3rem 0 2rem;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 1rem;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--accent-cyan);
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      backdrop-filter: blur(8px);
+    }
+
+    .hero-badge .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: 2.75rem;
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title span {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      max-width: 680px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+
+    /* Search & Filter Controls */
+    .controls-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+      align-items: center;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.85rem 3rem 0.85rem 2.8rem;
+      border-radius: 9999px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: var(--font-kr);
+      backdrop-filter: blur(12px);
+      outline: none;
+      transition: all 0.25s ease;
+      box-shadow: var(--shadow-card);
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 4px var(--accent-cyan-glow);
+    }
+
+    .search-box .search-icon {
+      position: absolute;
+      left: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-dim);
+      font-size: 1rem;
+      pointer-events: none;
+    }
+
+    .search-box .search-clear {
+      position: absolute;
+      right: 1.1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 0.9rem;
+      padding: 4px;
+      display: none;
+    }
+
+    .search-box .search-clear.visible {
+      display: block;
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 0.5rem;
+      background: var(--card-inner-bg);
+      padding: 0.35rem;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1.1rem;
+      border-radius: 9999px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .filter-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .filter-btn.active {
+      background: var(--text-main);
+      color: var(--bg-surface);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Cards Grid */
+    .portal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 1.75rem;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Portal Card */
+    .portal-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-card);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .portal-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent-cyan)), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .portal-card:hover {
+      transform: translateY(-6px);
+      background: var(--card-bg-hover);
+      border-color: var(--card-border-hover);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .portal-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Card Themes */
+    .portal-card.card-stock {
+      --card-accent: #38bdf8;
+      --card-glow: var(--accent-cyan-glow);
+    }
+
+    .portal-card.card-sydney-briefing {
+      --card-accent: #10b981;
+      --card-glow: var(--accent-emerald-glow);
+    }
+
+    .portal-card.card-sydney-master {
+      --card-accent: #8b5cf6;
+      --card-glow: var(--accent-purple-glow);
+    }
+
+    /* Card Top Bar */
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.25rem;
+      gap: 0.75rem;
+    }
+
+    .card-icon-wrap {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.85rem;
+      flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+
+    .portal-card:hover .card-icon-wrap {
+      transform: scale(1.08) rotate(3deg);
+    }
+
+    .card-badge-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.35rem;
+    }
+
+    .category-badge {
+      font-family: var(--font-heading);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--card-accent);
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.65rem;
+      border-radius: 9999px;
+      background: var(--card-inner-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--card-border);
+    }
+
+    .status-pill.live {
+      background: rgba(34, 197, 94, 0.12);
+      border-color: rgba(34, 197, 94, 0.3);
+      color: #4ade80;
+    }
+
+    .status-pill .indicator-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .status-pill.live .indicator-dot {
+      animation: pulse 1.8s infinite;
+    }
+
+    /* Card Content */
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 1.4rem;
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 0.6rem;
+      color: var(--text-main);
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+    }
+
+    /* Feature Highlights List */
+    .feature-list {
+      list-style: none;
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .feature-item {
+      font-size: 0.85rem;
+      color: var(--text-main);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      line-height: 1.5;
+    }
+
+    .feature-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .feature-item strong {
+      color: var(--card-accent);
+      font-weight: 700;
+    }
+
+    /* Card Tags */
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      background: var(--tag-bg);
+      border: 1px solid var(--tag-border);
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      transition: all 0.2s ease;
+    }
+
+    .portal-card:hover .tag {
+      color: var(--text-muted);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    /* Card Action Button */
+    .card-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1.2rem;
+      border-top: 1px solid var(--card-border);
+      margin-top: auto;
+    }
+
+    .action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--card-accent);
+      transition: gap 0.2s ease, transform 0.2s ease;
+    }
+
+    .action-btn .arrow {
+      font-size: 1.1rem;
+      transition: transform 0.2s ease;
+    }
+
+    .portal-card:hover .action-btn .arrow {
+      transform: translateX(4px);
+    }
+
+    .shortcut-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      background: var(--badge-bg);
+      border: 1px solid var(--card-border);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    /* Secondary Resources Section */
+    .resources-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      backdrop-filter: blur(12px);
+      margin-bottom: 4rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 1.3rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .section-badge {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      background: var(--card-inner-bg);
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+    }
+
+    .docs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .doc-item {
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+
+    .doc-item:hover {
+      background: var(--card-bg-hover);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+
+    .doc-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .doc-icon {
+      font-size: 1.25rem;
+    }
+
+    .doc-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .doc-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .doc-arrow {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      transition: transform 0.2s;
+    }
+
+    .doc-item:hover .doc-arrow {
+      color: var(--accent-cyan);
+      transform: translateX(3px);
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      border-top: 1px solid var(--card-border);
+      background: var(--card-bg);
+      padding: 2rem 0;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    /* Keyboard shortcut helper bar */
+    .keyboard-bar {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .kbd {
+      background: var(--card-inner-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.1rem;
+      }
+      .hero-desc {
+        font-size: 0.95rem;
+      }
+      .portal-grid {
+        grid-template-columns: 1fr;
+      }
+      .time-widget {
+        display: none;
+      }
+      .portal-card {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Empty search state */
+    .no-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--text-muted);
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- Header Navigation -->
+  <header>
+    <div class="container">
+      <div class="header-inner">
+        <a href="index.html" class="brand">
+          <div class="brand-icon">🪐</div>
+          <div class="brand-text">
+            <h1>WORKSPACE HUB</h1>
+            <p>Integrated Portal & Dashboards</p>
+          </div>
+        </a>
+
+        <div class="header-controls">
+          <!-- Live Dual Timezone Clocks -->
+          <div class="time-widget" title="실시간 서울 & 시드니 시계">
+            <div class="clock-item">
+              <span class="clock-tag">SEOUL</span>
+              <span id="seoulClock">--:--:--</span>
+            </div>
+            <span class="clock-divider">|</span>
+            <div class="clock-item">
+              <span class="clock-tag sydney">SYDNEY</span>
+              <span id="sydneyClock">--:--:--</span>
+            </div>
+          </div>
+
+          <!-- Dark/Light Theme Toggle -->
+          <button class="theme-toggle-btn" id="themeToggleBtn" title="다크/라이트 모드 전환" aria-label="테마 전환">
+            ☀️
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-badge">
+        <span class="pulse-dot"></span>
+        <span>WORKSPACE MISSION PORTAL</span>
+      </div>
+      <h2 class="hero-title">
+        스마트 자산 리밸런싱 &<br>
+        <span>시드니 1년 살기 마스터 허브</span>
+      </h2>
+      <p class="hero-desc">
+        국내주식 실시간 시세 포트폴리오 관리와 2027 시드니 유학휴직 프로젝트의 모든 가이드 및 리서치 백서를 한곳에서 탐색하세요.
+      </p>
+
+      <!-- Search & Category Filters -->
+      <div class="controls-wrapper">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="대시보드 검색 (예: KOSPI, 리밸런싱, 유학휴직, 예산, 어학원, 호봉...)" autocomplete="off">
+          <button class="search-clear" id="searchClearBtn" title="검색어 지우기">✕</button>
+        </div>
+
+        <div class="filter-tabs" role="tablist">
+          <button class="filter-btn active" data-category="all">🌟 전체 보기 (All)</button>
+          <button class="filter-btn" data-category="finance">📈 주식 & 자산배분</button>
+          <button class="filter-btn" data-category="sydney">🦘 시드니 1년 살기</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portal Cards Grid -->
+    <div class="portal-grid" id="portalGrid">
+
+      <!-- Card 1: Domestic Stock Rebalancing Dashboard -->
+      <a href="/my-stock/" id="stockCardLink" class="portal-card card-stock" data-category="finance" data-keywords="주식 국내주식 코스피 kospi 리밸런싱 삼성전자 sk하이닉스 자산배분 반도체비중 시세 차트 etf 매매">
+        <div class="card-top">
+          <div class="card-icon-wrap">📈</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Asset Rebalancing</span>
+            <span class="status-pill live">
+              <span class="indicator-dot"></span>
+              Live 자동 갱신 (10분)
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">국내주식 실시간 포트폴리오 리밸런싱 대시보드</h3>
+        <p class="card-desc">
+          KOSPI 6,000 ~ 8,500 박스권 전략 기반 네이버 증권 API 실시간 시세 연동 및 비중 이탈(±8%p) 자동 감지 엔진
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">⚡</span>
+            <span><strong>실시간 시세 연동</strong>: 삼전·하이닉스·ETF 최신 가격 자동 수집</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🎯</span>
+            <span><strong>지수 밴드 리밸런싱</strong>: KOSPI 7단계 목표 비중 및 매매 가이드 산출</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">📊</span>
+            <span><strong>자산 배분 시각화</strong>: 종목별 평가액 도넛 차트 & 모바일 반응형 뷰</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#KOSPI_6000_8500</span>
+          <span class="tag">#반도체목표비중</span>
+          <span class="tag">#실시간시세</span>
+          <span class="tag">#자동리밸런싱</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            대시보드 바로가기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [1]</span>
+        </div>
+      </a>
+
+      <!-- Card 2: Sydney Year Life Family Briefing -->
+      <a href="sydney-year-life.html" class="portal-card card-sydney-briefing" data-category="sydney" data-keywords="시드니 해외 1년 살기 가족 플랜 브리핑 로드맵 예산 노스쇼어 학교 어학원 정착">
+        <div class="card-top">
+          <div class="card-icon-wrap">👨‍👩‍👧‍👦</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Family Briefing Guide</span>
+            <span class="status-pill">
+              <span class="indicator-dot" style="background:#10b981;"></span>
+              2027 브리핑 가이드
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">시드니 1년 살기 가족 플랜 (가족 브리핑 가이드)</h3>
+        <p class="card-desc">
+          가족 간 의사결정과 공감대 형성을 위해 핵심 정보만을 집약한 시각적 브리핑 가이드 및 3단계 실행 로드맵
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">🗺️</span>
+            <span><strong>3단계 의사결정 로드맵</strong>: 핵심결정 ➔ 주거/학교 ➔ 출국 준비 흐름도</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">💰</span>
+            <span><strong>핵심 예산 요약</strong>: 1년 총 소요비용 (1.05억~1.15억) 명확한 구조화</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🏡</span>
+            <span><strong>주거·통학 비주얼 가이드</strong>: 노스쇼어 및 북서부 거주 권역 직관적 비교</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#가족브리핑</span>
+          <span class="tag">#3단계로드맵</span>
+          <span class="tag">#핵심예산요약</span>
+          <span class="tag">#노스쇼어</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            가족 가이드 열기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [2]</span>
+        </div>
+      </a>
+
+      <!-- Card 3: Sydney Year Life Master Research Portal -->
+      <a href="sydney-year-life-research.html" class="portal-card card-sydney-master" data-category="sydney" data-keywords="시드니 리서치 마스터 백서 유학휴직 교원 경기도교육청 어학원 공립초 시뮬레이터 비자500 590 체크리스트 호봉 승급">
+        <div class="card-top">
+          <div class="card-icon-wrap">🏛️</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Master Whitepaper</span>
+            <span class="status-pill">
+              <span class="indicator-dot" style="background:#8b5cf6;"></span>
+              Full Master Edition
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">시드니 1년 살기 리서치 포털 | 마스터 종합 백서</h3>
+        <p class="card-desc">
+          2027 시드니 연수 & 교원 유학휴직 프로젝트의 모든 법령, 행정 서식, 정밀 예산, 학교 매칭 데이터가 집약된 마스터 백서
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">📋</span>
+            <span><strong>교원 유학휴직 완벽 행정</strong>: 2025 인사편람 기반 서류·심사·호봉 가이드</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🏫</span>
+            <span><strong>교육기관 & 주거 매칭</strong>: 어학원(나비타스/맥quarie) 및 공립초 세부 분석</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🧮</span>
+            <span><strong>인터랙티브 예산 시뮬레이터</strong>: 환율·주거형태 실시간 연동 정밀 계산기</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#교원유학휴직</span>
+          <span class="tag">#어학원_공립초</span>
+          <span class="tag">#정밀예산시뮬레이터</span>
+          <span class="tag">#365정착체크리스트</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            마스터 백서 열기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [3]</span>
+        </div>
+      </a>
+
+      <!-- No search results fallback -->
+      <div class="no-results" id="noResultsMsg">
+        <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</p>
+        <p style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);">검색 결과가 없습니다.</p>
+        <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.25rem;">다른 키워드로 검색해보세요.</p>
+      </div>
+
+    </div>
+
+    <!-- Quick Docs & Guides Section -->
+    <section class="resources-section">
+      <div class="section-header">
+        <div class="section-title">
+          <span>📚</span>
+          <span>전략 문서 및 보조 가이드 (Repository Docs)</span>
+        </div>
+        <span class="section-badge">Reference Guides</span>
+      </div>
+
+      <div class="docs-grid">
+        <a href="https://github.com/insford/my-stock/blob/main/guide/국내주식_리밸런싱_전략.md" class="doc-item doc-link" data-local="../my-stock/guide/국내주식_리밸런싱_전략.md" target="_blank" rel="noopener">
+          <div class="doc-info">
+            <span class="doc-icon">📐</span>
+            <div>
+              <div class="doc-name">국내주식 리밸런싱 전략</div>
+              <div class="doc-meta">KOSPI 6000~8500 완화형 매트릭스 지침</div>
+            </div>
+          </div>
+          <span class="doc-arrow">↗</span>
+        </a>
+
+        <a href="https://github.com/insford/my-stock/blob/main/guide/국내주식_리밸런싱_종목선택.md" class="doc-item doc-link" data-local="../my-stock/guide/국내주식_리밸런싱_종목선택.md" target="_blank" rel="noopener">
+          <div class="doc-info">
+            <span class="doc-icon">🏷️</span>
+            <div>
+              <div class="doc-name">리밸런싱 종목 선정 및 비중</div>
+              <div class="doc-meta">반도체 2종 및 방어형 ETF 5종 분석</div>
+            </div>
+          </div>
+          <span class="doc-arrow">↗</span>
+        </a>
+
+        <a href="https://github.com/insford/my-stock/blob/main/guide/매매일지.md" class="doc-item doc-link" data-local="../my-stock/guide/매매일지.md" target="_blank" rel="noopener">
+          <div class="doc-info">
+            <span class="doc-icon">📝</span>
+            <div>
+              <div class="doc-name">리밸런싱 매매일지</div>
+              <div class="doc-meta">실제 집행 내역 및 포트폴리오 히스토리</div>
+            </div>
+          </div>
+          <span class="doc-arrow">↗</span>
+        </a>
+
+        <a href="https://github.com/insford/my-stock/blob/main/README.md" class="doc-item doc-link" data-local="../my-stock/README.md" target="_blank" rel="noopener">
+          <div class="doc-info">
+            <span class="doc-icon">📖</span>
+            <div>
+              <div class="doc-name">my-stock 프로젝트 README</div>
+              <div class="doc-meta">자동 수집 아키텍처 및 시스템 가이드</div>
+            </div>
+          </div>
+          <span class="doc-arrow">↗</span>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <p><strong>Workspace Unified Portal</strong> • Designed for High Efficiency & Clean Aesthetic</p>
+      <div class="footer-links">
+        <a href="/my-stock/" id="footerStockLink">주식 리밸런싱 대시보드</a>
+        <a href="sydney-year-life.html">시드니 가족 브리핑</a>
+        <a href="sydney-year-life-research.html">시드니 마스터 백서</a>
+      </div>
+      <div class="keyboard-bar">
+        <span>단축키: <span class="kbd">1</span> 주식대시보드</span>
+        <span><span class="kbd">2</span> 시드니가족플랜</span>
+        <span><span class="kbd">3</span> 시드니마스터백서</span>
+        <span><span class="kbd">/</span> 검색창 이동</span>
+        <span><span class="kbd">ESC</span> 검색 초기화</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // ==========================================
+    // 0. Environment Aware URL Handling
+    // ==========================================
+    const isLocalFile = window.location.protocol === 'file:';
+    const stockUrl = isLocalFile ? '../my-stock/index.html' : '/my-stock/';
+
+    const stockCardLink = document.getElementById('stockCardLink');
+    if (stockCardLink) stockCardLink.href = stockUrl;
+
+    const footerStockLink = document.getElementById('footerStockLink');
+    if (footerStockLink) footerStockLink.href = stockUrl;
+
+    if (isLocalFile) {
+      document.querySelectorAll('.doc-link').forEach(link => {
+        const localPath = link.getAttribute('data-local');
+        if (localPath) link.href = localPath;
+      });
+    }
+
+    // ==========================================
+    // 1. Dual Real-time Clocks (Seoul & Sydney)
+    // ==========================================
+    function updateClocks() {
+      const now = new Date();
+
+      // Seoul Time (Asia/Seoul)
+      const seoulOptions = {
+        timeZone: 'Asia/Seoul',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      };
+      const seoulFormatter = new Intl.DateTimeFormat('ko-KR', seoulOptions);
+      const seoulEl = document.getElementById('seoulClock');
+      if (seoulEl) seoulEl.textContent = seoulFormatter.format(now);
+
+      // Sydney Time (Australia/Sydney - automatically accounts for DST/AEDT/AEST)
+      const sydneyOptions = {
+        timeZone: 'Australia/Sydney',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      };
+      const sydneyFormatter = new Intl.DateTimeFormat('en-AU', sydneyOptions);
+      const sydneyEl = document.getElementById('sydneyClock');
+      if (sydneyEl) sydneyEl.textContent = sydneyFormatter.format(now);
+    }
+    setInterval(updateClocks, 1000);
+    updateClocks();
+
+    // ==========================================
+    // 2. Dark / Light Theme Manager
+    // ==========================================
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+    // Check saved theme or default to dark
+    const savedTheme = localStorage.getItem('portal_theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+    setTheme(savedTheme);
+
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.documentElement.setAttribute('data-theme', 'light');
+        themeToggleBtn.textContent = '🌙';
+        themeToggleBtn.title = '다크 모드로 전환';
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        themeToggleBtn.textContent = '☀️';
+        themeToggleBtn.title = '라이트 모드로 전환';
+      }
+      localStorage.setItem('portal_theme', theme);
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      setTheme(newTheme);
+    });
+
+    // ==========================================
+    // 3. Search & Category Filtering
+    // ==========================================
+    const searchInput = document.getElementById('searchInput');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.portal-card');
+    const noResultsMsg = document.getElementById('noResultsMsg');
+
+    let currentCategory = 'all';
+    let searchQuery = '';
+
+    function applyFilters() {
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const keywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+        const text = card.textContent.toLowerCase();
+
+        const matchesCategory = (currentCategory === 'all') || (category === currentCategory);
+        const matchesSearch = !searchQuery || keywords.includes(searchQuery) || text.includes(searchQuery);
+
+        if (matchesCategory && matchesSearch) {
+          card.style.display = 'flex';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (visibleCount === 0) {
+        noResultsMsg.style.display = 'block';
+      } else {
+        noResultsMsg.style.display = 'none';
+      }
+    }
+
+    // Filter Buttons
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentCategory = btn.getAttribute('data-category');
+        applyFilters();
+      });
+    });
+
+    // Search Input
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim().toLowerCase();
+      if (searchQuery.length > 0) {
+        searchClearBtn.classList.add('visible');
+      } else {
+        searchClearBtn.classList.remove('visible');
+      }
+      applyFilters();
+    });
+
+    searchClearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchQuery = '';
+      searchClearBtn.classList.remove('visible');
+      searchInput.focus();
+      applyFilters();
+    });
+
+    // ==========================================
+    // 4. Keyboard Shortcuts
+    // ==========================================
+    window.addEventListener('keydown', (e) => {
+      // If typing in input, don't trigger number shortcuts
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          searchQuery = '';
+          searchClearBtn.classList.remove('visible');
+          searchInput.blur();
+          applyFilters();
+        }
+        return;
+      }
+
+      if (e.key === '1') {
+        window.location.href = stockUrl;
+      } else if (e.key === '2') {
+        window.location.href = 'sydney-year-life.html';
+      } else if (e.key === '3') {
+        window.location.href = 'sydney-year-life-research.html';
+      } else if (e.key === '/') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+  </script>
+</body>
+</html>
