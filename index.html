@@ -1308,10 +1308,8 @@
     // 2. Dark / Light Theme Manager
     // ==========================================
     const themeToggleBtn = document.getElementById('themeToggleBtn');
-    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-
-    // Check saved theme or default to dark
-    const savedTheme = localStorage.getItem('portal_theme') || (prefersDarkScheme.matches ? 'dark' : 'light');
+    // Check saved theme or default to dark (default: dark)
+    const savedTheme = localStorage.getItem('portal_theme') || 'dark';
     setTheme(savedTheme);
 
     function setTheme(theme) {
