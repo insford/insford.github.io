@@ -487,6 +487,11 @@
       --card-glow: var(--accent-purple-glow);
     }
 
+    .portal-card.card-yacht {
+      --card-accent: #06b6d4;
+      --card-glow: rgba(6, 182, 212, 0.25);
+    }
+
     /* Card Top Bar */
     .card-top {
       display: flex;
@@ -927,6 +932,7 @@
           <button class="filter-btn active" data-category="all">🌟 전체 보기 (All)</button>
           <button class="filter-btn" data-category="finance">📈 주식 & 자산배분</button>
           <button class="filter-btn" data-category="sydney">🦘 시드니 1년 살기</button>
+          <button class="filter-btn" data-category="yacht">⛵ 요트 & 해양레저</button>
         </div>
       </div>
     </section>
@@ -1078,6 +1084,54 @@
         </div>
       </a>
 
+      <!-- Card 4: Yacht License & Family Leisure Master Portal -->
+      <a href="yacht-license-guide.html" class="portal-card card-yacht" data-category="yacht" data-keywords="요트 자격증 조종면허 동력수상레저기구 면제교육 화성요트학교 아라마리나 전곡항 카타마란 쌍동선 스키퍼 멀미 kca 무선통신사 제부도 케이블카 asa 레가타">
+        <div class="card-top">
+          <div class="card-icon-wrap">⛵</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Yacht & Leisure Hub</span>
+            <span class="status-pill">
+              <span class="indicator-dot" style="background:#06b6d4;"></span>
+              2026 Master Edition
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">요트 조종면허 & 가족 세일링 마스터 포털</h3>
+        <p class="card-desc">
+          수원 광교 출발 40시간 무시험 면제교육(100% 합격) 로드맵 및 8인 대가족 카타마란 프라이빗 차터 1일 풀코스 종합 가이드
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">🧭</span>
+            <span><strong>40h 무시험 면제교육</strong>: 화성 전곡항(50분) & 김포(도민 50% 감면 38.5만)</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">👨‍👩‍👧‍👦</span>
+            <span><strong>카타마란 가족 차터</strong>: 쌍동선 롤링 멀미 0% + 전문 스키퍼 하이브리드 조타</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🧮</span>
+            <span><strong>실전 시뮬레이터 & 안전</strong>: 실시간 종합 예산 계산기 & 기상 Go/No-Go 판정기</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#40h면제교육</span>
+          <span class="tag">#화성전곡항_50분</span>
+          <span class="tag">#카타마란_멀미0%</span>
+          <span class="tag">#8인가족풀코스</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            요트 마스터 가이드 열기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [4]</span>
+        </div>
+      </a>
+
       <!-- No search results fallback -->
       <div class="no-results" id="noResultsMsg">
         <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</p>
@@ -1141,6 +1195,28 @@
           </div>
           <span class="doc-arrow">↗</span>
         </a>
+
+        <a href="https://github.com/insford/antigravity/blob/main/요트자격증/Epic_01_Research/T1.1_요트_조종면허_취득_가이드.md" class="doc-item doc-link" data-local="../요트자격증/Epic_01_Research/T1.1_요트_조종면허_취득_가이드.md" target="_blank" rel="noopener">
+          <div class="doc-info">
+            <span class="doc-icon">🧭</span>
+            <div>
+              <div class="doc-name">요트 조종면허 취득 가이드</div>
+              <div class="doc-meta">시험 응시 vs 40시간 면제교육 및 도민 감면</div>
+            </div>
+          </div>
+          <span class="doc-arrow">↗</span>
+        </a>
+
+        <a href="https://github.com/insford/antigravity/blob/main/요트자격증/Epic_03_Practice/T3.4_첫_가족_요트_체험_기획서.md" class="doc-item doc-link" data-local="../요트자격증/Epic_03_Practice/T3.4_첫_가족_요트_체험_기획서.md" target="_blank" rel="noopener">
+          <div class="doc-info">
+            <span class="doc-icon">👨‍👩‍👧‍👦</span>
+            <div>
+              <div class="doc-name">첫 가족 요트 체험 기획서</div>
+              <div class="doc-meta">전곡항 카타마란 & 케이블카 8인 1일 투어</div>
+            </div>
+          </div>
+          <span class="doc-arrow">↗</span>
+        </a>
       </div>
     </section>
 
@@ -1154,11 +1230,13 @@
         <a href="/my-stock/" id="footerStockLink">주식 리밸런싱 대시보드</a>
         <a href="sydney-year-life.html">시드니 가족 브리핑</a>
         <a href="sydney-year-life-research.html">시드니 마스터 백서</a>
+        <a href="yacht-license-guide.html">요트 면허 & 가족 세일링</a>
       </div>
       <div class="keyboard-bar">
         <span>단축키: <span class="kbd">1</span> 주식대시보드</span>
         <span><span class="kbd">2</span> 시드니가족플랜</span>
         <span><span class="kbd">3</span> 시드니마스터백서</span>
+        <span><span class="kbd">4</span> 요트마스터가이드</span>
         <span><span class="kbd">/</span> 검색창 이동</span>
         <span><span class="kbd">ESC</span> 검색 초기화</span>
       </div>
@@ -1337,6 +1415,8 @@
         window.location.href = 'sydney-year-life.html';
       } else if (e.key === '3') {
         window.location.href = 'sydney-year-life-research.html';
+      } else if (e.key === '4') {
+        window.location.href = 'yacht-license-guide.html';
       } else if (e.key === '/') {
         e.preventDefault();
         searchInput.focus();
