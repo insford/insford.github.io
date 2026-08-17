@@ -933,6 +933,7 @@
           <button class="filter-btn" data-category="finance">📈 주식 & 자산배분</button>
           <button class="filter-btn" data-category="sydney">🦘 시드니 1년 살기</button>
           <button class="filter-btn" data-category="yacht">⛵ 요트 & 해양레저</button>
+          <button class="filter-btn" data-category="kids">🚗 아이와 국내여행</button>
         </div>
       </div>
     </section>
@@ -1132,6 +1133,54 @@
         </div>
       </a>
 
+      <!-- Card 5: Kids Trip Korea (전국 192개소 완결 포털) -->
+      <a href="/kids-trip-korea/" id="kidsCardLink" class="portal-card card-kids" data-category="kids" data-keywords="아이와여행 국내여행 캠핑장 자연휴양림 국립공원 숲나들e 숲체원 생태탐방원 팜스테이 카라반 글램핑 계곡 물놀이 광교 오픈런 캘린더 192선">
+        <div class="card-top">
+          <div class="card-icon-wrap">🚗</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Kids Trip Korea</span>
+            <span class="status-pill">
+              <span class="indicator-dot" style="background:#10b981;"></span>
+              192개소 완결 포털
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">아이와 국내여행 포털 | 전국 192선 완결 가이드</h3>
+        <p class="card-desc">
+          수원 광교 기준 만 5~7세 쌍둥이 가족 맞춤 공공캠핑장(60), 국·공립 자연휴양림(63), 국립공원·생태탐방원(43), 산림치유원(14), 팜스테이(12) 인터랙티브 가이드
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">🧭</span>
+            <span><strong>다차원 실시간 필터 & 지도</strong>: 출발지(GPS/광교/판교) 거리 연산 & Leaflet 전국 지도</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">⛺</span>
+            <span><strong>무텐트 & 부모 안심 퀵체크</strong>: 카라반·통나무집, 문앞주차, 온돌, 비상 소아응급실 연동</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">📅</span>
+            <span><strong>예약 오픈런 & D-Day 캘린더</strong>: 숲나들e·국립공원 선착순/추첨 일정 & 스마트폰 .ics 등록</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#전국192개소완결</span>
+          <span class="tag">#무텐트_카라반_숲캉스</span>
+          <span class="tag">#예약오픈런캘린더</span>
+          <span class="tag">#부모안심퀵체크</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            키즈 트립 포털 열기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [5]</span>
+        </div>
+      </a>
+
       <!-- No search results fallback -->
       <div class="no-results" id="noResultsMsg">
         <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</p>
@@ -1231,12 +1280,14 @@
         <a href="sydney-year-life.html">시드니 가족 브리핑</a>
         <a href="sydney-year-life-research.html">시드니 마스터 백서</a>
         <a href="/yacht-license-guide/" id="footerYachtLink">요트 면허 & 가족 세일링</a>
+        <a href="/kids-trip-korea/" id="footerKidsLink">아이와 국내여행 포털</a>
       </div>
       <div class="keyboard-bar">
         <span>단축키: <span class="kbd">1</span> 주식대시보드</span>
         <span><span class="kbd">2</span> 시드니가족플랜</span>
         <span><span class="kbd">3</span> 시드니마스터백서</span>
         <span><span class="kbd">4</span> 요트마스터가이드</span>
+        <span><span class="kbd">5</span> 아이와국내여행</span>
         <span><span class="kbd">/</span> 검색창 이동</span>
         <span><span class="kbd">ESC</span> 검색 초기화</span>
       </div>
@@ -1251,6 +1302,7 @@
     const isLocalFile = window.location.protocol === 'file:';
     const stockUrl = isLocalFile ? '../my-stock/index.html' : '/my-stock/';
     const yachtUrl = isLocalFile ? '../yacht-license-guide/index.html' : '/yacht-license-guide/';
+    const kidsUrl = isLocalFile ? '../kids-trip-korea/index.html' : '/kids-trip-korea/';
 
     const stockCardLink = document.getElementById('stockCardLink');
     if (stockCardLink) stockCardLink.href = stockUrl;
@@ -1263,6 +1315,12 @@
 
     const footerYachtLink = document.getElementById('footerYachtLink');
     if (footerYachtLink) footerYachtLink.href = yachtUrl;
+
+    const kidsCardLink = document.getElementById('kidsCardLink');
+    if (kidsCardLink) kidsCardLink.href = kidsUrl;
+
+    const footerKidsLink = document.getElementById('footerKidsLink');
+    if (footerKidsLink) footerKidsLink.href = kidsUrl;
 
     if (isLocalFile) {
       document.querySelectorAll('.doc-link').forEach(link => {
@@ -1422,6 +1480,8 @@
         window.location.href = 'sydney-year-life-research.html';
       } else if (e.key === '4') {
         window.location.href = yachtUrl;
+      } else if (e.key === '5') {
+        window.location.href = kidsUrl;
       } else if (e.key === '/') {
         e.preventDefault();
         searchInput.focus();
