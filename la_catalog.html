@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>웨스트코스트 패밀리 로드트립 — 권역별 관광지 카탈로그</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#F3EEE1; --surface:#FFFCF5; --surface-2:#ECE3CE; --ink:#2B2420; --ink-soft:#73685B;
+  --line:#DCD2BA; --accent:#1F6E70; --accent-ink:#FFFFFF; --stamp:#D8572A; --warn:#AE3B2C;
+  --good:#2E7D4A;
+  --shadow:0 1px 2px rgba(43,36,32,.08), 0 10px 26px -14px rgba(43,36,32,.22);
+  --c-vegas:#B5432B; --c-vegas-bg:#F6E1D3; --c-sd:#1C7A80; --c-sd-bg:#D9EEEE;
+  --c-la:#B9821B; --c-la-bg:#F3E4BE; --c-oc:#3C7D4B; --c-oc-bg:#DFEED8;
+}
+*{box-sizing:border-box;}
+html,body{background:var(--bg); color:var(--ink); font-family:"Archivo",system-ui,sans-serif; margin:0;}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif; margin:0;}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;}
+a{color:var(--accent);}
+.wrap{max-width:1480px; margin:0 auto; padding-inline:20px;}
+
+.masthead{padding-block:40px 24px; border-bottom:2px solid var(--line);}
+.masthead .eyebrow{font-family:"IBM Plex Mono",monospace; font-size:.78rem; letter-spacing:.14em; text-transform:uppercase; color:var(--stamp); font-weight:500;}
+.masthead h1{font-size:clamp(1.9rem,4.2vw,3rem); font-weight:700; margin-top:6px; line-height:1.08;}
+.masthead .sub{color:var(--ink-soft); font-size:1.02rem; margin-top:10px; max-width:720px; line-height:1.55;}
+.route{display:flex; align-items:center; gap:0; margin-top:24px; overflow-x:auto; padding-bottom:4px;}
+.route .stop{display:flex; flex-direction:column; align-items:center; min-width:92px; flex-shrink:0;}
+.route .dot{width:13px;height:13px;border-radius:50%; border:3px solid var(--surface);}
+.route .label{margin-top:8px; font-weight:700; font-size:.86rem; text-align:center;}
+.route .note{font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--ink-soft);}
+.route .seg{flex:1; min-width:28px; height:0; border-top:2px dashed var(--line); margin-top:6px;}
+.meta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;}
+.meta-chip{font-family:"IBM Plex Mono",monospace; font-size:.78rem; background:var(--surface); border:1px solid var(--line); border-radius:100px; padding:6px 14px; color:var(--ink-soft);}
+.meta-chip.flag{color:var(--stamp); border-color:var(--stamp); font-weight:600;}
+
+.viewtabs{display:flex; gap:8px; padding:16px 0; position:sticky; top:0; background:var(--bg); z-index:30; border-bottom:1px solid var(--line);}
+.viewtab{font-family:"Fraunces",serif; font-size:1rem; font-weight:600; padding:9px 20px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer;}
+.viewtab[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+
+.curator{padding-block:26px;}
+.curator h2{font-size:1.3rem; margin-bottom:4px;}
+.curator .hint{color:var(--ink-soft); font-size:.88rem; margin-bottom:18px;}
+.theme-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px;}
+.theme-card{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 16px 10px; box-shadow:var(--shadow);}
+.theme-card .t-title{font-weight:700; font-size:.92rem; margin-bottom:10px; display:flex; align-items:center; gap:6px;}
+.pick-list{display:flex; flex-direction:column; gap:6px;}
+.pick-btn{display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:none; border:none; padding:6px 8px; border-radius:8px; cursor:pointer; color:var(--ink); font:inherit; font-size:.86rem;}
+.pick-btn:hover, .pick-btn:focus-visible{background:var(--surface-2); outline:none;}
+.pick-rank{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-soft); width:1.1em;}
+
+.controls{position:sticky; top:57px; z-index:20; background:var(--bg); border-bottom:1px solid var(--line); padding-block:14px;}
+.controls-inner{display:flex; flex-direction:column; gap:10px;}
+.tabrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.tab{font-family:"IBM Plex Mono",monospace; font-size:.78rem; font-weight:500; border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:7px 14px; border-radius:100px; cursor:pointer;}
+.tab[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
+.chiprow{display:flex; gap:7px; flex-wrap:wrap;}
+.chip{font-size:.8rem; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); padding:6px 12px; border-radius:100px; cursor:pointer; display:inline-flex; gap:5px; align-items:center;}
+.chip[aria-pressed="true"]{background:var(--surface-2); color:var(--ink); border-color:var(--ink-soft); font-weight:600;}
+.searchrow{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+#q{flex:1; min-width:180px; max-width:360px; font:inherit; font-size:.88rem; padding:8px 12px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+.count{font-family:"IBM Plex Mono",monospace; font-size:.78rem; color:var(--ink-soft); white-space:nowrap;}
+.reset{font-size:.78rem; color:var(--warn); background:none; border:none; cursor:pointer; text-decoration:underline; font-family:inherit; padding:0;}
+
+.leg{padding-block:30px;}
+.leg-head{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; margin-bottom:18px; padding-bottom:14px; border-bottom:3px solid var(--leg-c);}
+.leg-no{font-family:"IBM Plex Mono",monospace; font-size:.78rem; background:var(--leg-c); color:#fff; padding:3px 10px; border-radius:6px; font-weight:600;}
+.leg-head h2{font-size:1.5rem; color:var(--leg-c);}
+.leg-head .leg-sub{color:var(--ink-soft); font-size:.9rem;}
+.leg-head .leg-note{font-family:"IBM Plex Mono",monospace; font-size:.74rem; color:var(--ink-soft); margin-left:auto; background:var(--surface-2); padding:4px 10px; border-radius:100px;}
+
+.grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:26px;}
+@media (max-width:860px){ .grid{grid-template-columns:1fr;} }
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; transition:box-shadow .3s;}
+.card.flash{box-shadow:0 0 0 3px var(--accent), var(--shadow);}
+.banner{background:var(--card-bg); padding:24px 22px 22px; position:relative; display:flex; align-items:center; gap:16px;}
+.ticket-no{position:absolute; top:12px; left:14px; font-family:"IBM Plex Mono",monospace; font-size:.68rem; color:var(--card-c); font-weight:600; opacity:.75;}
+.emoji{font-size:2.6rem; line-height:1; flex-shrink:0;}
+.banner h3{font-size:1.3rem; color:var(--card-c); line-height:1.2;}
+.en{font-size:.78rem; color:var(--ink-soft); margin-top:3px; font-style:italic;}
+.perf{border-top:2px dashed var(--line); position:relative; margin:0 16px;}
+.perf::before,.perf::after{content:"";position:absolute; top:-4px; width:7px;height:7px;border-radius:50%; background:var(--line);}
+.perf::before{left:-3px;} .perf::after{right:-3px;}
+.badges{display:flex; gap:6px; flex-wrap:wrap; padding:14px 20px 0;}
+.badge{font-size:.68rem; font-weight:600; padding:3px 9px; border-radius:100px; font-family:"IBM Plex Mono",monospace;}
+.b-existing{background:var(--surface-2); color:var(--ink-soft);}
+.b-new{background:var(--card-bg); color:var(--card-c);}
+.b-confirmed{background:var(--stamp); color:#fff;}
+.b-review{background:var(--warn); color:#fff;}
+.b-fixed{background:var(--ink); color:var(--bg);}
+
+.summary{margin:14px 20px 0; padding:12px 14px; background:var(--surface-2); border-radius:10px; display:flex; flex-direction:column; gap:6px;}
+.summary li{list-style:none; font-size:.86rem; line-height:1.5;}
+
+.facts{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:16px 20px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:14px;}
+.fact-label{color:var(--ink-soft); display:block; font-size:.7rem;}
+.fact-val{font-family:"IBM Plex Mono",monospace; font-size:.82rem; font-variant-numeric:tabular-nums; display:block; margin-top:3px; line-height:1.35;}
+
+.lists{display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:16px 20px 4px;}
+@media (max-width:860px){ .lists{grid-template-columns:1fr;} }
+.list-h{font-size:.78rem; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:5px;}
+.list-h.pro-h{color:var(--good);}
+.list-h.con-h{color:var(--warn);}
+.lists ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px;}
+.lists li{font-size:.83rem; line-height:1.48; padding-left:1.35em; position:relative;}
+.pro li::before{content:"✓"; position:absolute; left:0; color:var(--good); font-weight:700;}
+.con li::before{content:"▲"; position:absolute; left:0; color:var(--warn); font-size:.7em; top:.3em;}
+.lists li b{display:block; font-weight:700; margin-bottom:1px;}
+.lists li span{color:var(--ink-soft);}
+
+.quote{margin:14px 20px 0; padding:10px 14px; background:var(--surface-2); border-left:3px solid var(--card-c); font-size:.84rem; font-style:italic; color:var(--ink-soft); border-radius:0 8px 8px 0;}
+.quote .qlabel{display:block; font-style:normal; font-weight:700; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--card-c); margin-bottom:3px;}
+
+details{margin:14px 20px 0;}
+summary{cursor:pointer; font-size:.8rem; color:var(--accent); font-weight:600; list-style:none;}
+summary::-webkit-details-marker{display:none;}
+summary::before{content:"＋ "; }
+details[open] summary::before{content:"－ ";}
+.tipbox{font-size:.84rem; line-height:1.6; color:var(--ink-soft); margin-top:10px; padding-top:10px; border-top:1px dashed var(--line);}
+
+.card-foot{margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:8px; padding:14px 20px; border-top:1px solid var(--line); flex-wrap:wrap;}
+.tags-mini{display:flex; gap:4px; flex-wrap:wrap;}
+.tag-pill{font-size:.64rem; background:var(--surface-2); color:var(--ink-soft); padding:2px 7px; border-radius:100px;}
+.link-row{display:flex; gap:12px; flex-wrap:wrap;}
+.card-link{font-size:.78rem; font-weight:600; white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center; gap:4px; background:none; border:none; cursor:pointer; color:var(--accent); font-family:inherit; padding:0;}
+.card-link:hover{text-decoration:underline;}
+
+/* ---------- map ---------- */
+#mapSection{padding-block:26px;}
+.map-top{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+.map-legend{display:flex; gap:14px; flex-wrap:wrap; font-size:.8rem; color:var(--ink-soft);}
+.legend-dot{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle;}
+#mapView{height:72vh; min-height:420px; border-radius:16px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow);}
+.map-note{font-size:.78rem; color:var(--ink-soft); margin-top:10px; line-height:1.6;}
+.leaflet-popup-content-wrapper{background:var(--surface); color:var(--ink); border-radius:12px;}
+.leaflet-popup-content{font-family:"Archivo",sans-serif; margin:12px 14px; min-width:200px;}
+.popup-title{font-family:"Fraunces",serif; font-weight:700; font-size:1.02rem; margin-bottom:2px;}
+.popup-en{font-size:.72rem; color:var(--ink-soft); font-style:italic; margin-bottom:8px;}
+.popup-line{font-size:.8rem; margin-bottom:6px; line-height:1.4;}
+.popup-facts{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-soft); margin-bottom:8px;}
+.popup-btn{display:inline-block; font-size:.76rem; font-weight:600; padding:5px 10px; border-radius:100px; background:var(--accent); color:#fff; text-decoration:none; margin-right:6px; margin-top:2px; cursor:pointer; border:none;}
+.popup-btn.secondary{background:var(--surface-2); color:var(--ink);}
+
+footer{padding:36px 0 50px; border-top:1px solid var(--line); margin-top:10px;}
+footer p{color:var(--ink-soft); font-size:.8rem; line-height:1.7; max-width:820px;}
+
+[hidden]{display:none !important;}
+
+@media (max-width:560px){
+  .banner{flex-direction:column; text-align:center;}
+  .controls{top:48px;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Family Expedition · 6 PAX · 19 Nights</div>
+    <h1>웨스트코스트 패밀리 로드트립 — 권역별 후보 카탈로그</h1>
+    <p class="sub">2027년 2월, 3세대 6인(조부모 2 · 부모 2 · 만 6세 쌍둥이 2)이 떠나는 라스베이거스→샌디에이고→LA·패서디나→오렌지카운티 여정. 43개 후보지의 3줄 요약, 장단점 후기, 소요시간·비용·이동수단과 실제 지도 위치까지 한눈에 비교하고 골라보세요.</p>
+    <div class="route" id="route"></div>
+    <div class="meta-row">
+      <span class="meta-chip">✈ 2027.01.28 – 02.16 (항공권 확정)</span>
+      <span class="meta-chip">🚗 7~8인승 미니밴</span>
+      <span class="meta-chip">🧧 2월 설날 연휴 포함</span>
+      <span class="meta-chip flag">📍 도시별 체류기간: 미정 — 후보지를 고른 뒤 결정</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="viewtabs">
+    <button class="viewtab" id="tabCatalogBtn" aria-pressed="true">📋 카탈로그로 보기</button>
+    <button class="viewtab" id="tabMapBtn" aria-pressed="false">🗺️ 지도로 보기</button>
+  </nav>
+</div>
+
+<div id="catalogView">
+  <section class="curator">
+    <div class="wrap">
+      <h2>🧭 테마별 큐레이터 Top픽</h2>
+      <p class="hint">관심 있는 테마를 눌러보세요 — 해당 명소 카드로 바로 이동합니다.</p>
+      <div class="theme-grid" id="themeGrid"></div>
+    </div>
+  </section>
+
+  <nav class="controls" id="controls">
+    <div class="wrap controls-inner">
+      <div class="tabrow" id="clusterTabs"></div>
+      <div class="chiprow" id="perspChips"></div>
+      <div class="chiprow" id="statusChips"></div>
+      <div class="searchrow">
+        <input id="q" type="search" placeholder="이름·설명으로 검색 (예: 판다, 평지, 무료)" aria-label="검색">
+        <span class="count" id="count"></span>
+        <button class="reset" id="resetBtn">필터 초기화</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap" id="main"></main>
+</div>
+
+<div id="mapSection" class="wrap" hidden>
+  <div class="map-top">
+    <h2>🗺️ 전체 43곳 지도</h2>
+    <div class="map-legend" id="mapLegend"></div>
+  </div>
+  <div id="mapView"></div>
+  <p class="map-note">점선은 라스베이거스→샌디에이고→LA·패서디나→오렌지카운티로 이어지는 대략적인 이동 방향입니다(각 권역 대표 좌표 연결). 마커를 클릭하면 요약 정보와 함께 카탈로그 상세 카드로 이동하거나 구글맵 길찾기를 열 수 있습니다. 좌표는 대표 위치 기준 추정치이며, 실제 방문 전 정확한 주소는 구글맵에서 재확인하세요. 그랜드캐년 헬기투어(🚁)는 볼더시티 탑승 지점을 표시합니다.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p><strong>ℹ️ 안내</strong> · 대표 이미지는 실제 사진 대신 클러스터별 색상과 아이콘으로 제작한 일러스트 배너입니다. 예상 비용은 2025~2026년 공개 정보 기준 추정치(1인 기준, 변동 가능)이며 예약 전 공식 사이트 재확인을 권장합니다. 지도는 OpenStreetMap 타일을 사용하며, 인터넷 연결이 있어야 지도와 글꼴이 정상적으로 로드됩니다. "후기 검색"은 특정 글이 아닌 구글 검색 결과로 연결됩니다. 원본 문서: <span class="mono">권역별_관광지_후보_추천풀.md</span></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const CLUSTERS = {
+  vegas:{label:'라스베이거스', sub:'사막 & 엔터테인먼트'},
+  sd:{label:'샌디에이고', sub:'해양 생태 & 동물원'},
+  la:{label:'LA·패서디나', sub:'할리우드 & 라라랜드'},
+  oc:{label:'오렌지카운티', sub:'테마파크 & 해변 휴양'}
+};
+const CLUSTER_ORDER = ['vegas','sd','la','oc'];
+const CLUSTER_HEX = {vegas:'#B5432B', sd:'#1C7A80', la:'#B9821B', oc:'#3C7D4B'};
+
+const PERSPECTIVES = [
+  {id:'elder', label:'어르신 평지·힐링', icon:'👴'},
+  {id:'kid', label:'6세 아이 추천', icon:'👶'},
+  {id:'movie', label:'영화·감성', icon:'🎬'},
+  {id:'free', label:'무료·저비용', icon:'💸'},
+  {id:'indoor', label:'실내(날씨무관)', icon:'🏛️'},
+  {id:'nature', label:'자연·동물', icon:'🐾'},
+  {id:'ocean', label:'해양·해변', icon:'🌊'},
+  {id:'photo', label:'가족사진', icon:'📸'},
+  {id:'ride', label:'액티비티·탈것', icon:'🎢'},
+  {id:'food', label:'식도락', icon:'🍜'}
+];
+
+const STATUS_META = {
+  existing:{label:'기존안', cls:'b-existing'},
+  new:{label:'신규추천', cls:'b-new'},
+  confirmed:{label:'확정 유력', cls:'b-confirmed'},
+  review:{label:'재검토 필요', cls:'b-review'},
+  fixed:{label:'고정 행사', cls:'b-fixed'}
+};
+const STATUS_CHIPS = ['existing','new','confirmed','review'];
+
+// id 규칙: 클러스터 접두사 + 원문서 번호 / pro,con = {t:핵심, d:상세(후기형 근거)} / lat,lng = 대표 좌표(추정)
+const DATA = [
+ {id:'vegas-1',c:'vegas',n:'불의 계곡 주립공원',en:'Valley of Fire State Park',e:'🔥',st:['existing','confirmed'],lat:36.4360,lng:-114.5310,
+  dur:'반나절 · 총 4시간',cost:'차량당 ~$10',move:'미니밴 50분',
+  summary:['👴 어르신: 브라이스캐년(왕복 9시간) 대신 차로 50분, 16℃ 온화한 날씨','👶 아이: 코끼리 바위 평지 3분 + 야생 큰뿔양 탐정놀이','🎬 영화: 《스타트렉》·《트랜스포머》 촬영지, 붉은 물결 파이어 웨이브'],
+  pro:[{t:'화이트 돔 시닉 바이웨이',d:'드라이브만으로도 70대 부모님이 연신 감탄하는 화성 같은 절경, 차에서 내리지 않고도 감상 가능'},
+       {t:'코끼리 바위(Elephant Rock)',d:'동쪽 출구 주차장서 도보 3분, 완만한 평지라 전 세대 포토존으로 최적'},
+       {t:'비지터 센터 화장실',d:'온·냉방 수세식 화장실이 있어 트레일 입구 재래식 간이화장실(Vault Toilet)을 피할 수 있음'}],
+  con:[{t:'통신 완전 두절',d:'공원 진입 15분 전부터 셀룰러 데이터 100% 끊김 — 출발 전 구글맵 오프라인 지도 다운로드 필수'},
+       {t:'모래길 발빠짐',d:'마우스 탱크 트레일 등은 발목까지 푹푹 빠져 어르신 도보 비권장, 공원 내 식당 없어 생수·간식 필수'},
+       {t:'아틀라틀 록 계단',d:'암각화를 보려면 80여 개 가파른 철제 계단 — 무릎 약한 어르신은 계단 아래서 망원줌 관람 권장'}],
+  quote:'화성에 불시착한 듯한 충격적 절경이다. 화이트 돔 시닉 바이웨이 드라이브만으로도 70대 부모님이 연신 감탄하셨다. 비지터 센터 주변에서 야생 큰뿔양 떼를 만났다.',
+  tip:'네바다주 최초·최대 주립공원, 1억 5천만 년 전 쥐라기 모래언덕이 굳은 붉은 사암 지대. 왕복 이동 1.5시간+공원 체류 2.5시간으로 하루를 가볍게 쓸 수 있는 반나절 코스.',
+  tags:['kid','nature','photo']},
+ {id:'vegas-2',c:'vegas',n:'그랜드캐년 웨스트림 헬기투어',en:'Papillon Grand Celebration',e:'🚁',st:['existing','confirmed'],lat:35.9480,lng:-114.8601,
+  dur:'총 4~4.5시간',cost:'6인 전세 ~$3,200',move:'호텔 픽업 포함',
+  summary:['👴 어르신: 14시간 지옥버스투어 대신 4.5시간 효도투어, 체력 소모 제로','👶 아이: 헬리콥터 탑승 자체로 엄청난 흥분과 신기함','👨‍👩‍👧 가족: 6인 단독 전세 헬기 + 협곡 바닥 샴페인·주스 피크닉'],
+  pro:[{t:'단열압축 온도차',d:'협곡 바닥은 림보다 8~10℃ 더 따뜻해 겨울에도 쾌적한 피크닉이 가능'},
+       {t:'대자연의 스케일',d:'평생 잊지 못할 콜로라도 강변 1,000m 협곡 바닥 착륙 체험'},
+       {t:'프라이빗 전세',d:'6인 가족 단독 탑승이라 모르는 사람과 합승하는 스트레스가 없음'}],
+  con:[{t:'고비용',d:'6인 총비용 약 $3,200선 — 예산에 미치는 영향이 큼'},
+       {t:'기상 리스크',d:'강풍 등 기상 악화 시 당일 일정 취소 가능성이 있어 여유일 확보가 안전'}],
+  quote:'',
+  tip:'볼더시티 공항(지도 마커 위치)에서 헬기를 타고 후버댐·미드호를 지나 협곡 바닥(콜로라도 강변)에 착륙하는 럭셔리 투어. 호텔 픽업부터 복귀까지 총 4~4.5시간.',
+  tags:['elder','kid','ride','photo']},
+ {id:'vegas-3',c:'vegas',n:'벨라지오 분수쇼 & 온실정원',en:'Bellagio Fountains & Conservatory',e:'⛲',st:['existing'],lat:36.1126,lng:-115.1767,
+  dur:'1~1.5시간',cost:'무료',move:'스트립 도보',
+  summary:['👴 어르신: 휠체어·유모차 100% 평지, 완전 무료','👶 아이: 설날 테마 화려한 꽃장식 구경','💡 핵심: 저녁식사 전후 가볍게 들르는 스트립 필수 코스'],
+  pro:[{t:'완전 무료',d:'입장료 없이 세계 최대 규모 음악 분수쇼와 실내 온실정원을 동시에 관람'},
+       {t:'실내외 연결',d:'쾌적한 실내-야외 이동 구조라 날씨 영향을 받지 않음'},
+       {t:'춘절 테마 장식',d:'1~2월은 설날(춘절) 테마로 꾸며진 화려한 생화 장식 기간'}],
+  con:[{t:'분수쇼 혼잡',d:'저녁 분수쇼 시간대에는 관람 인파가 몰려 명당 확보가 필요'}],
+  quote:'',
+  tip:'호수 위에서 펼쳐지는 세계 최대 규모 음악 분수쇼와 거대 생화 실내 정원. Day1~2 저녁 산책에 자연스럽게 포함하기 좋음.',
+  tags:['elder','kid','free','indoor','photo']},
+ {id:'vegas-4',c:'vegas',n:'베네시안 운하 & 패션쇼몰',en:'Venetian Canals & Fashion Show',e:'🛶',st:['existing'],lat:36.1211,lng:-115.1695,
+  dur:'2~3시간',cost:'입장 무료 (곤돌라 체험 ~$39/인)',move:'스트립 도보',
+  summary:['👴 어르신: 날씨 무관 쾌적한 실내 평지 산책','👶 아이: 곤돌라 뱃사공 노래 공연 구경','💡 핵심: 스트립 최대 쇼핑몰과 바로 연결'],
+  pro:[{t:'전천후 실내',d:'인공 하늘 천장 아래 이탈리아풍 운하를 날씨와 무관하게 산책'},
+       {t:'시차적응 최적',d:'Day1~2 저녁에 가볍게 들르기 좋은 동선'}],
+  con:[{t:'곤돌라 유료',d:'곤돌라 탑승 체험은 별도 요금(약 $39/인) 발생'}],
+  quote:'',
+  tip:'이탈리아 베네치아를 옮겨놓은 실내 인공 하늘과 곤돌라 운하, 스트립 최대 쇼핑몰이 이어짐.',
+  tags:['kid','indoor','photo']},
+ {id:'vegas-5',c:'vegas',n:'스피어',en:'Sphere Las Vegas',e:'🌐',st:['new'],lat:36.1213,lng:-115.1550,
+  dur:'외관 30분 / 공연 2시간',cost:'외관 무료 · 내부 티켓 ~$100/인',move:'스트립 북단',
+  summary:['🎬 영화·감성: 지구상 어디에도 없는 압도적 최첨단 시각 혁명','👴 어르신: 외관 야경 관람만으로 충분, 무료','💡 핵심: 내부 입장은 선택사항'],
+  pro:[{t:'세계 최대 구형 랜드마크',d:'지름 157m, 16K 초고화질 스크린의 몰입형 미디어 아트'},
+       {t:'외관 무료',d:'야경 관람(30분)만으로도 충분한 비주얼 임팩트'}],
+  con:[{t:'내부 티켓 고가',d:'1인 $100 내외'},
+       {t:'어지럼증 주의',d:'돔 영상 특성상 어르신 어지럼증이 생길 수 있음'}],
+  quote:'',
+  tip:'외관 야경 관람만으로도 충분히 감탄 가능 — 굳이 고가의 내부 티켓을 살 필요는 없음.',
+  tags:['movie','photo']},
+ {id:'vegas-6',c:'vegas',n:'후버댐 & 미드호수',en:'Hoover Dam & Lake Mead',e:'🏗️',st:['new','review'],lat:36.0161,lng:-114.7377,
+  dur:'반나절 · 왕복 포함 3시간+',cost:'내부투어 ~$30/인 (외부조망 무료)',move:'미니밴 40분',
+  summary:['⚠️ 일정 재검토: 현재 3박이 이미 꽉 차 들어갈 자리 없음','💡 핵심: 세계 최대 콘크리트 중력댐, 《트랜스포머》 비밀기지 배경','👴 제안: 차회 방문 시 우선 후보로 보류'],
+  pro:[{t:'토목 건축의 기적',d:'221m 거대한 콘크리트 벽과 인공호수 조망'}],
+  con:[{t:'일정 충돌',d:'불의 계곡 또는 헬기투어 중 하나를 희생해야 들어갈 수 있는 반나절짜리라 이번엔 보류 권장'}],
+  quote:'',
+  tip:'미국 대공황을 극복한 세계 최대 규모 콘크리트 중력식 댐. 체류기간이 아직 미정이니, 라스베이거스에 하루 더 배정하게 된다면 최우선 후보.',
+  tags:['movie'], note:'⚠️ 일정 재검토'},
+ {id:'vegas-7',c:'vegas',n:'하이롤러 대관람차',en:'High Roller at The LINQ',e:'🎡',st:['new'],lat:36.1162,lng:-115.1706,
+  dur:'탑승 30분',cost:'~$25~37/인 (시간대별)',move:'LINQ 프로미나드 도보',
+  summary:['👴 어르신: 전혀 걷지 않고 소파에 앉아 360도 야경, 멀미 제로','💡 핵심: 세계 2위 대관람차, 30분 1바퀴','📸 사진: 스트립 전체가 배경'],
+  pro:[{t:'완전 좌석 관람',d:'40인 탑승 통유리 구형 캐빈에서 편하게 스트립 전체를 조망'}],
+  con:[{t:'티켓 비용',d:'시간대별 1인 $25~37'}],
+  quote:'',
+  tip:'저녁 산책 시간에 가볍게 끼워 넣기 좋은 30분짜리 옵션. 높이 168m.',
+  tags:['elder','ride','photo']},
+ {id:'vegas-8',c:'vegas',n:'웰컴 투 라스베가스 사인',en:'Welcome to Fabulous Las Vegas Sign',e:'📸',st:['new'],lat:36.0825,lng:-115.1728,
+  dur:'5~10분',cost:'무료',move:'공항↔호텔 이동 동선 경유',
+  summary:['💸 핵심: 완전 무료, 5~10분 초단시간 포토스톱','📸 사진: 가장 가성비 높은 3세대 가족사진 명소','🚗 동선: 공항↔호텔 이동 경로에 끼워넣기'],
+  pro:[{t:'가성비 최고',d:'별도 일정 확보 없이 이동 동선에 그대로 포함 가능'}],
+  con:[{t:'대기 줄서기',d:'신호가 자주 바뀌어 순서대로 촬영 필요'}],
+  quote:'',
+  tip:'스트립 남쪽 끝(Mandalay Bay 인근)의 상징적인 빈티지 네온 간판.',
+  tags:['free','photo','elder']},
+
+ {id:'sd-1',c:'sd',n:'샌디에이고 동물원',en:'San Diego Zoo',e:'🦁',st:['new'],lat:32.7353,lng:-117.1490,
+  dur:'3~4시간',cost:'~$64/인(성인) · ~$54(아동)',move:'렌트카, 발보아파크 내',
+  summary:['👴 부모님: 2층 가이드버스 35분, 무릎 하중 제로','👶 아이들: 2024년 복귀한 판다 윈촨&신바오 직관','👫 부부: 스카이파리 케이블카에서 원시림 정글 뷰'],
+  pro:[{t:'2층 가이드 버스',d:'입장권 포함, 35분간 앉아서 동물원 70%를 관람 — 무릎 하중 제로'},
+       {t:'판다 직관',d:'2024년 8월 복귀한 판다 윈촨&신바오 대나무 먹방, 코알라 눈높이 관람'},
+       {t:'스카이파리 케이블카',d:'하늘을 가로지르며 내려다보는 원시림 정글 뷰'}],
+  con:[{t:'판다 릿지 대기',d:'주말 오전은 대기 15~20분 — 오픈런 또는 QR 무료 타임드 티켓으로 대응'}],
+  quote:'세계 1위 명성에 걸맞게 철창이 없고 자연 서식지 같다. 협곡 지형이라 걸어서만 다니면 무릎이 나가지만, 2층 버스와 스카이파리를 타면 거의 걷지 않고 핵심을 다 볼 수 있어 어르신과 아이 모두 대만족이었다.',
+  tip:'트립어드바이저 선정 세계 1위 동물원. 40만㎡ 아열대 우림에 판다·코알라·북극곰 등 3,700여 마리 서식. 사파리파크 대비 도심 접근성·휠체어 동선에서 압도적으로 우수함.',
+  tags:['elder','kid','nature','photo']},
+ {id:'sd-2',c:'sd',n:'샌디에이고 사파리 파크',en:'San Diego Safari Park',e:'🦏',st:['new'],lat:33.0924,lng:-116.9975,
+  dur:'반나절~종일',cost:'~$70대/인',move:'시내서 북쪽 35분',
+  summary:['👴 어르신: 도보거리 극대화, ECV(전동스쿠터) 대여 필수','👶 아이: 아프리카 트램 타고 기린·코뿔소·얼룩말 떼 관람','💡 핵심: 여의도 2.5배 사바나, 판다는 본원 동물원에만 있음'],
+  pro:[{t:'초대형 방목 사파리',d:'730만㎡ 부지에 수백 마리 야생동물이 자연방목으로 서식'}],
+  con:[{t:'체력 소모 큼',d:'부지가 너무 넓어 수동 휠체어는 보호자 체력이 방전, 오후 트램 대기는 최대 1시간'}],
+  quote:'',
+  tip:'아프리카 사바나 평원을 옮겨놓은 초대형 자연방목 야생동물 공원. 동물원 본원과 비교하면 이동거리·더위 부담이 커 3세대 가족에는 본원이 우선 추천.',
+  tags:['kid','nature','ride']},
+ {id:'sd-3',c:'sd',n:'라호야 코브',en:'La Jolla Cove',e:'🦭',st:['existing','confirmed'],lat:32.8508,lng:-117.2713,
+  dur:'1.5~2시간',cost:'무료',move:'다운타운서 차로 20분',
+  summary:['👨‍👩‍👧 온가족: 3m 코앞에서 바다사자 가족의 낮잠·다이빙 관찰','👴 부모님: 턱 없는 평지 콘크리트 산책로+잔디밭 벤치','👶 아이들: 칠드런스풀에서 바다사자 vs 물개 비교 학습'],
+  pro:[{t:'천연 서식지 관찰',d:'수족관이 아닌 진짜 야생 바다사자·물개 수십 마리가 자연 바위에서 일광욕'},
+       {t:'완벽한 평지 산책로',d:'턱 없는 콘크리트 Coast Walk와 엘렌 브라우닝 공원 벤치 휴식'},
+       {t:'반나절 동선 꿀팁',d:'차로 5분 거리 버치 아쿠아리움과 묶으면 야생→체험으로 이어지는 완벽한 코스'}],
+  con:[{t:'젖은 갯바위 낙상 위험',d:'녹조 낀 바위는 빙판보다 미끄럽고 따개비가 날카로움 — 상부 데크 안전펜스 뒤에서만 조망할 것'},
+       {t:'야생 특유의 악취',d:'배설물 비린내가 날 수 있어 마스크·민트사탕 권장'}],
+  quote:'아이들에게 최고의 자연학습장. 동물원이 아니라 진짜 파도치는 바위 위에 바다사자들이 뒹구는 모습에 어르신들도 감탄하셨다.',
+  tip:'수족관이 아닌 진짜 태평양 야생 바다사자·물개가 자연 바위에서 일광욕하는 천연 서식지. 남쪽 10분 거리 칠드런스 풀과 비교관찰 가능.',
+  tags:['elder','kid','nature','ocean','free','photo']},
+ {id:'sd-4',c:'sd',n:'발보아 파크',en:'Balboa Park',e:'🌺',st:['existing'],lat:32.7341,lng:-117.1449,
+  dur:'1.5~2시간',cost:'무료 (일부 박물관 유료)',move:'동물원 바로 옆',
+  summary:['👴 어르신: 완벽한 평지 보행로','📸 사진: 스페인 궁전풍 3세대 인생사진 1순위','💡 핵심: 샌디에이고 동물원 바로 옆, 동선 연계 쉬움'],
+  pro:[{t:'스페인 식민지풍 건축',d:'1915년 박람회 기념 궁전 건축물군과 연꽃 연못(Lily Pond)'}],
+  con:[{t:'단독 볼거리 제한적',d:'박물관 입장은 대부분 유료, 산책+사진 목적이면 충분'}],
+  quote:'',
+  tip:'야외 파이프오르간도 있어 시간대에 따라 라이브 연주를 감상할 수 있음.',
+  tags:['elder','free','photo']},
+ {id:'sd-5',c:'sd',n:'USS 미드웨이 항공모함 박물관',en:'USS Midway Museum',e:'⚓',st:['new'],lat:32.7137,lng:-117.1754,
+  dur:'2시간',cost:'~$26/인(성인) · ~$18(아동)',move:'다운타운 해안가',
+  summary:['👨‍👦 남편&아이: 비행갑판 위 전투기·헬기 조종석 탑승 체험','👴 어르신: 엘리베이터로 내부 이동, 참전용사 자원봉사자 안내','💡 핵심: 전장 300m 실제 취역 항공모함'],
+  pro:[{t:'실물 항모 체험',d:'비행갑판 위 수십 대 전투기·헬기 조종석에 직접 탑승 가능'},
+       {t:'참전용사 해설',d:'자원봉사자들의 따뜻한 안내로 역사적 의미가 전달됨'}],
+  con:[{t:'일부 계단 구간',d:'갑판 이동 중 계단이 있어 어르신 동행 시 속도 조절 필요'}],
+  quote:'',
+  tip:'거대한 배 내부는 엘리베이터로 이동 가능해 생각보다 어르신 동반 부담이 적음.',
+  tags:['kid','movie','indoor']},
+ {id:'sd-6',c:'sd',n:'올드타운 샌디에이고',en:'Old Town San Diego',e:'🌮',st:['existing'],lat:32.7547,lng:-117.1958,
+  dur:'1.5~2시간',cost:'입장 무료 (식사비 별도)',move:'다운타운 인근',
+  summary:['👨‍👩‍👧 가족: 흥겨운 멕시코 음악과 타코·파히타 가족식사','💡 핵심: 캘리포니아 발상지, 19세기 멕시코 전통 가옥','📸 비교: 사진 명소로는 코로나도 섬이 더 우수'],
+  pro:[{t:'마리아치 라이브',d:'생음악과 함께하는 활기찬 식사 분위기'},
+       {t:'키즈메뉴 충실',d:'아이 입맛에 맞는 메뉴가 다양함'}],
+  con:[{t:'코로나도 대비 매력 낮음',d:'사진·힐링 목적이면 코로나도 섬을 우선 고려 — 멕시칸 음식은 LA K-Town에서도 대체 가능'}],
+  quote:'',
+  tip:'캘리포니아 발상지로 19세기 멕시코 전통 가옥과 수공예품 상점가가 늘어서 있음.',
+  tags:['kid','food','free']},
+ {id:'sd-7',c:'sd',n:'카브리요 국립기념지',en:'Cabrillo National Monument',e:'🌊',st:['new'],lat:32.6723,lng:-117.2412,
+  dur:'1.5시간',cost:'차량당 ~$20 (NPS 입장료)',move:'포인트로마, 차로 정상 진입',
+  summary:['👴 어르신: 차로 정상까지 바로 진입, 보행 부담 없음','🐋 계절 포인트: 1~2월 야생 회색고래 이동 관측 시즌','💡 핵심: 1542년 유럽인 첫 캘리포니아 상륙지'],
+  pro:[{t:'360도 파노라마',d:'태평양 바다와 샌디에이고 스카이라인을 동시에 조망'},
+       {t:'회색고래 관측',d:'겨울철 전망대에서 고래 이동을 맨눈으로 관측 가능한 시즌'}],
+  con:[{t:'등대 내부는 계단',d:'역사 등대 탐방 코스는 일부 계단 구간이 있음'}],
+  quote:'',
+  tip:'포인트로마 반도 끝자락 절벽에 위치, 차량으로 정상까지 바로 올라갈 수 있는 몇 안 되는 전망 포인트.',
+  tags:['elder','nature','ocean','photo']},
+ {id:'sd-8',c:'sd',n:'시포트 빌리지',en:'Seaport Village',e:'⛵',st:['existing'],lat:32.7084,lng:-117.1708,
+  dur:'1~1.5시간',cost:'무료',move:'다운타운 도보',
+  summary:['👴 어르신: 평지 산책+카페 티타임','💡 핵심: 아기자기한 목조 상점가, 해변 잔디밭','🚗 동선: 다운타운 도보권'],
+  pro:[{t:'여유로운 평지 산책',d:'해안 조망과 함께 느긋한 티타임을 즐길 수 있음'}],
+  con:[{t:'체험 요소 적음',d:'단독 방문 시 볼거리는 다소 제한적'}],
+  quote:'',
+  tip:'샌디에이고 만을 따라 조성된 목조 건물 상점가, 반나절 마무리용 코스로 적합.',
+  tags:['elder','free','food']},
+ {id:'sd-9',c:'sd',n:'버치 아쿠아리움',en:'Birch Aquarium at Scripps',e:'🐠',st:['new'],lat:32.8661,lng:-117.2544,
+  dur:'1.5~2시간',cost:'~$25/인(성인) · ~$20(아동)',move:'라호야 코브서 차로 5분',
+  summary:['👶 아이: 터치탱크에서 불가사리·성게 직접 만지기','👴 어르신: 냉난방 완비 실내 휴식처','💡 핵심: 라호야 코브서 차로 5분, 연계 추천'],
+  pro:[{t:'터치탱크 체험',d:'야생 바다사자를 본 다음, 직접 만지는 체험으로 아이 몰입도를 극대화'},
+       {t:'냉난방 완비',d:'바닷바람에 지친 어르신의 실내 휴식처로도 적합'}],
+  con:[{t:'주말 오전 대기',d:'현지 가족 단위 방문객이 몰려 평일 오전 방문을 권장'}],
+  quote:'',
+  tip:'UC San Diego 스크립스 해양연구소 부속 아쿠아리움, 켈프숲 대형 수조와 야외 타이드풀 체험 데크가 있음.',
+  tags:['elder','kid','nature','indoor']},
+ {id:'sd-10',c:'sd',n:'코로나도 섬 & 호텔 델 코로나도',en:'Coronado Island & Hotel del Coronado',e:'🏖️',st:['new'],lat:32.6828,lng:-117.1811,
+  dur:'1.5~2시간',cost:'무료 (주차·식사 별도)',move:'다운타운서 다리로 10~15분(통행료 無)',
+  summary:['📸 사진: 빅토리안 리조트+백사장, 3세대 인생사진','👴 어르신: 완전 평지 보드워크+야자수 정원 벤치','💡 핵심: 코로나도 다리 통행료 無, 10~15분'],
+  pro:[{t:'역사적 리조트 외관',d:'1888년 개장한 빅토리안 양식 리조트, 영화 《뜨거운 것이 좋아》 배경지'},
+       {t:'완전 평지',d:'보드워크 전 구간이 휠체어 이동 부담 없는 평지'}],
+  con:[{t:'성수기 주차 혼잡',d:'호텔 주변 주차 공간이 붐빌 수 있음'}],
+  quote:'',
+  tip:'일정상 올드타운과 동시 방문이 어려우면, 사진·힐링 목적일 때 코로나도를 우선 배치 권장.',
+  tags:['elder','ocean','photo','free']},
+
+ {id:'la-1',c:'la',n:'그리피스 천문대',en:'Griffith Observatory',e:'🔭',st:['existing','confirmed'],lat:34.1184,lng:-118.3004,
+  dur:'2~2.5시간',cost:'입장 무료 (정상주차 $10/h 또는 그릭시어터 무료+셔틀)',move:'그릭시어터 무료주차 + DASH 셔틀',
+  summary:['🎬 남편: 평점 5.0 — 절대 타협 불가능한 영화 성지 순례의 정점','👴 부모님: LA 전역이 오렌지빛으로 물드는 일몰·야경에 대감탄','👶 아이들: 거대 천체망원경으로 달 분화구 관측'],
+  pro:[{t:'라라랜드 왈츠 촬영지',d:'미아와 세바스찬이 별빛 속 왈츠를 추던 플라네타륨의 실제 촬영 장소'},
+       {t:'전구역 배리어프리',d:'엘리베이터·램프 완비, 무료 수동 휠체어 대여'},
+       {t:'3단계 조망',d:'낮 풍경→일몰→매직아워 야경까지 한 번에 즐길 수 있음'}],
+  con:[{t:'정상 주차 150대뿐',d:'일몰 1시간 전 100% 만차 — 그릭시어터 무료주차+DASH 셔틀(7분) 연계가 핵심 꿀팁'},
+       {t:'월요일 휴관',d:'실내 전시관은 월요일 휴무이니 방문 요일 확인 필수'}],
+  quote:'',
+  tip:'뉴욕 센트럴파크 5배 크기 그리피스 파크 정상, 평일(화~목) 오후 3:30~4:00 도착을 추천. 남쪽 테라스 난간·서쪽 잔디광장이 명당 포토존.',
+  tags:['elder','kid','movie','free','photo']},
+ {id:'la-2',c:'la',n:'헌팅턴 라이브러리 & 식물원',en:'The Huntington',e:'🌿',st:['existing','confirmed'],lat:34.1281,lng:-118.1145,
+  dur:'3~4시간',cost:'~$29/인(성인) · ~$15(아동), 화요일 휴무',move:'패서디나 숙소 인근',
+  summary:['👴 부모님: 70대 조부모님 만족도 압도적 1위, 호숫가 누각 힐링','👶 아이들: 어린이 정원 미스트 분수·소리터널·물도랑 체험','💡 핵심: 무료 순환 셔틀로 중국·일본 정원 편안히 직행'],
+  pro:[{t:'호숫가 중국정원 힐링',d:'대리석 다리·정자·폭포가 어우러진 미국 최대 규모 중국식 정원에서 차를 마시며 휴식'},
+       {t:'어린이 정원',d:'미스트 분수·소리터널·물도랑 오감체험으로 아이 만족도 높음'},
+       {t:'무료 셔틀+휠체어',d:'8개 정류장 순환 셔틀로 중국·일본 정원까지 편안히 직행 가능'}],
+  con:[{t:'화요일 정기휴무',d:'방문일 요일 확인 필수'},
+       {t:'사막정원은 패스',d:'부지가 워낙 넓어 경사 심하고 그늘 없는 사막정원은 과감히 생략, 3대 핵심구역만 집중 권장'}],
+  quote:'',
+  tip:'50만㎡에 달하는 철도 재벌의 저택과 세계 최고 수준의 전문 테마 식물원. 중국정원+어린이정원+일본정원 3곳 집중 관람이 핵심.',
+  tags:['elder','kid','nature','photo']},
+ {id:'la-3',c:'la',n:'유니버설 스튜디오 할리우드',en:'Universal Studios Hollywood',e:'🎬',st:['existing'],lat:34.1381,lng:-118.3534,
+  dur:'종일',cost:'~$109~174/인 (날짜별 변동)',move:'Preferred Parking ~$50',
+  summary:['🎬 남편: 100년 역사의 실제 할리우드 영화 세트장 테마파크','👶 아이들: 슈퍼 닌텐도 월드 마리오카트 레이싱에 열광','👴 부모님: 60분 트램투어, 앉아서 세트장 관람'],
+  pro:[{t:'60분 트램 투어',d:'비행기 추락 현장·조스·지진·분노의 질주 세트장을 앉아서 편안히 관람, 어르신 대인기'},
+       {t:'슈퍼 닌텐도 월드',d:'마리오카트 레이싱에 쌍둥이가 열광'}],
+  con:[{t:'Preferred 주차 $50',d:'보행 피로를 줄이려면 입구 바로 앞 유료 주차를 권장'},
+       {t:'상하부 이동 제약',d:'ECV/휠체어는 에스컬레이터 탑승 불가, 전용 ADA 셔틀로 이동을 1회로 최소화할 것'}],
+  quote:'',
+  tip:'워너브라더스의 라라랜드 카페 세트장은 2017년 팝업으로 현재 철거되어 없음 — 화려한 볼거리와 닌텐도월드가 있는 유니버설이 대가족에 훨씬 적합.',
+  tags:['kid','movie','ride']},
+ {id:'la-4',c:'la',n:'허모사 비치 피어',en:'Hermosa Beach Pier',e:'🎺',st:['new'],lat:33.8622,lng:-118.3998,
+  dur:'1.5~2시간',cost:'무료 (주차타워 유료)',move:'Hermosa Beach Pier Parking Garage',
+  summary:['🎬 남편: 《라라랜드》 "City of Stars" 탭댄스 촬영 부두','👴 부모님: 산타모니카보다 훨씬 한적하고 조용','💡 핵심: 라이트하우스 카페는 야간 21+ 성인전용'],
+  pro:[{t:'City of Stars 촬영 부두',d:'라이언 고슬링이 황혼녘 바다 위에서 탭댄스 스텝을 밟던 실제 목조 부두'},
+       {t:'한적한 평지 피어',d:'산타모니카보다 훨씬 조용해 여유로운 산책 가능'}],
+  con:[{t:'라이트하우스 카페 21+ 전용',d:'야간에는 성인 전용 주점으로 운영되어 아이 동반 시 낮시간 외관 포토존만 가능'}],
+  quote:'',
+  tip:'1949년 개업 70년 전통 재즈클럽 ‘더 라이트하우스 카페’가 피어 입구에 위치. 패서디나→오렌지카운티 이동일 경유 추천.',
+  tags:['elder','movie','ocean','free','photo']},
+ {id:'la-5',c:'la',n:'게티 센터',en:'The Getty Center',e:'🏛️',st:['existing'],lat:34.0780,lng:-118.4741,
+  dur:'2~2.5시간',cost:'입장 무료 (주차 $20)',move:'무료 모노레일 트램',
+  summary:['💸 핵심: 입장료 무료, 반고흐·모네 명화 소장','👶 아이들: 주차장서 미술관 정상까지 무료 모노레일 트램','👴 어르신: 전관 엘리베이터+무료 휠체어 완비'],
+  pro:[{t:'입장 무료',d:'반 고흐의 《아이리스》, 모네 명화를 무료로 감상 — 차량 주차비 $20만 부과'},
+       {t:'무료 모노레일',d:'주차장서 미술관 정상까지 트램을 타고 이동, 아이들에게도 재미있는 체험'}],
+  con:[{t:'주차비 발생',d:'차량당 $20'}],
+  quote:'',
+  tip:'LA 서부 언덕 위 새하얀 대리석 건축물. 태평양이 내려다보이는 야외 선인장·원형 정원에서 어르신 휴식 겸 산책.',
+  tags:['elder','kid','free','indoor','photo']},
+ {id:'la-6',c:'la',n:'데스칸소 가든',en:'Descanso Gardens',e:'🌲',st:['new'],lat:34.1992,lng:-118.2201,
+  dur:'2~3시간',cost:'~$15/인',move:'라카냐다, 패서디나 인근',
+  summary:['👶 아이: 숲속을 달리는 미니 증기기차($5) 탑승','👴 어르신: 참나무 그늘 80% 덮인 평지 산책로','💡 핵심: 헌팅턴 가든과 테마 중복, 택일 권장'],
+  pro:[{t:'동백꽃 숲길 평지',d:'2월 만발한 동백꽃과 참나무 그늘 아래 평지 산책로'},
+       {t:'미니 증기기차',d:'$5로 숲속을 달리는 아이들 체험'}],
+  con:[{t:'헌팅턴과 테마 중복',d:'두 곳 모두 방문은 비효율적 — 헌팅턴의 웅장한 궁궐형 정원과 달리 아늑한 삼림욕장 느낌이라 택일 권장'}],
+  quote:'',
+  tip:'65만㎡에 달하는 울창한 참나무 원시림 수목원.',
+  tags:['elder','kid','nature']},
+ {id:'la-7',c:'la',n:'산타모니카 피어 & 해변',en:'Santa Monica Pier',e:'🎡',st:['existing'],lat:34.0094,lng:-118.4973,
+  dur:'1.5~2시간',cost:'무료 (놀이기구 별도)',move:'해안도로 접근',
+  summary:['💡 핵심: 대륙횡단 도로 루트66의 종점','👶 아이: 클래식 회전목마와 목조 데크 산책','👴 어르신: 평지 데크, 주말보다 평일 추천'],
+  pro:[{t:'루트66 상징성',d:'대륙횡단 도로의 종점이라는 상징적 의미, 클래식 회전목마'}],
+  con:[{t:'주말 인파',d:'혼잡 회피를 위해 평일 오전 방문을 추천'}],
+  quote:'',
+  tip:'태평양 바다 위 목조 피어, 평지 데크 산책로라 전 세대가 부담 없이 즐길 수 있음.',
+  tags:['kid','ocean','free','photo']},
+ {id:'la-8',c:'la',n:'캘리포니아 사이언스 센터',en:'California Science Center',e:'🚀',st:['existing'],lat:34.0114,lng:-118.2871,
+  dur:'2시간',cost:'입장 무료 (엔데버호 특별관 사전예약 유료)',move:'엑스포파크',
+  summary:['💡 핵심: 우주 25회 비행한 엔데버호 실물 전시','💸 핵심: 입장 무료','🚗 동선: 귀국 당일 낮 경유 추천'],
+  pro:[{t:'엔데버호 실물',d:'실제 우주를 25회 비행한 우주왕복선을 무료로 관람'}],
+  con:[{t:'특별관 사전예약',d:'엔데버호 전시 특별관은 사전 예약이 필요'}],
+  quote:'',
+  tip:'귀국 당일(Day18) 낮 일정으로 추천 — 짐을 가볍게 들고 가볍게 즐기기 좋음.',
+  tags:['kid','free','indoor']},
+ {id:'la-9',c:'la',n:'할리우드 명예의 거리',en:'Hollywood Walk of Fame',e:'⭐',st:['new'],lat:34.1022,lng:-118.3410,
+  dur:'40분',cost:'무료 (주차 2시간 $3)',move:'오베이션몰 지하주차장',
+  summary:['💡 핵심: 스타들의 황동별 바닥, 안성기·이병헌 핸드프린팅','⚠️ 치안 주의: 노숙자·호객꾼 상주','🚗 전략: 40분 핀포인트 관람 또는 드라이브스루'],
+  pro:[{t:'상징적 핸드프린팅',d:'스타들의 황동별+안성기·이병헌 핸드프린팅, TCL 차이니즈 극장'}],
+  con:[{t:'치안 주의',d:'노숙자 텐트·대마초 냄새·악질 코스프레 호객꾼(사진 찍고 인당 $20 강요)이 상주하므로 오래 머물지 말 것, 야간 방문 절대 금지'}],
+  quote:'',
+  tip:'오베이션몰 지하주차장(2시간 $3)에 주차 후 40분 핀포인트로 차이니즈 극장 앞마당 사진만 찍고 철수, 또는 미니밴 창밖으로 드라이브스루 관람 강력 권장.',
+  tags:['movie','photo'], note:'⚠️ 치안 주의'},
+ {id:'la-10',c:'la',n:'베벌리힐스 로데오 드라이브',en:'Rodeo Drive, Beverly Hills',e:'🌴',st:['new'],lat:34.0696,lng:-118.4053,
+  dur:'1시간',cost:'무료 (공영주차 2시간 무료)',move:'438/345 N Beverly Dr 주차장',
+  summary:['💡 핵심: 세계적 럭셔리 명품 거리, 영화 《귀여운 여인》 배경','🛡️ 치안: 극상(5.0/5.0), 전담 경찰 상시 순찰','💸 핵심: 시 공영주차장 최초 2시간 완전 무료'],
+  pro:[{t:'치안 극상',d:'전담 경찰 상시 순찰, 노숙자 제로, 완벽한 평지 대리석 보도'},
+       {t:'2시간 무료주차',d:'438/345 N Beverly Dr 공영주차장, 영수증 인증 없이 2시간 무료'}],
+  con:[{t:'체험요소 적음',d:'쇼핑 외 콘텐츠는 제한적'}],
+  quote:'',
+  tip:'베벌리 가든스 파크의 거대한 ‘Beverly Hills’ 랜드마크 사인 앞에서 대가족 인생사진 촬영(1시간 산책 코스).',
+  tags:['elder','free','photo']},
+ {id:'la-11',c:'la',n:'콜로라도 스트리트 브리지',en:'Colorado Street Bridge',e:'🏛️',st:['new'],lat:34.1448,lng:-118.1584,
+  dur:'20~30분',cost:'무료',move:'패서디나 숙소서 차로 5분',
+  summary:['🎬 영화: 《라라랜드》 미아&세바스찬 데이트 아치교','💡 핵심: 1913년 고풍스러운 콘크리트 아치교','🚗 동선: 패서디나 숙소서 차로 5분'],
+  pro:[{t:'라라랜드 데이트 아치교',d:'미아와 세바스찬이 데이트하며 걸었던 1913년 아치교, 패서디나 시청과 함께 건축 산책'}],
+  con:[{t:'볼거리 짧음',d:'단독 방문 시 20~30분 내로 소화되는 짧은 코스'}],
+  quote:'',
+  tip:'숙소 근접성이 좋아 저녁 산책이나 이동 전 가볍게 들르기 좋음.',
+  tags:['movie','free','photo']},
+ {id:'la-12',c:'la',n:'더 그로브 & 파머스 마켓',en:'The Grove & Original Farmers Market',e:'🥐',st:['existing'],lat:34.0721,lng:-118.3584,
+  dur:'1.5~2시간',cost:'무료 입장 (식사비 별도)',move:'게티↔그리피스 동선 경유',
+  summary:['💡 핵심: 1934년부터 이어진 LA 대표 재래시장','👨‍👩‍👧 가족: 다양한 푸드코트로 입맛 걱정 없는 식사','🚗 동선: 게티 센터↔그리피스 천문대 사이 점심 경유지'],
+  pro:[{t:'다양한 푸드코트',d:'어르신·아이 입맛을 모두 충족하는 폭넓은 선택지'},
+       {t:'이동 동선 최적',d:'게티 센터와 그리피스 천문대 사이 점심 경유지로 최적의 위치'}],
+  con:[{t:'체험 요소 적음',d:'쇼핑·식사 목적 위주라 별도 체험 콘텐츠는 적음'}],
+  quote:'',
+  tip:'분수와 트램이 있는 아기자기한 가족 산책 코스, 완전 평지.',
+  tags:['kid','food','free']},
+
+ {id:'oc-1',c:'oc',n:'디즈니랜드 파크',en:'Disneyland Park',e:'🎡',st:['existing'],lat:33.8121,lng:-117.9190,
+  dur:'종일',cost:'1일권 ~$104~206/인 (날짜별 변동)',move:'ECV 사전렌탈(ScooterBug) 권장',
+  summary:['💡 핵심: 1955년 월트 디즈니가 직접 설계한 세계 최초 디즈니랜드','👶 아이: 미키의 툰타운·런어웨이 레일웨이(신장제한 없음)','👴 어르신: ECV(전동스쿠터) 사전 렌탈 필수'],
+  pro:[{t:'오리지널 디즈니랜드',d:'스타워즈 갤럭시스 엣지(실물 크기 밀레니엄 팔콘), 판타지랜드 클래식 라이드'},
+       {t:'야간 불꽃놀이',d:'신데렐라 성 앞에서 펼쳐지는 피날레'}],
+  con:[{t:'2만보 보행량',d:'파크 내 하루 보행량이 약 13km에 달해 수동 휠체어는 3시간 만에 보호자 방전 — ScooterBug 등 사설 ECV 사전 배송이 필수 보험'},
+       {t:'대여소 오전 매진',d:'파크 정문 대여소는 오전 9:30에 전량 매진'}],
+  quote:'',
+  tip:'오전 핵심 라이드 탑승 후 인파가 극에 달하는 13:00~16:00엔 숙소 복귀해 2시간 낮잠, 오후 5시 재입장해야 밤 9시 불꽃놀이까지 완주 가능.',
+  tags:['kid','ride','photo']},
+ {id:'oc-2',c:'oc',n:'디즈니 캘리포니아 어드벤처',en:'Disney California Adventure',e:'🎢',st:['existing'],lat:33.8078,lng:-117.9201,
+  dur:'종일',cost:'파크호퍼권 포함 ~$170~270/인',move:'디즈니랜드 맞은편',
+  summary:['👶 쌍둥이 최애 1위: 카스랜드 실물 크기 영화 마을 질주','👴 어르신 대감탄: 소어린 4D 행글라이더 비행 체험','💡 핵심: 신장 102cm 제한, 격렬하지 않아 조부모도 탑승 가능'],
+  pro:[{t:'카스랜드 실물 마을',d:'영화 《카(Cars)》 속 마을을 실물 크기로 완벽 재현, 쌍둥이 최애 1위'},
+       {t:'소어린(Soarin\') 4D',d:'행글라이더를 타고 세계 명소를 비행하는 감동적 라이드, 어르신도 대감탄'},
+       {t:'월드 오브 컬러',d:'거대한 수상 분수 레이저 조명 쇼'}],
+  con:[{t:'신장제한 102cm',d:'카스랜드 ‘라디에이터 스프링스 레이서’는 신장 40인치(102cm) 제한, 만 6세 쌍둥이는 전원 탑승 가능'}],
+  quote:'',
+  tip:'디즈니랜드 맞은편 자매 파크, 격렬하지 않아 조부모님도 함께 탑승 가능한 라이드가 많음.',
+  tags:['kid','elder','ride']},
+ {id:'oc-3',c:'oc',n:'발보아 아일랜드 미니 페리',en:'Balboa Island Ferry',e:'⛵',st:['existing'],lat:33.6013,lng:-117.8958,
+  dur:'1~1.5시간',cost:'차량 편도 ~$3 · 도보 ~$1.25',move:'뉴포트비치',
+  summary:['👶 아이: 차를 탄 채 3분 만에 바다를 건너는 놀이기구 체험','👴 어르신: 계단 없는 완전 평지 해안마을 산책로','💡 핵심: 수제 아이스크림 ‘발보아 바’'],
+  pro:[{t:'차+배 복합 체험',d:'자동차를 탄 채 3분 만에 바다를 건너는 체험 자체가 아이들에게 큰 놀이기구'},
+       {t:'완전 평지 마을',d:'배에서 내리면 계단 없는 해안마을 산책로와 수제 아이스크림 ‘발보아 바’'}],
+  con:[{t:'대기시간',d:'주말 혼잡 시 승선 대기가 발생할 수 있음'}],
+  quote:'',
+  tip:'뉴포트비치 지역의 대표적인 가족 힐링 코스.',
+  tags:['elder','kid','ocean','photo']},
+ {id:'oc-4',c:'oc',n:'어바인 그레이트 파크',en:'Orange County Great Park',e:'🌳',st:['existing'],lat:33.6783,lng:-117.7423,
+  dur:'1.5~2시간',cost:'무료 (열기구 탑승 무료)',move:'어바인',
+  summary:['💸 핵심: 완전 무료 초대형 평지 복합공원','👶 아이: 아파트 10층 높이 헬륨 열기구 무료 탑승','💡 핵심: 회전목마, 광활한 잔디밭'],
+  pro:[{t:'무료 헬륨열기구',d:'아파트 10층 높이까지 수직으로 뜨는 주황색 거대 헬륨 열기구를 완전 무료로 체험'}],
+  con:[{t:'랜드마크성 약함',d:'단독 방문 시 특별한 볼거리는 다소 제한적'}],
+  quote:'',
+  tip:'초대형 평지 복합공원이라 어르신·아이 모두 부담 없이 산책 가능.',
+  tags:['kid','free','elder']},
+ {id:'oc-5',c:'oc',n:'크리스탈 코브 주립공원',en:'Crystal Cove State Park',e:'🌊',st:['existing'],lat:33.5703,lng:-117.8336,
+  dur:'1.5~2시간',cost:'차량당 ~$15',move:'해안도로',
+  summary:['💡 핵심: 태평양 해안 절벽과 해안선 절경','🍽️ 식도락: 역사적 오두막 레스토랑에서 브런치','👴 어르신: 전망대는 평지, 해변 하강은 일부 계단'],
+  pro:[{t:'해안절벽 브런치',d:'바다 바로 앞 역사적 오두막 레스토랑(The Beachcomber)에서 파도 소리 들으며 식사'}],
+  con:[{t:'해변 접근 계단',d:'해변까지 내려가는 구간은 일부 계단이 있음'}],
+  quote:'',
+  tip:'전망대 조망만으로도 충분히 만족스러운 해안절벽 포인트.',
+  tags:['elder','ocean','food','photo']},
+ {id:'oc-6',c:'oc',n:'라구나비치 & 헤이슬러파크',en:'Laguna Beach & Heisler Park',e:'🎨',st:['new'],lat:33.5434,lng:-117.7857,
+  dur:'1.5~2시간',cost:'무료',move:'결혼식장 인근',
+  summary:['💡 핵심: 예술가 해안마을, 에메랄드빛 태평양','👴 어르신: 완벽한 평지 꽃길 산책로','🚗 동선: 사촌 결혼식장(Laguna Hills) 인근'],
+  pro:[{t:'평지 꽃길 산책',d:'절벽을 따라 조성된 헤이슬러 파크의 평지 꽃길에서 에메랄드빛 해안 조망'},
+       {t:'결혼식장 인근',d:'동선 연계가 쉬워 결혼식 전후로 묶기 좋음'}],
+  con:[{t:'주차 협소',d:'주차 공간이 넉넉지 않아 혼잡할 수 있음'}],
+  quote:'',
+  tip:'예술가 해안 마을 특유의 갤러리·카페도 함께 즐기기 좋음.',
+  tags:['elder','ocean','free','photo']},
+ {id:'oc-7',c:'oc',n:'다나포인트 돌고래/고래 크루즈',en:'Dana Point Whale Watching',e:'🐬',st:['new'],lat:33.4616,lng:-117.6981,
+  dur:'2시간',cost:'~$70/인(성인) · ~$45(아동)',move:'다나포인트 하버',
+  summary:['💡 핵심: ‘세계 돌고래의 수도’ 다나포인트 하버','🐋 계절 포인트: 2월은 회색고래 이동 관측 최적기','👶 아이: 수백 마리 야생 돌고래 점프 직관'],
+  pro:[{t:'세계 돌고래의 수도',d:'대형 카타마란(쌍동선)을 타고 수백 마리 야생 돌고래 떼의 점프를 직관'},
+       {t:'2월 회색고래 시즌',d:'알래스카에서 멕시코로 이동하는 회색고래 관측 최적기'}],
+  con:[{t:'멀미 주의',d:'멀미에 민감한 가족은 사전 대비(약 복용 등) 권장, 실내좌석은 완비'}],
+  quote:'',
+  tip:'흔들림이 적고 실내 좌석이 완비되어 있어 어르신도 큰 부담 없이 탑승 가능.',
+  tags:['kid','nature','ocean','ride']},
+ {id:'oc-8',c:'oc',n:'너츠베리팜',en:"Knott's Berry Farm",e:'🍓',st:['new'],lat:33.8436,lng:-117.9975,
+  dur:'반나절~종일',cost:'~$65~90/인',move:'부에나파크',
+  summary:['💡 핵심: 1920년 시작된 미국 최초의 테마파크','👶 아이: 스누피 캐릭터 구역 ‘Camp Snoopy’','🚗 동선: 부에나파크 한인타운 인접'],
+  pro:[{t:'미국 최초 테마파크',d:'1920년 시작, 스누피 캐릭터 구역과 19세기 서부 개척시대 골드러시 마을 테마'}],
+  con:[{t:'시설 노후화',d:'디즈니 대비 어트랙션과 시설이 다소 올드함'}],
+  quote:'',
+  tip:'부에나파크 한인타운과 인접해 식사 연계가 쉬움.',
+  tags:['kid','ride']},
+ {id:'oc-9',c:'oc',n:'미션 산 후안 카피스트라노',en:'Mission San Juan Capistrano',e:'⛪',st:['new'],lat:33.5017,lng:-117.6625,
+  dur:'1~1.5시간',cost:'~$13/인',move:'결혼식장서 차로 10분',
+  summary:['💡 핵심: 1776년 설립, 캘리포니아 최고(最古) 미션','🌹 포인트: 장미정원과 고벽돌 회랑','🚗 동선: 결혼식장(Laguna Hills)서 차로 10분'],
+  pro:[{t:'1776년 역사 유적',d:'캘리포니아에서 가장 유서 깊은 스페인 가톨릭 미션 수도원, 장미정원과 고벽돌 회랑'}],
+  con:[{t:'정숙 요구',d:'종교시설 특성상 소란을 자제해야 함'}],
+  quote:'',
+  tip:'결혼식 전후 일정과 동선이 겹쳐 하루에 묶기 좋음.',
+  tags:['elder','photo']},
+ {id:'oc-10',c:'oc',n:'부에나파크 한식타운 & 더 소스 몰',en:'The Source Mall, Buena Park',e:'🍲',st:['existing'],lat:33.8575,lng:-118.0004,
+  dur:'1~1.5시간',cost:'식사비만 발생',move:'부에나파크',
+  summary:['💡 핵심: 대형 한인마트(H Mart)+한식당 밀집','🧧 포인트: 설날 떡국 재료 장보기 필수 거점','🍜 핵심: 소화 편한 곰탕·순두부 식사'],
+  pro:[{t:'H Mart 설날장보기',d:'떡국떡·명절 식재료를 한 번에 확보 가능'},
+       {t:'소화 편한 한식',d:'곰탕·순두부 등으로 어르신·아이 컨디션 관리'}],
+  con:[{t:'관광요소 아님',d:'생활 거점 성격이 강해 식사·장보기 목적으로 한정'}],
+  quote:'',
+  tip:'기름진 현지식 연속 섭취를 끊어주는 균형 잡힌 한식 보급 거점.',
+  tags:['food','indoor']},
+ {id:'oc-11',c:'oc',n:'사우스 코스트 플라자',en:'South Coast Plaza',e:'🛍️',st:['new'],lat:33.6894,lng:-117.8886,
+  dur:'1.5~2시간',cost:'무료 입장',move:'코스타메사',
+  summary:['💡 핵심: 미국 서부 최대 럭셔리 실내 쇼핑몰','🌧️ 대체 옵션: 비 오거나 쌀쌀한 날 완벽한 실내 평지','🍜 핵심: 딘타이펑 딤섬 식사 연계'],
+  pro:[{t:'서부 최대 럭셔리몰',d:'냉난방 완비 실내 평지 산책이 가능한 대형 쇼핑 공간'},
+       {t:'딘타이펑 딤섬',d:'우천·추위 대비 대체 일정으로 삼기 좋은 식사 옵션'}],
+  con:[{t:'쇼핑목적 아니면 지루',d:'관광 콘텐츠로서의 매력은 상대적으로 약함'}],
+  quote:'',
+  tip:'날씨 변수에 대응하는 백업 일정으로 보관해두면 좋음.',
+  tags:['elder','indoor','food','free']},
+ {id:'oc-12',c:'oc',n:'어바인 스펙트럼 센터',en:'Irvine Spectrum Center',e:'🎡',st:['new'],lat:33.6373,lng:-117.7466,
+  dur:'1.5~2시간',cost:'무료 입장 (관람차 별도 소액)',move:'어바인',
+  summary:['💡 핵심: 무료 입장 야외 오픈몰','🎡 포인트: 대형 관람차+회전목마, 어르신도 앉아서 탑승','💡 핵심: 디즈니랜드 다음날 완전휴식일 저녁 나들이로 적합'],
+  pro:[{t:'무료 야외오픈몰',d:'대형 관람차와 회전목마가 있는 가족형 쇼핑·엔터테인먼트 복합단지'},
+       {t:'완전휴식일 적합',d:'디즈니랜드 다음날 저녁 나들이로 체력 부담 없이 즐기기 좋음'}],
+  con:[{t:'더 소스몰과 중복',d:'둘 다 방문할 필요는 없어 택일을 권장'}],
+  quote:'',
+  tip:'관람차는 어르신도 앉아서 탑승 가능한 수준의 저강도 액티비티.',
+  tags:['elder','kid','free','food']},
+];
+
+const THEMES = [
+  {title:'🐾 한국에 없는 거대 자연/동물원', picks:['sd-1','sd-2','la-2','sd-3']},
+  {title:'🎬 남편 헐리우드 & 라라랜드 성지', picks:['la-1','la-4','la-3','la-10']},
+  {title:'👴 70대 부모님 만족도(평지/힐링)', picks:['la-2','sd-4','oc-3','vegas-3']},
+  {title:'👶 만 6세 쌍둥이 최애(동물/놀이)', picks:['oc-2','sd-1','la-3','oc-7']},
+];
+
+const byId = Object.fromEntries(DATA.map(d=>[d.id,d]));
+
+function renderRoute(){
+  const el = document.getElementById('route');
+  el.innerHTML = CLUSTER_ORDER.map((c,i)=>{
+    const seg = i < CLUSTER_ORDER.length-1 ? '<div class="seg"></div>' : '';
+    return `<div class="stop"><div class="dot" style="background:${CLUSTER_HEX[c]}"></div><div class="label">${CLUSTERS[c].label}</div><div class="note">순서 ${i+1} · 기간 미정</div></div>${seg}`;
+  }).join('');
+}
+
+function renderThemes(){
+  const el = document.getElementById('themeGrid');
+  el.innerHTML = THEMES.map(t=>`
+    <div class="theme-card">
+      <div class="t-title">${t.title}</div>
+      <div class="pick-list">
+        ${t.picks.map((id,i)=>{const d=byId[id]; return `<button class="pick-btn" data-jump="${id}"><span class="pick-rank">${i+1}</span><span>${d.e}</span><span>${d.n}</span></button>`;}).join('')}
+      </div>
+    </div>`).join('');
+  el.querySelectorAll('[data-jump]').forEach(btn=>btn.addEventListener('click',()=>jumpTo(btn.dataset.jump)));
+}
+
+function jumpTo(id){
+  resetFilters(false);
+  render();
+  requestAnimationFrame(()=>{
+    const node = document.getElementById(id);
+    if(!node) return;
+    node.scrollIntoView({behavior:'smooth', block:'center'});
+    node.classList.add('flash');
+    setTimeout(()=>node.classList.remove('flash'), 1600);
+  });
+}
+
+// ---------- view tabs ----------
+function switchView(view){
+  document.getElementById('catalogView').hidden = view!=='catalog';
+  document.getElementById('mapSection').hidden = view!=='map';
+  document.getElementById('tabCatalogBtn').setAttribute('aria-pressed', view==='catalog');
+  document.getElementById('tabMapBtn').setAttribute('aria-pressed', view==='map');
+  if(view==='map') ensureMap();
+}
+document.getElementById('tabCatalogBtn').addEventListener('click',()=>switchView('catalog'));
+document.getElementById('tabMapBtn').addEventListener('click',()=>switchView('map'));
+
+function showOnMap(id){
+  switchView('map');
+  const item = byId[id];
+  requestAnimationFrame(()=>{
+    mapInstance.flyTo([item.lat,item.lng], 13, {duration:0.6});
+    setTimeout(()=>{ markerById[id] && markerById[id].openPopup(); }, 650);
+  });
+}
+window.showInCatalog = function(id){ switchView('catalog'); jumpTo(id); };
+
+// ---------- map ----------
+let mapInstance = null;
+const markerById = {};
+
+function clusterCentroid(c){
+  const items = DATA.filter(d=>d.c===c);
+  const lat = items.reduce((s,d)=>s+d.lat,0)/items.length;
+  const lng = items.reduce((s,d)=>s+d.lng,0)/items.length;
+  return [lat,lng];
+}
+
+function mapsUrl(item){
+  return 'https://www.google.com/maps/search/?api=1&query=' + item.lat + ',' + item.lng;
+}
+
+function popupHTML(item){
+  const s0 = item.summary && item.summary[0] ? item.summary[0] : '';
+  return `
+    <div class="popup-title">${item.e} ${item.n}</div>
+    <div class="popup-en">${item.en}</div>
+    <div class="popup-line">${s0}</div>
+    <div class="popup-facts">⏱ ${item.dur} · 💰 ${item.cost}</div>
+    <button class="popup-btn" onclick="showInCatalog('${item.id}')">카탈로그 상세보기</button>
+    <a class="popup-btn secondary" href="${mapsUrl(item)}" target="_blank" rel="noopener">구글맵 길찾기</a>
+  `;
+}
+
+function ensureMap(){
+  if(mapInstance){ mapInstance.invalidateSize(); return; }
+  mapInstance = L.map('mapView', {scrollWheelZoom:true}).setView([34.6,-117.0], 7);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(mapInstance);
+
+  const routePts = CLUSTER_ORDER.map(clusterCentroid);
+  L.polyline(routePts,{color:'#73685B', weight:2, dashArray:'6,8', opacity:.7}).addTo(mapInstance);
+
+  DATA.forEach(item=>{
+    const marker = L.circleMarker([item.lat,item.lng],{
+      radius:9, color:'#fff', weight:2, fillColor:CLUSTER_HEX[item.c], fillOpacity:.92
+    }).addTo(mapInstance);
+    marker.bindPopup(popupHTML(item));
+    markerById[item.id] = marker;
+  });
+
+  const legend = document.getElementById('mapLegend');
+  legend.innerHTML = CLUSTER_ORDER.map(c=>`<span><span class="legend-dot" style="background:${CLUSTER_HEX[c]}"></span>${CLUSTERS[c].label}</span>`).join('');
+}
+
+// ---------- controls ----------
+const state = {cluster:'all', persp:new Set(), status:new Set(), q:''};
+
+function renderControls(){
+  const tabs = document.getElementById('clusterTabs');
+  const allTab = `<button class="tab" data-cluster="all" aria-pressed="${state.cluster==='all'}">전체 43곳</button>`;
+  tabs.innerHTML = allTab + CLUSTER_ORDER.map(c=>`<button class="tab" data-cluster="${c}" aria-pressed="${state.cluster===c}">${CLUSTERS[c].label}</button>`).join('');
+  tabs.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{state.cluster=b.dataset.cluster; render();}));
+
+  const pc = document.getElementById('perspChips');
+  pc.innerHTML = PERSPECTIVES.map(p=>`<button class="chip" data-persp="${p.id}" aria-pressed="${state.persp.has(p.id)}">${p.icon} ${p.label}</button>`).join('');
+  pc.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.persp;
+    state.persp.has(id)?state.persp.delete(id):state.persp.add(id);
+    render();
+  }));
+
+  const sc = document.getElementById('statusChips');
+  sc.innerHTML = STATUS_CHIPS.map(s=>`<button class="chip" data-status="${s}" aria-pressed="${state.status.has(s)}">${STATUS_META[s].label}</button>`).join('');
+  sc.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.status;
+    state.status.has(id)?state.status.delete(id):state.status.add(id);
+    render();
+  }));
+
+  document.getElementById('q').value = state.q;
+}
+
+function resetFilters(doRender=true){
+  state.cluster='all'; state.persp.clear(); state.status.clear(); state.q='';
+  if(doRender) render();
+}
+
+function matches(item){
+  if(state.cluster!=='all' && item.c!==state.cluster) return false;
+  if(state.persp.size && ![...state.persp].every(p=>item.tags.includes(p))) return false;
+  if(state.status.size && ![...state.status].some(s=>item.st.includes(s))) return false;
+  if(state.q){
+    const hay=(item.n+' '+item.en+' '+item.pro.map(p=>p.t+p.d).join(' ')+' '+item.con.map(p=>p.t+p.d).join(' ')+' '+item.tip).toLowerCase();
+    if(!hay.includes(state.q.toLowerCase())) return false;
+  }
+  return true;
+}
+
+function reviewUrl(item){
+  return 'https://www.google.com/search?q=' + encodeURIComponent(item.n + ' ' + item.en + ' 리뷰 후기');
+}
+
+function cardHTML(item){
+  const badges = item.st.map(s=>`<span class="badge ${STATUS_META[s].cls}">${STATUS_META[s].label}</span>`).join('');
+  const quote = item.quote ? `<div class="quote"><span class="qlabel">실제 방문자 리뷰</span>“${item.quote}”</div>` : '';
+  const summary = item.summary?.length ? `<ul class="summary">${item.summary.map(s=>`<li>${s}</li>`).join('')}</ul>` : '';
+  const pro = item.pro.length ? `<div class="pro"><div class="list-h pro-h">✓ 장점 &amp; 포인트</div><ul>${item.pro.map(x=>`<li><b>${x.t}</b><span>${x.d}</span></li>`).join('')}</ul></div>` : '<div></div>';
+  const con = item.con.length ? `<div class="con"><div class="list-h con-h">▲ 주의할 점</div><ul>${item.con.map(x=>`<li><b>${x.t}</b><span>${x.d}</span></li>`).join('')}</ul></div>` : '<div></div>';
+  const tagMini = item.tags.map(t=>{const p=PERSPECTIVES.find(x=>x.id===t); return p?`<span class="tag-pill">${p.icon} ${p.label}</span>`:'';}).join('');
+  return `
+  <article class="card" id="${item.id}" style="--card-bg:${item.c==='vegas'?'var(--c-vegas-bg)':item.c==='sd'?'var(--c-sd-bg)':item.c==='la'?'var(--c-la-bg)':'var(--c-oc-bg)'}; --card-c:${CLUSTER_HEX[item.c]}">
+    <div class="banner">
+      <div class="ticket-no">${item.id.toUpperCase()}</div>
+      <div class="emoji">${item.e}</div>
+      <div><h3>${item.n}</h3><div class="en">${item.en}</div></div>
+    </div>
+    <div class="perf"></div>
+    <div class="badges">${badges}${item.note?`<span class="badge b-review">${item.note}</span>`:''}</div>
+    ${summary}
+    <div class="facts">
+      <div><span class="fact-label">⏱ 소요시간</span><span class="fact-val">${item.dur}</span></div>
+      <div><span class="fact-label">💰 예상비용</span><span class="fact-val">${item.cost}</span></div>
+      <div><span class="fact-label">🚗 이동수단</span><span class="fact-val">${item.move}</span></div>
+    </div>
+    <div class="lists">${pro}${con}</div>
+    ${quote}
+    ${item.tip ? `<details><summary>추가 배경 정보 더보기</summary><div class="tipbox">${item.tip}</div></details>` : ''}
+    <div class="card-foot">
+      <div class="tags-mini">${tagMini}</div>
+      <div class="link-row">
+        <button class="card-link" onclick="showOnMap('${item.id}')">📍 지도에서 보기</button>
+        <a class="card-link" href="${reviewUrl(item)}" target="_blank" rel="noopener">후기 검색 ↗</a>
+      </div>
+    </div>
+  </article>`;
+}
+
+function render(){
+  renderControls();
+  const main = document.getElementById('main');
+  let shown=0;
+  let html='';
+  CLUSTER_ORDER.forEach(c=>{
+    if(state.cluster!=='all' && state.cluster!==c) return;
+    const clusterItems = DATA.filter(d=>d.c===c);
+    const visible = clusterItems.filter(matches);
+    shown += visible.length;
+    if(!visible.length) return;
+    html += `
+    <section class="leg" style="--leg-c:${CLUSTER_HEX[c]}">
+      <div class="leg-head">
+        <span class="leg-no">LEG ${CLUSTER_ORDER.indexOf(c)+1}/4</span>
+        <h2>${CLUSTERS[c].label}</h2>
+        <span class="leg-sub">${CLUSTERS[c].sub}</span>
+        <span class="leg-note">체류기간 미정 · 순서만 고정</span>
+      </div>
+      <div class="grid">${visible.map(cardHTML).join('')}</div>
+    </section>`;
+  });
+  if(!shown){
+    html = `<div style="padding:60px 0; text-align:center; color:var(--ink-soft);">조건에 맞는 명소가 없습니다. 필터를 조정해보세요.</div>`;
+  }
+  main.innerHTML = html;
+  document.getElementById('count').textContent = `${shown} / ${DATA.length}곳 표시 중`;
+}
+
+document.getElementById('q').addEventListener('input', e=>{state.q=e.target.value; render();});
+document.getElementById('resetBtn').addEventListener('click', ()=>resetFilters());
+
+renderRoute();
+renderThemes();
+render();
+</script>
+</body>
+</html>

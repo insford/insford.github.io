@@ -487,6 +487,11 @@
       --card-glow: rgba(6, 182, 212, 0.25);
     }
 
+    .portal-card.card-travel {
+      --card-accent: #f59e0b;
+      --card-glow: rgba(245, 158, 11, 0.25);
+    }
+
     /* Card Top Bar */
     .card-top {
       display: flex;
@@ -928,6 +933,7 @@
           <button class="filter-btn" data-category="finance">📈 주식 & 자산배분</button>
           <button class="filter-btn" data-category="sydney">🦘 시드니 1년 살기</button>
           <button class="filter-btn" data-category="yacht">⛵ 요트 & 해양레저</button>
+          <button class="filter-btn" data-category="travel">✈️ 가족여행 플래닝</button>
         </div>
       </div>
     </section>
@@ -1079,6 +1085,54 @@
         </div>
       </a>
 
+      <!-- Card 4: US West Coast Family Trip Catalog -->
+      <a href="la_catalog.html" class="portal-card card-travel" data-category="travel" data-keywords="미국여행 라스베이거스 샌디에이고 로스앤젤레스 la 오렌지카운티 가족여행 디즈니랜드 그랜드캐년 지도 로드트립 3세대">
+        <div class="card-top">
+          <div class="card-icon-wrap">🧭</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Family Trip Planner</span>
+            <span class="status-pill">
+              <span class="indicator-dot" style="background:#f59e0b;"></span>
+              Planning Draft
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">웨스트코스트 3세대 가족여행 카탈로그</h3>
+        <p class="card-desc">
+          라스베이거스 · 샌디에이고 · LA · 오렌지카운티 42개 후보 관광지를 지도와 함께 비교하는 가족여행 플래닝 카탈로그
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">🗺️</span>
+            <span><strong>인터랙티브 지도</strong>: 전체 후보지 위치를 권역별 색상 마커로 한눈에 확인</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🎛️</span>
+            <span><strong>다관점 필터</strong>: 어르신 평지·아이 추천·영화감성·무료 등 10가지 관점으로 비교</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">💰</span>
+            <span><strong>장단점 & 실전 정보</strong>: 소요시간·예상비용·이동수단과 실제 후기 요약 제공</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#3세대가족여행</span>
+          <span class="tag">#웨스트코스트로드트립</span>
+          <span class="tag">#지도연동카탈로그</span>
+          <span class="tag">#여행플래닝</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            카탈로그 열기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [4]</span>
+        </div>
+      </a>
+
       <!-- No search results fallback -->
       <div class="no-results" id="noResultsMsg">
         <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</p>
@@ -1177,11 +1231,13 @@
         <a href="/my-stock/" id="footerStockLink">주식 리밸런싱 대시보드</a>
         <a href="sydney-year-life-research.html">시드니 마스터 백서</a>
         <a href="/yacht-license-guide/" id="footerYachtLink">요트 면허 & 가족 세일링</a>
+        <a href="la_catalog.html">가족여행 카탈로그</a>
       </div>
       <div class="keyboard-bar">
         <span>단축키: <span class="kbd">1</span> 주식대시보드</span>
         <span><span class="kbd">2</span> 시드니마스터백서</span>
         <span><span class="kbd">3</span> 요트마스터가이드</span>
+        <span><span class="kbd">4</span> 가족여행카탈로그</span>
         <span><span class="kbd">/</span> 검색창 이동</span>
         <span><span class="kbd">ESC</span> 검색 초기화</span>
       </div>
@@ -1365,6 +1421,8 @@
         window.location.href = 'sydney-year-life-research.html';
       } else if (e.key === '3') {
         window.location.href = yachtUrl;
+      } else if (e.key === '4') {
+        window.location.href = 'la_catalog.html';
       } else if (e.key === '/') {
         e.preventDefault();
         searchInput.focus();
