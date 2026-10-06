@@ -11,7 +11,7 @@
   color-scheme: light;
   --bg:#F3EEE1; --surface:#FFFCF5; --surface-2:#ECE3CE; --ink:#2B2420; --ink-soft:#73685B;
   --line:#DCD2BA; --accent:#1F6E70; --accent-ink:#FFFFFF; --stamp:#D8572A; --warn:#AE3B2C;
-  --good:#2E7D4A;
+  --good:#2E7D4A; --wife:#8E5FB0; --wife-bg:#EFE4F5;
   --shadow:0 1px 2px rgba(43,36,32,.08), 0 10px 26px -14px rgba(43,36,32,.22);
   --c-vegas:#B5432B; --c-vegas-bg:#F6E1D3; --c-sd:#1C7A80; --c-sd-bg:#D9EEEE;
   --c-la:#B9821B; --c-la-bg:#F3E4BE; --c-oc:#3C7D4B; --c-oc-bg:#DFEED8;
@@ -47,6 +47,8 @@ a{color:var(--accent);}
 .theme-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:14px;}
 .theme-card{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 16px 10px; box-shadow:var(--shadow);}
 .theme-card .t-title{font-weight:700; font-size:.92rem; margin-bottom:10px; display:flex; align-items:center; gap:6px;}
+.theme-card-highlight{border-color:var(--wife); box-shadow:0 0 0 1px var(--wife) inset;}
+.t-note{font-size:.76rem; color:var(--ink-soft); margin:-4px 0 10px; line-height:1.4;}
 .pick-list{display:flex; flex-direction:column; gap:6px;}
 .pick-btn{display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:none; border:none; padding:6px 8px; border-radius:8px; cursor:pointer; color:var(--ink); font:inherit; font-size:.86rem;}
 .pick-btn:hover, .pick-btn:focus-visible{background:var(--surface-2); outline:none;}
@@ -92,6 +94,8 @@ a{color:var(--accent);}
 .b-confirmed{background:var(--stamp); color:#fff;}
 .b-review{background:var(--warn); color:#fff;}
 .b-fixed{background:var(--ink); color:var(--bg);}
+.b-wife{background:var(--wife-bg); color:var(--wife); border:1px solid var(--wife);}
+.b-shop{background:var(--surface-2); color:var(--ink-soft); border:1px dashed var(--line);}
 
 .summary{margin:14px 20px 0; padding:12px 14px; background:var(--surface-2); border-radius:10px; display:flex; flex-direction:column; gap:6px;}
 .summary li{list-style:none; font-size:.86rem; line-height:1.5;}
@@ -211,7 +215,7 @@ footer p{color:var(--ink-soft); font-size:.8rem; line-height:1.7; max-width:820p
     <div class="map-legend" id="mapLegend"></div>
   </div>
   <div id="mapView"></div>
-  <p class="map-note">점선은 라스베이거스→샌디에이고→LA·패서디나→오렌지카운티로 이어지는 대략적인 이동 방향입니다(각 권역 대표 좌표 연결). 마커를 클릭하면 요약 정보와 함께 카탈로그 상세 카드로 이동하거나 구글맵 길찾기를 열 수 있습니다. 좌표는 대표 위치 기준 추정치이며, 실제 방문 전 정확한 주소는 구글맵에서 재확인하세요. 그랜드캐년 헬기투어(🚁)는 볼더시티 탑승 지점을 표시합니다.</p>
+  <p class="map-note">점선은 라스베이거스→샌디에이고→LA·패서디나→오렌지카운티로 이어지는 대략적인 이동 방향입니다(각 권역 대표 좌표 연결). 마커를 클릭하면 요약 정보와 함께 카탈로그 상세 카드로 이동하거나 구글맵 길찾기를 열 수 있습니다. 좌표는 대표 위치 기준 추정치이며, 실제 방문 전 정확한 주소는 구글맵에서 재확인하세요. 그랜드캐년 헬기투어(🚁)는 볼더시티 탑승 지점을 표시합니다. <strong>보라색 테두리 마커</strong>는 자연경관·동물원을 선호하는 와이프 픽 명소입니다.</p>
 </div>
 
 <footer>
@@ -255,7 +259,7 @@ const STATUS_CHIPS = ['existing','new','confirmed','review'];
 
 // id 규칙: 클러스터 접두사 + 원문서 번호 / pro,con = {t:핵심, d:상세(후기형 근거)} / lat,lng = 대표 좌표(추정)
 const DATA = [
- {id:'vegas-1',c:'vegas',n:'불의 계곡 주립공원',en:'Valley of Fire State Park',e:'🔥',st:['existing','confirmed'],lat:36.4360,lng:-114.5310,
+ {id:'vegas-1',c:'vegas',n:'불의 계곡 주립공원',en:'Valley of Fire State Park',e:'🔥',st:['existing','confirmed'],lat:36.4360,lng:-114.5310,wife:true,
   dur:'반나절 · 총 4시간',cost:'차량당 ~$10',move:'미니밴 50분',
   summary:['👴 어르신: 브라이스캐년(왕복 9시간) 대신 차로 50분, 16℃ 온화한 날씨','👶 아이: 코끼리 바위 평지 3분 + 야생 큰뿔양 탐정놀이','🎬 영화: 《스타트렉》·《트랜스포머》 촬영지, 붉은 물결 파이어 웨이브'],
   pro:[{t:'화이트 돔 시닉 바이웨이',d:'드라이브만으로도 70대 부모님이 연신 감탄하는 화성 같은 절경, 차에서 내리지 않고도 감상 가능'},
@@ -288,7 +292,7 @@ const DATA = [
   quote:'',
   tip:'호수 위에서 펼쳐지는 세계 최대 규모 음악 분수쇼와 거대 생화 실내 정원. Day1~2 저녁 산책에 자연스럽게 포함하기 좋음.',
   tags:['elder','kid','free','indoor','photo']},
- {id:'vegas-4',c:'vegas',n:'베네시안 운하 & 패션쇼몰',en:'Venetian Canals & Fashion Show',e:'🛶',st:['existing'],lat:36.1211,lng:-115.1695,
+ {id:'vegas-4',c:'vegas',n:'베네시안 운하 & 패션쇼몰',en:'Venetian Canals & Fashion Show',e:'🛶',st:['existing'],lat:36.1211,lng:-115.1695,shopLow:true,
   dur:'2~3시간',cost:'입장 무료 (곤돌라 체험 ~$39/인)',move:'스트립 도보',
   summary:['👴 어르신: 날씨 무관 쾌적한 실내 평지 산책','👶 아이: 곤돌라 뱃사공 노래 공연 구경','💡 핵심: 스트립 최대 쇼핑몰과 바로 연결'],
   pro:[{t:'전천후 실내',d:'인공 하늘 천장 아래 이탈리아풍 운하를 날씨와 무관하게 산책'},
@@ -332,7 +336,7 @@ const DATA = [
   tip:'스트립 남쪽 끝(Mandalay Bay 인근)의 상징적인 빈티지 네온 간판.',
   tags:['free','photo','elder']},
 
- {id:'sd-1',c:'sd',n:'샌디에이고 동물원',en:'San Diego Zoo',e:'🦁',st:['new'],lat:32.7353,lng:-117.1490,
+ {id:'sd-1',c:'sd',n:'샌디에이고 동물원',en:'San Diego Zoo',e:'🦁',st:['new'],lat:32.7353,lng:-117.1490,wife:true,
   dur:'3~4시간',cost:'~$64/인(성인) · ~$54(아동)',move:'렌트카, 발보아파크 내',
   summary:['👴 부모님: 2층 가이드버스 35분, 무릎 하중 제로','👶 아이들: 2024년 복귀한 판다 윈촨&신바오 직관','👫 부부: 스카이파리 케이블카에서 원시림 정글 뷰'],
   pro:[{t:'2층 가이드 버스',d:'입장권 포함, 35분간 앉아서 동물원 70%를 관람 — 무릎 하중 제로'},
@@ -350,7 +354,7 @@ const DATA = [
   quote:'',
   tip:'아프리카 사바나 평원을 옮겨놓은 초대형 자연방목 야생동물 공원. 동물원 본원과 비교하면 이동거리·더위 부담이 커 3세대 가족에는 본원이 우선 추천.',
   tags:['kid','nature','ride']},
- {id:'sd-3',c:'sd',n:'라호야 코브',en:'La Jolla Cove',e:'🦭',st:['existing','confirmed'],lat:32.8508,lng:-117.2713,
+ {id:'sd-3',c:'sd',n:'라호야 코브',en:'La Jolla Cove',e:'🦭',st:['existing','confirmed'],lat:32.8508,lng:-117.2713,wife:true,
   dur:'1.5~2시간',cost:'무료',move:'다운타운서 차로 20분',
   summary:['👨‍👩‍👧 온가족: 3m 코앞에서 바다사자 가족의 낮잠·다이빙 관찰','👴 부모님: 턱 없는 평지 콘크리트 산책로+잔디밭 벤치','👶 아이들: 칠드런스풀에서 바다사자 vs 물개 비교 학습'],
   pro:[{t:'천연 서식지 관찰',d:'수족관이 아닌 진짜 야생 바다사자·물개 수십 마리가 자연 바위에서 일광욕'},
@@ -387,7 +391,7 @@ const DATA = [
   quote:'',
   tip:'캘리포니아 발상지로 19세기 멕시코 전통 가옥과 수공예품 상점가가 늘어서 있음.',
   tags:['kid','food','free']},
- {id:'sd-7',c:'sd',n:'카브리요 국립기념지',en:'Cabrillo National Monument',e:'🌊',st:['new'],lat:32.6723,lng:-117.2412,
+ {id:'sd-7',c:'sd',n:'카브리요 국립기념지',en:'Cabrillo National Monument',e:'🌊',st:['new'],lat:32.6723,lng:-117.2412,wife:true,
   dur:'1.5시간',cost:'차량당 ~$20 (NPS 입장료)',move:'포인트로마, 차로 정상 진입',
   summary:['👴 어르신: 차로 정상까지 바로 진입, 보행 부담 없음','🐋 계절 포인트: 1~2월 야생 회색고래 이동 관측 시즌','💡 핵심: 1542년 유럽인 첫 캘리포니아 상륙지'],
   pro:[{t:'360도 파노라마',d:'태평양 바다와 샌디에이고 스카이라인을 동시에 조망'},
@@ -404,7 +408,7 @@ const DATA = [
   quote:'',
   tip:'샌디에이고 만을 따라 조성된 목조 건물 상점가, 반나절 마무리용 코스로 적합.',
   tags:['elder','free','food']},
- {id:'sd-9',c:'sd',n:'버치 아쿠아리움',en:'Birch Aquarium at Scripps',e:'🐠',st:['new'],lat:32.8661,lng:-117.2544,
+ {id:'sd-9',c:'sd',n:'버치 아쿠아리움',en:'Birch Aquarium at Scripps',e:'🐠',st:['new'],lat:32.8661,lng:-117.2544,wife:true,
   dur:'1.5~2시간',cost:'~$25/인(성인) · ~$20(아동)',move:'라호야 코브서 차로 5분',
   summary:['👶 아이: 터치탱크에서 불가사리·성게 직접 만지기','👴 어르신: 냉난방 완비 실내 휴식처','💡 핵심: 라호야 코브서 차로 5분, 연계 추천'],
   pro:[{t:'터치탱크 체험',d:'야생 바다사자를 본 다음, 직접 만지는 체험으로 아이 몰입도를 극대화'},
@@ -434,7 +438,7 @@ const DATA = [
   quote:'',
   tip:'뉴욕 센트럴파크 5배 크기 그리피스 파크 정상, 평일(화~목) 오후 3:30~4:00 도착을 추천. 남쪽 테라스 난간·서쪽 잔디광장이 명당 포토존.',
   tags:['elder','kid','movie','free','photo']},
- {id:'la-2',c:'la',n:'헌팅턴 라이브러리 & 식물원',en:'The Huntington',e:'🌿',st:['existing','confirmed'],lat:34.1281,lng:-118.1145,
+ {id:'la-2',c:'la',n:'헌팅턴 라이브러리 & 식물원',en:'The Huntington',e:'🌿',st:['existing','confirmed'],lat:34.1281,lng:-118.1145,wife:true,
   dur:'3~4시간',cost:'~$29/인(성인) · ~$15(아동), 화요일 휴무',move:'패서디나 숙소 인근',
   summary:['👴 부모님: 70대 조부모님 만족도 압도적 1위, 호숫가 누각 힐링','👶 아이들: 어린이 정원 미스트 분수·소리터널·물도랑 체험','💡 핵심: 무료 순환 셔틀로 중국·일본 정원 편안히 직행'],
   pro:[{t:'호숫가 중국정원 힐링',d:'대리석 다리·정자·폭포가 어우러진 미국 최대 규모 중국식 정원에서 차를 마시며 휴식'},
@@ -473,7 +477,7 @@ const DATA = [
   quote:'',
   tip:'LA 서부 언덕 위 새하얀 대리석 건축물. 태평양이 내려다보이는 야외 선인장·원형 정원에서 어르신 휴식 겸 산책.',
   tags:['elder','kid','free','indoor','photo']},
- {id:'la-6',c:'la',n:'데스칸소 가든',en:'Descanso Gardens',e:'🌲',st:['new'],lat:34.1992,lng:-118.2201,
+ {id:'la-6',c:'la',n:'데스칸소 가든',en:'Descanso Gardens',e:'🌲',st:['new'],lat:34.1992,lng:-118.2201,wife:true,
   dur:'2~3시간',cost:'~$15/인',move:'라카냐다, 패서디나 인근',
   summary:['👶 아이: 숲속을 달리는 미니 증기기차($5) 탑승','👴 어르신: 참나무 그늘 80% 덮인 평지 산책로','💡 핵심: 헌팅턴 가든과 테마 중복, 택일 권장'],
   pro:[{t:'동백꽃 숲길 평지',d:'2월 만발한 동백꽃과 참나무 그늘 아래 평지 산책로'},
@@ -562,7 +566,7 @@ const DATA = [
   quote:'',
   tip:'뉴포트비치 지역의 대표적인 가족 힐링 코스.',
   tags:['elder','kid','ocean','photo']},
- {id:'oc-4',c:'oc',n:'어바인 그레이트 파크',en:'Orange County Great Park',e:'🌳',st:['existing'],lat:33.6783,lng:-117.7423,
+ {id:'oc-4',c:'oc',n:'어바인 그레이트 파크',en:'Orange County Great Park',e:'🌳',st:['existing'],lat:33.6783,lng:-117.7423,wife:true,
   dur:'1.5~2시간',cost:'무료 (열기구 탑승 무료)',move:'어바인',
   summary:['💸 핵심: 완전 무료 초대형 평지 복합공원','👶 아이: 아파트 10층 높이 헬륨 열기구 무료 탑승','💡 핵심: 회전목마, 광활한 잔디밭'],
   pro:[{t:'무료 헬륨열기구',d:'아파트 10층 높이까지 수직으로 뜨는 주황색 거대 헬륨 열기구를 완전 무료로 체험'}],
@@ -570,7 +574,7 @@ const DATA = [
   quote:'',
   tip:'초대형 평지 복합공원이라 어르신·아이 모두 부담 없이 산책 가능.',
   tags:['kid','free','elder']},
- {id:'oc-5',c:'oc',n:'크리스탈 코브 주립공원',en:'Crystal Cove State Park',e:'🌊',st:['existing'],lat:33.5703,lng:-117.8336,
+ {id:'oc-5',c:'oc',n:'크리스탈 코브 주립공원',en:'Crystal Cove State Park',e:'🌊',st:['existing'],lat:33.5703,lng:-117.8336,wife:true,
   dur:'1.5~2시간',cost:'차량당 ~$15',move:'해안도로',
   summary:['💡 핵심: 태평양 해안 절벽과 해안선 절경','🍽️ 식도락: 역사적 오두막 레스토랑에서 브런치','👴 어르신: 전망대는 평지, 해변 하강은 일부 계단'],
   pro:[{t:'해안절벽 브런치',d:'바다 바로 앞 역사적 오두막 레스토랑(The Beachcomber)에서 파도 소리 들으며 식사'}],
@@ -578,7 +582,7 @@ const DATA = [
   quote:'',
   tip:'전망대 조망만으로도 충분히 만족스러운 해안절벽 포인트.',
   tags:['elder','ocean','food','photo']},
- {id:'oc-6',c:'oc',n:'라구나비치 & 헤이슬러파크',en:'Laguna Beach & Heisler Park',e:'🎨',st:['new'],lat:33.5434,lng:-117.7857,
+ {id:'oc-6',c:'oc',n:'라구나비치 & 헤이슬러파크',en:'Laguna Beach & Heisler Park',e:'🎨',st:['new'],lat:33.5434,lng:-117.7857,wife:true,
   dur:'1.5~2시간',cost:'무료',move:'결혼식장 인근',
   summary:['💡 핵심: 예술가 해안마을, 에메랄드빛 태평양','👴 어르신: 완벽한 평지 꽃길 산책로','🚗 동선: 사촌 결혼식장(Laguna Hills) 인근'],
   pro:[{t:'평지 꽃길 산책',d:'절벽을 따라 조성된 헤이슬러 파크의 평지 꽃길에서 에메랄드빛 해안 조망'},
@@ -587,7 +591,7 @@ const DATA = [
   quote:'',
   tip:'예술가 해안 마을 특유의 갤러리·카페도 함께 즐기기 좋음.',
   tags:['elder','ocean','free','photo']},
- {id:'oc-7',c:'oc',n:'다나포인트 돌고래/고래 크루즈',en:'Dana Point Whale Watching',e:'🐬',st:['new'],lat:33.4616,lng:-117.6981,
+ {id:'oc-7',c:'oc',n:'다나포인트 돌고래/고래 크루즈',en:'Dana Point Whale Watching',e:'🐬',st:['new'],lat:33.4616,lng:-117.6981,wife:true,
   dur:'2시간',cost:'~$70/인(성인) · ~$45(아동)',move:'다나포인트 하버',
   summary:['💡 핵심: ‘세계 돌고래의 수도’ 다나포인트 하버','🐋 계절 포인트: 2월은 회색고래 이동 관측 최적기','👶 아이: 수백 마리 야생 돌고래 점프 직관'],
   pro:[{t:'세계 돌고래의 수도',d:'대형 카타마란(쌍동선)을 타고 수백 마리 야생 돌고래 떼의 점프를 직관'},
@@ -621,7 +625,7 @@ const DATA = [
   quote:'',
   tip:'기름진 현지식 연속 섭취를 끊어주는 균형 잡힌 한식 보급 거점.',
   tags:['food','indoor']},
- {id:'oc-11',c:'oc',n:'사우스 코스트 플라자',en:'South Coast Plaza',e:'🛍️',st:['new'],lat:33.6894,lng:-117.8886,
+ {id:'oc-11',c:'oc',n:'사우스 코스트 플라자',en:'South Coast Plaza',e:'🛍️',st:['new'],lat:33.6894,lng:-117.8886,shopLow:true,
   dur:'1.5~2시간',cost:'무료 입장',move:'코스타메사',
   summary:['💡 핵심: 미국 서부 최대 럭셔리 실내 쇼핑몰','🌧️ 대체 옵션: 비 오거나 쌀쌀한 날 완벽한 실내 평지','🍜 핵심: 딘타이펑 딤섬 식사 연계'],
   pro:[{t:'서부 최대 럭셔리몰',d:'냉난방 완비 실내 평지 산책이 가능한 대형 쇼핑 공간'},
@@ -630,7 +634,7 @@ const DATA = [
   quote:'',
   tip:'날씨 변수에 대응하는 백업 일정으로 보관해두면 좋음.',
   tags:['elder','indoor','food','free']},
- {id:'oc-12',c:'oc',n:'어바인 스펙트럼 센터',en:'Irvine Spectrum Center',e:'🎡',st:['new'],lat:33.6373,lng:-117.7466,
+ {id:'oc-12',c:'oc',n:'어바인 스펙트럼 센터',en:'Irvine Spectrum Center',e:'🎡',st:['new'],lat:33.6373,lng:-117.7466,shopLow:true,
   dur:'1.5~2시간',cost:'무료 입장 (관람차 별도 소액)',move:'어바인',
   summary:['💡 핵심: 무료 입장 야외 오픈몰','🎡 포인트: 대형 관람차+회전목마, 어르신도 앉아서 탑승','💡 핵심: 디즈니랜드 다음날 완전휴식일 저녁 나들이로 적합'],
   pro:[{t:'무료 야외오픈몰',d:'대형 관람차와 회전목마가 있는 가족형 쇼핑·엔터테인먼트 복합단지'},
@@ -642,6 +646,7 @@ const DATA = [
 ];
 
 const THEMES = [
+  {title:'🌳 와이프 픽 — 자연·동물원 베스트', note:'쇼핑몰보다 자연경관·동물원 선호 (시드니 센테니얼파크 같은 느낌) — 🌳 배지가 붙은 곳 우선 고려', picks:['sd-1','sd-3','la-2','oc-5']},
   {title:'🐾 한국에 없는 거대 자연/동물원', picks:['sd-1','sd-2','la-2','sd-3']},
   {title:'🎬 남편 헐리우드 & 라라랜드 성지', picks:['la-1','la-4','la-3','la-10']},
   {title:'👴 70대 부모님 만족도(평지/힐링)', picks:['la-2','sd-4','oc-3','vegas-3']},
@@ -661,8 +666,9 @@ function renderRoute(){
 function renderThemes(){
   const el = document.getElementById('themeGrid');
   el.innerHTML = THEMES.map(t=>`
-    <div class="theme-card">
+    <div class="theme-card${t.note?' theme-card-highlight':''}">
       <div class="t-title">${t.title}</div>
+      ${t.note?`<div class="t-note">${t.note}</div>`:''}
       <div class="pick-list">
         ${t.picks.map((id,i)=>{const d=byId[id]; return `<button class="pick-btn" data-jump="${id}"><span class="pick-rank">${i+1}</span><span>${d.e}</span><span>${d.n}</span></button>`;}).join('')}
       </div>
@@ -743,7 +749,8 @@ function ensureMap(){
 
   DATA.forEach(item=>{
     const marker = L.circleMarker([item.lat,item.lng],{
-      radius:9, color:'#fff', weight:2, fillColor:CLUSTER_HEX[item.c], fillOpacity:.92
+      radius: item.wife ? 11 : 9, color: item.wife ? '#8E5FB0' : '#fff', weight: item.wife ? 3 : 2,
+      fillColor:CLUSTER_HEX[item.c], fillOpacity:.92
     }).addTo(mapInstance);
     marker.bindPopup(popupHTML(item));
     markerById[item.id] = marker;
@@ -803,6 +810,8 @@ function reviewUrl(item){
 
 function cardHTML(item){
   const badges = item.st.map(s=>`<span class="badge ${STATUS_META[s].cls}">${STATUS_META[s].label}</span>`).join('');
+  const wifeBadge = item.wife ? '<span class="badge b-wife">🌳 와이프 픽</span>' : '';
+  const shopBadge = item.shopLow ? '<span class="badge b-shop">🛍️ 쇼핑 위주(낮은 우선순위)</span>' : '';
   const quote = item.quote ? `<div class="quote"><span class="qlabel">실제 방문자 리뷰</span>“${item.quote}”</div>` : '';
   const summary = item.summary?.length ? `<ul class="summary">${item.summary.map(s=>`<li>${s}</li>`).join('')}</ul>` : '';
   const pro = item.pro.length ? `<div class="pro"><div class="list-h pro-h">✓ 장점 &amp; 포인트</div><ul>${item.pro.map(x=>`<li><b>${x.t}</b><span>${x.d}</span></li>`).join('')}</ul></div>` : '<div></div>';
@@ -816,7 +825,7 @@ function cardHTML(item){
       <div><h3>${item.n}</h3><div class="en">${item.en}</div></div>
     </div>
     <div class="perf"></div>
-    <div class="badges">${badges}${item.note?`<span class="badge b-review">${item.note}</span>`:''}</div>
+    <div class="badges">${badges}${wifeBadge}${shopBadge}${item.note?`<span class="badge b-review">${item.note}</span>`:''}</div>
     ${summary}
     <div class="facts">
       <div><span class="fact-label">⏱ 소요시간</span><span class="fact-val">${item.dur}</span></div>
