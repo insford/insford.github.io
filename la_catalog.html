@@ -37,8 +37,8 @@ a{color:var(--accent);}
 .meta-chip{font-family:"IBM Plex Mono",monospace; font-size:.78rem; background:var(--surface); border:1px solid var(--line); border-radius:100px; padding:6px 14px; color:var(--ink-soft);}
 .meta-chip.flag{color:var(--stamp); border-color:var(--stamp); font-weight:600;}
 
-.viewtabs{display:flex; gap:8px; padding:16px 0; position:sticky; top:0; background:var(--bg); z-index:30; border-bottom:1px solid var(--line);}
-.viewtab{font-family:"Fraunces",serif; font-size:1rem; font-weight:600; padding:9px 20px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer;}
+.viewtabs{display:flex; flex-wrap:wrap; gap:8px; padding:16px 0; position:sticky; top:0; background:var(--bg); z-index:30; border-bottom:1px solid var(--line);}
+.viewtab{font-family:"Fraunces",serif; font-size:1rem; font-weight:600; padding:9px 20px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer; white-space:nowrap;}
 .viewtab[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent);}
 
 .curator{padding-block:26px;}
@@ -54,7 +54,7 @@ a{color:var(--accent);}
 .pick-btn:hover, .pick-btn:focus-visible{background:var(--surface-2); outline:none;}
 .pick-rank{font-family:"IBM Plex Mono",monospace; font-size:.72rem; color:var(--ink-soft); width:1.1em;}
 
-.controls{position:sticky; top:57px; z-index:20; background:var(--bg); border-bottom:1px solid var(--line); padding-block:14px;}
+.controls{position:sticky; top:0; z-index:20; background:var(--bg); border-bottom:1px solid var(--line); padding-block:14px;}
 .controls-inner{display:flex; flex-direction:column; gap:10px;}
 .tabrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
 .tab{font-family:"IBM Plex Mono",monospace; font-size:.78rem; font-weight:500; border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:7px 14px; border-radius:100px; cursor:pointer;}
@@ -156,7 +156,12 @@ footer p{color:var(--ink-soft); font-size:.8rem; line-height:1.7; max-width:820p
 
 @media (max-width:560px){
   .banner{flex-direction:column; text-align:center;}
-  .controls{top:48px;}
+  .leg-head .leg-note{margin-left:0;}
+  .viewtab{font-size:.88rem; padding:8px 14px;}
+  #mapView{height:58vh; min-height:320px;}
+}
+@media (max-width:400px){
+  .theme-grid{grid-template-columns:1fr;}
 }
 </style>
 </head>
@@ -774,6 +779,15 @@ function switchView(view){
 }
 document.getElementById('tabCatalogBtn').addEventListener('click',()=>switchView('catalog'));
 document.getElementById('tabMapBtn').addEventListener('click',()=>switchView('map'));
+
+function syncStickyOffset(){
+  const viewtabs = document.querySelector('.viewtabs');
+  const controls = document.getElementById('controls');
+  if(viewtabs && controls) controls.style.top = viewtabs.offsetHeight + 'px';
+}
+window.addEventListener('resize', syncStickyOffset);
+window.addEventListener('load', syncStickyOffset);
+syncStickyOffset();
 
 function showOnMap(id){
   switchView('map');
