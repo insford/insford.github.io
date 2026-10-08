@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>쏠비치 변산 가을 가족여행 — 권역별 관광지 카탈로그</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --font-sans: "Archivo", system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --bg: #F3EEE1;
+  --surface: #FFFCF5;
+  --surface-2: #ECE3CE;
+  --surface-3: #F8F3E3;
+  --ink: #2B2420;
+  --ink-soft: #73685B;
+  --ink-muted: #9B8F7E;
+  --line: #DCD2BA;
+  --line-subtle: #E8E0CB;
+  --accent: #1F6E70;
+  --accent-ink: #FFFFFF;
+  --stamp: #D8572A;
+  --warn: #AE3B2C;
+  --good: #2E7D4A;
+  --kids: #B23A6B;
+  --kids-bg: #F6DCE6;
+  --shadow: 0 1px 2px rgba(43,36,32,.08), 0 10px 26px -14px rgba(43,36,32,.22);
+
+  --c-cliff: #1C7A80;      --c-cliff-bg: #D9EEEE;
+  --c-red: #B5432B;        --c-red-bg: #F6E1D3;
+  --c-mountain: #3C7D4B;   --c-mountain-bg: #DFEED8;
+  --c-gomso: #8E5FB0;      --c-gomso-bg: #EFE4F5;
+  --c-saemangeum: #4A6FA5; --c-saemangeum-bg: #DCE4F2;
+  --c-gochang: #B9821B;    --c-gochang-bg: #F3E4BE;
+}
+
+*{box-sizing:border-box;}
+html,body{background:var(--bg); color:var(--ink); font-family:var(--font-sans); margin:0; line-height:1.55;}
+h1,h2,h3{font-family:var(--font-serif); margin:0;}
+.mono{font-family:var(--font-mono);}
+a{color:var(--accent); text-decoration:none;}
+.wrap{max-width:1480px; margin:0 auto; padding-inline:20px;}
+
+/* ---------- Masthead ---------- */
+.masthead{padding-block:40px 24px; border-bottom:2px solid var(--line);}
+.masthead .eyebrow{font-family:var(--font-mono); font-size:.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--stamp); font-weight:600;}
+.masthead h1{font-size:clamp(1.8rem,4vw,2.9rem); font-weight:700; margin-top:8px; line-height:1.15; color:var(--ink);}
+.masthead .sub{color:var(--ink-soft); font-size:1.02rem; margin-top:12px; max-width:860px; line-height:1.6;}
+.meta-row{display:flex; gap:10px; flex-wrap:wrap; margin-top:20px;}
+.meta-chip{font-family:var(--font-mono); font-size:.78rem; background:var(--surface); border:1px solid var(--line); border-radius:100px; padding:6px 14px; color:var(--ink-soft); display:inline-flex; align-items:center; gap:6px;}
+.meta-chip.flag{color:var(--stamp); border-color:var(--stamp); font-weight:600; background:rgba(216,87,42,0.08);}
+.meta-chip.base{color:var(--accent); border-color:var(--accent); font-weight:600; background:rgba(31,110,112,0.08);}
+
+.route{display:flex; align-items:center; gap:0; margin-top:24px; overflow-x:auto; padding-bottom:6px;}
+.route .stop{display:flex; flex-direction:column; align-items:center; min-width:110px; flex-shrink:0;}
+.route .dot{width:14px; height:14px; border-radius:50%; border:3px solid var(--surface);}
+.route .label{margin-top:8px; font-weight:700; font-size:.86rem; text-align:center;}
+.route .note{font-family:var(--font-mono); font-size:.68rem; color:var(--ink-soft);}
+.route .seg{flex:1; min-width:32px; height:0; border-top:2px dashed var(--line); margin-top:7px;}
+
+/* ---------- Plan Accordion Banner ---------- */
+.itinerary-box{margin-top:24px; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 20px;}
+.itinerary-box summary{cursor:pointer; font-weight:700; font-size:.95rem; color:var(--accent); display:flex; align-items:center; gap:8px;}
+.itinerary-box summary::-webkit-details-marker{display:none;}
+.itinerary-content{display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:16px; margin-top:14px; padding-top:14px; border-top:1px solid var(--line);}
+.plan-col{background:var(--surface-3); border:1px solid var(--line); border-radius:10px; padding:14px;}
+.plan-col h4{margin:0 0 8px; font-size:.9rem; color:var(--ink); display:flex; align-items:center; justify-content:space-between;}
+.plan-col ul{margin:0; padding-left:18px; font-size:.82rem; color:var(--ink-soft); display:flex; flex-direction:column; gap:6px;}
+
+/* ---------- Viewtabs & Theme Toggle ---------- */
+.viewtabs{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:14px 0; position:sticky; top:0; background:var(--bg); z-index:30; border-bottom:1px solid var(--line);}
+.viewtabs-left{display:flex; gap:8px; align-items:center;}
+.viewtab{font-family:var(--font-sans); font-size:.92rem; font-weight:600; padding:8px 18px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); cursor:pointer; white-space:nowrap; transition:all .2s;}
+.viewtab[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-weight:700;}
+/* ---------- Curator ---------- */
+.curator{padding-block:24px 18px;}
+.curator h2{font-size:1.3rem; margin-bottom:4px; color:var(--ink);}
+.curator .hint{color:var(--ink-soft); font-size:.88rem; margin-bottom:16px;}
+.theme-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:14px;}
+.theme-card{background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 16px 12px; box-shadow:var(--shadow);}
+.theme-card .t-title{font-weight:700; font-size:.92rem; margin-bottom:8px; display:flex; align-items:center; gap:6px; color:var(--ink);}
+.theme-card-kids{border-color:var(--kids); box-shadow:0 0 0 1px var(--kids) inset;}
+.t-note{font-size:.76rem; color:var(--ink-soft); margin:-2px 0 10px; line-height:1.4;}
+.pick-list{display:flex; flex-direction:column; gap:5px;}
+.pick-btn{display:flex; align-items:center; gap:8px; width:100%; text-align:left; background:none; border:none; padding:6px 8px; border-radius:8px; cursor:pointer; color:var(--ink); font:inherit; font-size:.84rem; transition:background .15s;}
+.pick-btn:hover, .pick-btn:focus-visible{background:var(--surface-2); outline:none;}
+.pick-rank{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-muted); width:1.2em;}
+
+/* ---------- Controls ---------- */
+.controls{position:sticky; top:0; z-index:20; background:var(--bg); border-bottom:1px solid var(--line); padding-block:12px;}
+.controls-inner{display:flex; flex-direction:column; gap:10px;}
+.tabrow{display:flex; gap:8px; flex-wrap:wrap; align-items:center;}
+.tab{font-family:var(--font-mono); font-size:.78rem; font-weight:500; border:1px solid var(--line); background:var(--surface); color:var(--ink); padding:7px 14px; border-radius:100px; cursor:pointer; transition:all .15s;}
+.tab[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink); border-color:var(--accent); font-weight:700;}
+.chiprow{display:flex; gap:6px; flex-wrap:wrap;}
+.chip{font-size:.78rem; border:1px solid var(--line); background:var(--surface); color:var(--ink-soft); padding:5px 12px; border-radius:100px; cursor:pointer; display:inline-flex; gap:5px; align-items:center; transition:all .15s;}
+.chip[aria-pressed="true"]{background:var(--surface-2); color:var(--ink); border-color:var(--accent); font-weight:600;}
+.searchrow{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+#q{flex:1; min-width:200px; max-width:380px; font:inherit; font-size:.88rem; padding:8px 14px; border-radius:100px; border:1px solid var(--line); background:var(--surface); color:var(--ink);}
+#q:focus{outline:2px solid var(--accent); border-color:var(--accent);}
+.count{font-family:var(--font-mono); font-size:.78rem; color:var(--ink-soft); white-space:nowrap;}
+.reset{font-size:.78rem; color:var(--warn); background:none; border:none; cursor:pointer; text-decoration:underline; font-family:inherit; padding:0;}
+
+/* ---------- Catalog Grid & Cards ---------- */
+.leg{padding-block:28px 16px;}
+.leg-head{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:18px; padding-bottom:12px; border-bottom:3px solid var(--leg-c);}
+.leg-no{font-family:var(--font-mono); font-size:.78rem; background:var(--leg-c); color:#fff; padding:3px 10px; border-radius:6px; font-weight:600;}
+.leg-head h2{font-size:1.45rem; color:var(--leg-c);}
+.leg-head .leg-sub{color:var(--ink-soft); font-size:.88rem;}
+.leg-head .leg-note{font-family:var(--font-mono); font-size:.74rem; color:var(--ink-soft); margin-left:auto; background:var(--surface-2); padding:4px 10px; border-radius:100px;}
+
+.grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:24px;}
+@media (max-width:920px){ .grid{grid-template-columns:1fr;} }
+
+.card{background:var(--surface); border:1px solid var(--line); border-radius:16px; box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden; transition:box-shadow .3s, transform .2s;}
+.card:hover{transform:translateY(-2px);}
+.card.flash{box-shadow:0 0 0 3px var(--accent), var(--shadow);}
+.banner{background:var(--card-bg); padding:20px 20px 18px; position:relative; display:flex; align-items:center; gap:16px;}
+.ticket-no{position:absolute; top:12px; left:14px; font-family:var(--font-mono); font-size:.7rem; color:var(--card-c); font-weight:700; opacity:.85;}
+.emoji{font-size:2.5rem; line-height:1; flex-shrink:0;}
+.banner-info{flex:1; min-width:0;}
+.banner h3{font-size:1.3rem; color:var(--card-c); line-height:1.2; word-break:keep-all;}
+.en{font-size:.78rem; color:var(--ink-soft); margin-top:4px; font-style:italic;}
+.perf{border-top:2px dashed var(--line); position:relative; margin:0 16px;}
+.perf::before,.perf::after{content:"";position:absolute; top:-4px; width:7px;height:7px;border-radius:50%; background:var(--line);}
+.perf::before{left:-3px;} .perf::after{right:-3px;}
+
+.badges{display:flex; gap:6px; flex-wrap:wrap; padding:12px 18px 0;}
+.badge{font-size:.68rem; font-weight:600; padding:3px 9px; border-radius:100px; font-family:var(--font-mono);}
+.b-confirmed{background:var(--stamp); color:#fff;}
+.b-recom{background:var(--surface-2); color:var(--ink);}
+.b-kids{background:var(--kids-bg); color:var(--kids); border:1px solid var(--kids);}
+.b-tide{background:var(--c-saemangeum-bg); color:var(--accent); border:1px solid var(--accent);}
+.b-indoor{background:var(--c-mountain-bg); color:var(--good); border:1px solid var(--good);}
+
+.summary{margin:12px 18px 0; padding:12px 14px; background:var(--surface-3); border-radius:10px; display:flex; flex-direction:column; gap:6px; border:1px solid var(--line-subtle);}
+.summary li{list-style:none; font-size:.85rem; line-height:1.5; color:var(--ink);}
+
+.facts{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; padding:14px 18px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-top:14px; background:var(--surface);}
+.fact-label{color:var(--ink-muted); display:block; font-size:.7rem;}
+.fact-val{font-family:var(--font-mono); font-size:.8rem; font-weight:600; color:var(--ink); display:block; margin-top:3px; line-height:1.35;}
+
+.lists{display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:14px 18px 4px;}
+@media (max-width:600px){ .lists{grid-template-columns:1fr;} }
+.list-h{font-size:.78rem; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:5px;}
+.list-h.pro-h{color:var(--good);}
+.list-h.con-h{color:var(--warn);}
+.lists ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:8px;}
+.lists li{font-size:.82rem; line-height:1.45; padding-left:1.35em; position:relative;}
+.pro li::before{content:"✓"; position:absolute; left:0; color:var(--good); font-weight:700;}
+.con li::before{content:"▲"; position:absolute; left:0; color:var(--warn); font-size:.7em; top:.28em;}
+.lists li b{display:block; font-weight:600; margin-bottom:1px; color:var(--ink);}
+.lists li span{color:var(--ink-soft); font-size:.79rem;}
+
+.quote{margin:12px 18px 0; padding:10px 14px; background:var(--surface-3); border-left:3px solid var(--card-c); font-size:.83rem; color:var(--ink-soft); border-radius:0 8px 8px 0;}
+.quote .qlabel{display:block; font-weight:700; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--card-c); margin-bottom:3px;}
+
+details{margin:12px 18px 0;}
+summary{cursor:pointer; font-size:.8rem; color:var(--accent); font-weight:600; list-style:none;}
+summary::-webkit-details-marker{display:none;}
+summary::before{content:"＋ "; }
+details[open] summary::before{content:"－ ";}
+.tipbox{font-size:.82rem; line-height:1.55; color:var(--ink-soft); margin-top:8px; padding-top:8px; border-top:1px dashed var(--line);}
+
+.card-foot{margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:8px; padding:12px 18px; border-top:1px solid var(--line); flex-wrap:wrap;}
+.tags-mini{display:flex; gap:4px; flex-wrap:wrap;}
+.tag-pill{font-size:.65rem; background:var(--surface-2); color:var(--ink-soft); padding:2px 8px; border-radius:100px; font-family:var(--font-mono);}
+.link-row{display:flex; gap:10px; flex-wrap:wrap;}
+.card-link{font-size:.78rem; font-weight:600; white-space:nowrap; text-decoration:none; display:inline-flex; align-items:center; gap:4px; background:none; border:none; cursor:pointer; color:var(--accent); font-family:inherit; padding:0;}
+.card-link:hover{text-decoration:underline;}
+
+/* ---------- Map View ---------- */
+#mapSection{padding-block:24px;}
+.map-top{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;}
+.map-legend{display:flex; gap:12px; flex-wrap:wrap; font-size:.8rem; color:var(--ink-soft);}
+.legend-dot{display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:5px; vertical-align:middle;}
+#mapView{height:72vh; min-height:440px; border-radius:16px; overflow:hidden; border:1px solid var(--line); box-shadow:var(--shadow);}
+.map-note{font-size:.8rem; color:var(--ink-soft); margin-top:12px; line-height:1.6;}
+.leaflet-popup-content-wrapper{background:var(--surface); color:var(--ink); border-radius:12px; border:1px solid var(--line);}
+.leaflet-popup-content{font-family:var(--font-sans); margin:12px 14px; min-width:220px;}
+.popup-title{font-family:var(--font-serif); font-weight:700; font-size:1.02rem; margin-bottom:2px; color:var(--ink);}
+.popup-en{font-size:.72rem; color:var(--ink-soft); font-style:italic; margin-bottom:8px;}
+.popup-line{font-size:.8rem; margin-bottom:6px; line-height:1.4; color:var(--ink);}
+.popup-facts{font-family:var(--font-mono); font-size:.72rem; color:var(--ink-soft); margin-bottom:10px;}
+.popup-btn{display:inline-block; font-size:.76rem; font-weight:600; padding:5px 10px; border-radius:100px; background:var(--accent); color:var(--accent-ink); text-decoration:none; margin-right:6px; margin-top:4px; cursor:pointer; border:none;}
+.popup-btn.secondary{background:var(--surface-2); color:var(--ink);}
+
+footer{padding:36px 0 50px; border-top:1px solid var(--line); margin-top:16px; background:var(--surface-3);}
+footer p{color:var(--ink-soft); font-size:.82rem; line-height:1.7; max-width:860px;}
+
+[hidden]{display:none !important;}
+
+@media (max-width:640px){
+  .banner{flex-direction:column; text-align:center;}
+  .leg-head .leg-note{margin-left:0;}
+  .viewtab{font-size:.84rem; padding:7px 14px;}
+  #mapView{height:60vh; min-height:340px;}
+  .controls{position:static; top:auto;}
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Family Autumn Vacation · 4 PAX · 2 Nights 3 Days</div>
+    <h1>쏠비치 변산 가을 가족여행 — 권역별 관광지 카탈로그</h1>
+    <p class="sub">2026년 10월 9일(금, 한글날) ~ 10월 11일(일) 2박 3일. 쏠비치 변산(소노벨 변산)을 베이스캠프로 떠나는 가을 서해안 힐링 로드. 만 5세 쌍둥이 가족 맞춤 25개 명소의 3줄 요약, 장단점 후기, 소요시간·비용·이동거리와 대화형 지도로 한눈에 비교하고 선택하세요.</p>
+    
+    <div class="route" id="route"></div>
+
+    <div class="meta-row">
+      <span class="meta-chip flag">📅 2026.10.09(금) – 10.11(일) 한글날 연휴</span>
+      <span class="meta-chip base">🏨 베이스캠프: 쏠비치 변산 (소노벨 변산)</span>
+      <span class="meta-chip">👶 만 5세 쌍둥이 동반 (유모차·평지 친화)</span>
+      <span class="meta-chip">🚗 승용차 자유여행 (권역별 5~35분)</span>
+      <span class="meta-chip">🌊 서해 3대 낙조 & 채석강 물때 연계</span>
+      <span class="meta-chip">🦀 제철 대하·꽃게 & 백합죽 미식</span>
+    </div>
+
+    <details class="itinerary-box">
+      <summary>🗓️ 2박 3일 추천 동선 시나리오 3선 보기 (기본 힐링 / 키즈 액티비티 / 우천 실내) <span class="mono" style="font-size:.76rem; font-weight:normal; color:var(--ink-soft); margin-left:auto;">[클릭하여 펼치기]</span></summary>
+      <div class="itinerary-content">
+        <div class="plan-col">
+          <h4>코스 A: 바다자연 & 여유 힐링 <span style="font-size:.72rem; color:var(--good);">[기본추천]</span></h4>
+          <ul>
+            <li><strong>Day 1 (금):</strong> 도착 ➔ 격포항 백합죽 점심 ➔ 쏠비치 체크인 ➔ 격포해변 모래놀이 ➔ 채석강 해식동굴(간조) ➔ 닭이봉 일몰</li>
+            <li><strong>Day 2 (토):</strong> 내소사 전나무숲길(유모차) ➔ 곰소 젓갈백반 ➔ 곰소염전 & 슬지제빵소 ➔ 적벽강 수성당 ➔ 오션플레이 스파</li>
+            <li><strong>Day 3 (일):</strong> 고사포 송림 숲길 ➔ 변산해변 어린이놀이터 ➔ 국립새만금간척박물관 ➔ 방조제 드라이브 귀가</li>
+          </ul>
+        </div>
+        <div class="plan-col">
+          <h4>코스 B: 만 5세 맞춤 키즈 액티비티 <span style="font-size:.72rem; color:var(--kids);">[아이최애]</span></h4>
+          <ul>
+            <li><strong>Day 1 (금):</strong> 격포해변 모래놀이 ➔ 쏠비치 오션플레이 워터파크(온수풀 3h) ➔ 격포항 대하구이 & 바지락칼국수</li>
+            <li><strong>Day 2 (토):</strong> 고창 상하농원(동물 먹이주기 & 소시지 공방) ➔ 파머스 레스토랑 ➔ 곰소 슬지제빵소(소금빵) ➔ 채석강 노을</li>
+            <li><strong>Day 3 (일):</strong> 줄포만 갯벌생태공원(가족 전동 자전거) ➔ 부안청자박물관(물레 체험) ➔ 점심 후 귀가</li>
+          </ul>
+        </div>
+        <div class="plan-col">
+          <h4>코스 C: 우천 / 강풍 시 실내 대체 <span style="font-size:.72rem; color:var(--accent);">[날씨대비]</span></h4>
+          <ul>
+            <li><strong>Day 1 (금):</strong> 쏠비치 체크인 ➔ 부안영상테마파크(또는 대형카페) ➔ 쏠비치 오션플레이 실내존 & 노천 사우나</li>
+            <li><strong>Day 2 (토):</strong> 부안청자박물관(실내 전시&체험) ➔ 곰소 슬지제빵소 ➔ 국립새만금간척박물관 & 신재생에너지파크(4D)</li>
+            <li><strong>Day 3 (일):</strong> 내소사(비 오는 날 전나무 운치) ➔ 격포항 바지락칼국수 ➔ 안전 귀가</li>
+          </ul>
+        </div>
+      </div>
+    </details>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="viewtabs">
+    <div class="viewtabs-left">
+      <button class="viewtab" id="tabCatalogBtn" aria-pressed="true">📋 카탈로그로 보기</button>
+      <button class="viewtab" id="tabMapBtn" aria-pressed="false">🗺️ 지도로 보기</button>
+    </div>
+  </nav>
+</div>
+
+<div id="catalogView">
+  <section class="curator">
+    <div class="wrap">
+      <h2>🧭 테마별 큐레이터 Top 픽</h2>
+      <p class="hint">관심 있는 테마의 후보지를 누르면 해당 명소 카드로 부드럽게 이동합니다.</p>
+      <div class="theme-grid" id="themeGrid"></div>
+    </div>
+  </section>
+
+  <nav class="controls" id="controls">
+    <div class="wrap controls-inner">
+      <div class="tabrow" id="clusterTabs"></div>
+      <div class="chiprow" id="perspChips"></div>
+      <div class="chiprow" id="statusChips"></div>
+      <div class="searchrow">
+        <input id="q" type="search" placeholder="이름·키워드로 검색 (예: 소금빵, 모래놀이, 전나무, 평지)" aria-label="검색">
+        <span class="count" id="count"></span>
+        <button class="reset" id="resetBtn">필터 초기화</button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="wrap" id="main"></main>
+</div>
+
+<div id="mapSection" class="wrap" hidden>
+  <div class="map-top">
+    <h2>🗺️ 변산반도 & 인근 명소 인터랙티브 지도 (총 25곳)</h2>
+    <div class="map-legend" id="mapLegend"></div>
+  </div>
+  <div id="mapView"></div>
+  <p class="map-note">★ <strong>쏠비치 변산(분홍 마커)</strong>은 이번 여행의 베이스캠프입니다. 각 마커를 누르면 요약 정보와 함께 네이버·카카오 지도 길찾기를 바로 실행하거나 카탈로그 상세 카드로 이동할 수 있습니다. <strong>황금빛 테두리 마커</strong>는 만 5세 쌍둥이 아이들이 가장 좋아하는 키즈 특화 명소입니다.</p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p><strong>ℹ️ 여행 참고 안내</strong> · 본 카탈로그는 2026년 10월 9일~11일 가을 연휴 쏠비치 변산 숙박을 기준으로 맞춤 작성되었습니다. 채석강 해식동굴 탐방은 반드시 국립해양조사원(스마트 조석예보 격포항 기준) 간조 시각(저조 전후 2시간)에 맞춰 안전하게 방문하시기 바랍니다. 지도는 OpenStreetMap 타일을 사용하며 실시간 네이버/카카오 지도 길찾기와 연동됩니다. 원본 문서: <span class="mono">권역별_관광지_추천풀.md</span></p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ---------- 클러스터 정의 ----------
+const CLUSTERS = {
+  cliff:      {label:'격포·채석강', sub:'숙소 도보~차로 20분 / 해식동굴·노을·솔섬·모항', c:'#1C7A80'},
+  red:        {label:'적벽강·고사포', sub:'차로 5~12분 / 붉은암벽 & 솔숲', c:'#B5432B'},
+  mountain:   {label:'내변산·문화', sub:'차로 20~28분 / 전나무숲길·폭포·사찰', c:'#3C7D4B'},
+  gomso:      {label:'곰소만·줄포', sub:'차로 23~35분 / 염전·디저트 & 갯벌', c:'#8E5FB0'},
+  saemangeum: {label:'새만금·신재생', sub:'차로 15~25분 / 국립박물관 & 드라이브', c:'#4A6FA5'},
+  gochang:    {label:'고창 연계', sub:'차로 40~48분 / 상하농원 & 선운사', c:'#B9821B'}
+};
+const CLUSTER_ORDER = ['cliff','red','mountain','gomso','saemangeum','gochang'];
+
+const PERSPECTIVES = [
+  {id:'kid', label:'👶 5세 아이 추천', icon:'👶'},
+  {id:'stroller', label:'🌲 유모차·평지', icon:'🌲'},
+  {id:'sunset', label:'🌅 노을·인생샷', icon:'🌅'},
+  {id:'indoor', label:'🏛️ 실내·체험', icon:'🏛️'},
+  {id:'ocean', label:'🌊 바다·갯벌', icon:'🌊'},
+  {id:'food', label:'🍜 미식·디저트', icon:'🍜'},
+  {id:'free', label:'💸 무료·알뜰', icon:'💸'}
+];
+
+const STATUS_META = {
+  confirmed: {label:'🌟 확정 유력', cls:'b-confirmed'},
+  recom:     {label:'👍 추천', cls:'b-recom'},
+  kids_pick: {label:'👶 키즈 픽', cls:'b-kids'},
+  tide:      {label:'🌊 물때 필수', cls:'b-tide'},
+  indoor_alt:{label:'🌤️ 실내 안심', cls:'b-indoor'}
+};
+const STATUS_CHIPS = ['confirmed','recom','kids_pick','tide','indoor_alt'];
+
+// ---------- 명소 데이터 (총 25선) ----------
+const DATA = [
+  // 1. 격포·채석강
+  {id:'cliff-1', c:'cliff', n:'채석강 & 해식동굴', en:'Chaeseokgang Cliffs & Sea Cave', e:'🌊', st:['confirmed','tide'],
+   lat:35.6251, lng:126.4682, kidFav:true,
+   dur:'1~1.5시간', cost:'무료', move:'숙소 도보 5분',
+   summary:['👶 쌍둥이: 수만 권 책을 쌓은 듯한 신기한 지층과 바위 틈 게·고둥 탐정놀이','👫 부부: 웅장한 지질 파노라마와 해식동굴 실루엣 감성 인생샷','💡 핵심: 하루 2회 간조(물 빠지는 시간) 전후 2시간에만 진입 가능!'],
+   pro:[{t:'압도적 지질 절경', d:'국가지정 명승 제13호, 파도가 깎아낸 수만 겹의 퇴적 지층 절벽'},
+        {t:'도보 5분 최고 접근성', d:'쏠비치 리조트 뒤편 해안산책로로 바로 연결되어 이동 피로도 제로'}],
+   con:[{t:'갯바위 미끄럼 주의', d:'바닷물이 닿는 바위와 녹조는 매우 미끄러움 — 5세 아이는 미끄럼 방지 운동화 필수 착용 및 손잡고 보행'},
+        {t:'밀물 고립 위험', d:'물 들어올 때는 신속히 나와야 하므로 당일 조석표 간조 시각 체크 필수'}],
+   quote:'"교과서에서 보던 층리 절벽을 아이 눈앞에서 직접 보여줄 수 있어 감동이었습니다. 간조 때 동굴 안에서 바다를 배경으로 찍은 가족사진은 평생 액자감이에요!"',
+   tip:'숙소 로비나 해양조사원 웹에서 당일 간조 시간을 꼭 확인하세요. 10월 초순 가을 바닷바람이 상쾌하지만 저녁엔 쌀쌀하므로 겉옷을 챙기세요.',
+   tags:['ocean','sunset','free','kid']},
+
+  {id:'cliff-2', c:'cliff', n:'격포해수욕장', en:'Gyeokpo Beach', e:'🏖️', st:['confirmed','kids_pick'],
+   lat:35.6272, lng:126.4703, kidFav:true,
+   dur:'1~2시간', cost:'무료', move:'숙소 바로 앞 도보 2분',
+   summary:['👶 쌍둥이: 부드러운 고운 모래밭에서 모래성 쌓기 & 조개껍데기 줍기','👫 부부: 해 질 무렵 서해안 3대 낙조가 붉게 물드는 황금빛 해안 산책','💡 핵심: 쏠비치 객실과 광장에서 계단 하나로 연결되는 최고의 베이스캠프 해변'],
+   pro:[{t:'완벽한 숙소 접근성', d:'놀다가 모래 묻으면 바로 객실로 올라와 씻길 수 있는 최고의 편의성'},
+        {t:'노을 감상 명당', d:'오후 5시 30분경 붉게 물드는 하늘과 바다가 만들어내는 환상적인 일몰'}],
+   con:[{t:'가을철 바닷바람', d:'10월 해 질 녘엔 바닷바람이 다소 차가울 수 있으니 아이들 바람막이 점퍼 준비'}],
+   quote:'"리조트 바로 코앞이라 아이들과 부담 없이 모래놀이 도구 들고 내려가서 1시간 놀고 오기 딱 좋았습니다."',
+   tip:'리조트 1층 베이커리나 편의점에서 따뜻한 음료 한 잔 테이크아웃해서 해안 데크 벤치에 앉아 쉬기 좋습니다.',
+   tags:['ocean','sunset','free','kid']},
+
+  {id:'cliff-3', c:'cliff', n:'격포항 수산시장 & 방파제', en:'Gyeokpo Port Fish Market & Breakwater', e:'🦀', st:['confirmed'],
+   lat:35.6205, lng:126.4729,
+   dur:'1.5시간', cost:'식사 1인 1.5만~3만', move:'숙소 차로 3분 (도보 15분)',
+   summary:['👶 쌍둥이: 수조 속 살아 움직이는 가을 꽃게·대하 구경 & 빨간 등대 산책','👫 부부: 부안 명물 백합죽/바지락칼국수와 제철 해산물 가족 외식','💡 핵심: 유모차로 편안하게 걸을 수 있는 평지 방파제와 해상 인도교'],
+   pro:[{t:'아이 식사 최적화', d:'맵지 않고 고소하고 부드러운 백합죽과 바지락칼국수는 5세 유아 식사 1순위'},
+        {t:'가을 해산물 제철', d:'10월은 살이 꽉 찬 꽃게찜과 대하 소금구이가 가장 맛있는 시즌'}],
+   con:[{t:'피크타임 주차 혼잡', d:'주말 점심/저녁 피크 시간대에는 수산시장 공영주차장이 붐빌 수 있음'}],
+   quote:'"백합죽이 정말 고소해서 입 짧은 아이들도 한 그릇 뚝딱 비웠습니다. 방파제 산책로도 유모차 끌기 편해요."',
+   tip:'격포항 남방파제 해상 인도교를 걸어 빨간 등대까지 가면 시원한 바다 뷰와 갈매기들을 가까이 볼 수 있습니다.',
+   tags:['food','ocean','stroller']},
+
+  {id:'cliff-4', c:'cliff', n:'닭이봉 전망대 & 팔각정', en:'Dakibong Observatory', e:'🌅', st:['recom'],
+   lat:35.6247, lng:126.4713,
+   dur:'40분', cost:'무료', move:'숙소 차로 4분 (도보 20분)',
+   summary:['👶 쌍둥이: 2층 카페에서 달콤한 아이스크림 먹으며 항구에 오가는 배 구경','👫 부부: 채석강 지층 상부와 격포항, 위도까지 서해 바다를 360도로 굽어보는 파노라마','💡 핵심: 정상 팔각정 바로 앞까지 차로 올라갈 수 있어 보행 부담 제로!'],
+   pro:[{t:'차량 정상 진입 가능', d:'아이들이 걷기 힘들어도 차를 타고 정상 전망대 바로 앞까지 이동 가능'},
+        {t:'서해안 조망 1등 뷰', d:'날씨 맑은 가을날에는 멀리 고군산군도와 위도까지 시원하게 조망'}],
+   con:[{t:'진입로 폭 협소', d:'정상으로 올라가는 차도 폭이 좁은 구간이 있어 맞은편 차량 마주칠 때 서행 필요'}],
+   quote:'"격포항과 채석강이 미니어처처럼 한눈에 들어옵니다. 일몰 시간 30분 전에 올라가면 장관이에요."',
+   tip:'걸어 올라갈 경우 계단이 제법 있으니 5세 아이 동반 시에는 차량으로 정상 주차장까지 이동하는 것을 추천합니다.',
+   tags:['sunset','free']},
+
+  {id:'cliff-5', c:'cliff', n:'쏠비치 변산 오션플레이', en:'Ocean Play Byeonsan (Water Park)', e:'🏊', st:['confirmed','kids_pick','indoor_alt'],
+   lat:35.6263, lng:126.4716, kidFav:true,
+   dur:'2.5~3.5시간', cost:'투숙객 할인 약 2.4만~3만', move:'숙소 지하 1층 연결',
+   summary:['👶 쌍둥이: 따뜻한 온수 키즈풀, 슬라이드, 유수풀, 아쿠아 플레이존 대환호','👫 부부: 서해 바다가 내려다보이는 야외 인피니티풀과 피로를 푸는 노천 이벤트탕','💡 핵심: 날씨·기온에 영향받지 않는 5세 아이들의 확실한 체력 소진 보증수표!'],
+   pro:[{t:'객실 엘리베이터 직결', d:'수영복 입고 가운 걸치고 바로 내려갈 수 있는 압도적인 동선 편의'},
+        {t:'사계절 따뜻한 온천수', d:'가을철에도 실내외 전 구역 따뜻한 온수풀 운영으로 감기 걱정 없음'}],
+   con:[{t:'이용 요금 발생', d:'가족 4인 이용 시 비용 발생 (투숙객/회원/제휴카드 할인 20~30% 필수 챙길 것)'}],
+   quote:'"여행 1일차나 2일차 오후에 물놀이 3시간 시켜주면 저녁에 밥도 꿀맛으로 먹고 꿀잠 잡니다. 최고!"',
+   tip:'수영모(야구모자/캡모자 가능)와 아이들 튜브, 구명조끼를 미리 챙겨가시면 현장 대여비를 아낄 수 있습니다.',
+   tags:['kid','indoor','ocean']},
+
+  {id:'cliff-6', c:'cliff', n:'금구원조각공원', en:'Geumguwon Sculpture Park', e:'🗿', st:['recom'],
+   lat:35.6175, lng:126.4705,
+   dur:'40분~1시간', cost:'무료(기부금함)', move:'숙소 차로 7분',
+   summary:['👶 쌍둥이: 넓은 잔디 산기슭에 놓인 사람·동물 조각상 사이 숨바꼭질 놀이','👫 부부: 1966년 조성된 우리나라 최초 조각공원, 곡선미 가득한 여인상과 소나무숲의 조화','💡 핵심: 관광객이 거의 없어 한적하게 산책하며 쉬어가기 좋은 숨은 명소'],
+   pro:[{t:'한적한 숨은 명소', d:'유명 관광지와 달리 인파가 없어 아이들이 조각상 사이를 자유롭게 뛰어다닐 수 있음'},
+        {t:'자연과 예술의 조화', d:'2만여 평 야산 지형을 그대로 살려 조성한 공원이라 산책로 자체가 운치 있음'}],
+   con:[{t:'비포장 산책로', d:'일부 구간은 흙길과 완만한 경사가 있어 유모차보다는 아이와 손을 잡고 걷는 것을 추천'}],
+   quote:'"사람이 거의 없어서 아이들이 조각상 보물찾기 하듯 뛰어놀았어요. 소나무 그늘 아래서 쉬기도 좋았습니다."',
+   tip:'격포에서 곰소 방향 30번 국도 마포삼거리 인근에서 좁은 진입로로 들어가야 하니 내비게이션 안내를 끝까지 따라가세요.',
+   tags:['free','kid']},
+
+  {id:'cliff-7', c:'cliff', n:'솔섬 해넘이 전망지 (변산마실길 4코스)', en:'Solseom Sunset Point', e:'🌇', st:['recom'],
+   lat:35.6118, lng:126.4651,
+   dur:'30분~1시간', cost:'무료', move:'숙소 차로 8분 (전북학생해양수련원 주차장)',
+   summary:['👶 쌍둥이: 수평선 위 소나무 섬을 가리키며 "저게 솔섬이야!" 하는 바다 관찰 놀이','👫 부부: 우리나라에서 노을이 가장 아름답다고 소문난 포인트, 섬 뒤로 해가 지는 실루엣 사진','💡 핵심: 해넘이솔섬길(변산마실길 4코스) 초입, 전망 포인트까지는 짧은 평지 데크'],
+   pro:[{t:'채석강보다 한적한 노을뷰', d:'학생해양수련원 앞 전망데크에서 섬과 바다, 노을을 동시에 담을 수 있어 사진 명당'},
+        {t:'짧은 접근 동선', d:'주차장에서 전망 포인트까지 5분 내로 도착해 아이와 동행하기 부담 없음'}],
+   con:[{t:'날씨 의존', d:'구름이 많은 날은 노을이 흐릿할 수 있어 일몰 시각과 기상을 미리 확인하는 것이 좋음'}],
+   quote:'"채석강 노을 명당은 사람이 많은데 솔섬은 훨씬 여유롭게 볼 수 있었어요. 섬 뒤로 해가 넘어가는 순간이 장관입니다."',
+   tip:'해넘이 시각 30분 전에 도착해 자리를 잡고, 아이들 간식과 돗자리를 챙기면 느긋하게 노을을 즐길 수 있습니다.',
+   tags:['sunset','free']},
+
+  {id:'cliff-8', c:'cliff', n:'모항해수욕장', en:'Mohang Beach', e:'🏝️', st:['recom'],
+   lat:35.5805, lng:126.5155,
+   dur:'1~1.5시간', cost:'무료', move:'숙소 차로 18분',
+   summary:['👶 쌍둥이: 격포보다 한적하고 완만한 백사장에서 여유로운 모래놀이와 조개잡이','👫 부부: 울창한 소나무밭과 아담한 백사장이 어우러진 조용한 숨은 해변','💡 핵심: 격포↔곰소 이동 동선 중간에 있어 가볍게 들르기 좋은 휴식 포인트'],
+   pro:[{t:'아늑하고 조용한 분위기', d:'격포·변산해수욕장보다 작고 한적해 여유롭게 물놀이와 산책을 즐기기 좋음'},
+        {t:'소나무 그늘 쉼터', d:'해변을 둘러싼 울창한 송림이 그늘을 만들어 한낮에도 쉬어가기 좋음'}],
+   con:[{t:'편의시설 소박', d:'격포에 비해 상점·식당 수가 적으므로 간식과 물은 미리 챙겨가는 것이 안전'}],
+   quote:'"작고 조용한 해변이라 아이들이 모래놀이 하기에 딱 좋았어요. 격포에서 곰소 가는 길에 잠깐 들르기도 편합니다."',
+   tip:'곰소염전·내소사로 이동하는 길목에 있으니 Day2 오전 일정에 자연스럽게 끼워 넣기 좋습니다.',
+   tags:['stroller','ocean','free','kid']},
+
+  // 2. 적벽강·고사포
+  {id:'red-1', c:'red', n:'적벽강 & 수성당 (가을꽃밭)', en:'Jeokbyeokgang Cliff & Suseongdang', e:'🌺', st:['confirmed'],
+   lat:35.6375, lng:126.4658,
+   dur:'1~1.5시간', cost:'무료', move:'숙소 차로 7분',
+   summary:['👶 쌍둥이: 몽돌 자갈 밟는 소리 놀이 & 수성당 개양할미 바다 수호 전설 듣기','👫 부부: 붉은 암벽과 10월 가을 코스모스/메밀꽃 단지가 어우러진 비경','💡 핵심: 채석강보다 한적하고 평화로우며, 일몰 때 붉은 바위가 황금빛으로 물드는 명소'],
+   pro:[{t:'완만한 흙길 산책로', d:'수성당 언덕길은 야자매트와 평탄한 흙길로 정비되어 아이들과 걷기 수월'},
+        {t:'꽃밭과 절벽 바다의 조화', d:'가을철 절벽 위 언덕에 펼쳐지는 꽃밭과 푸른 바다가 인생사진 배경으로 최고'}],
+   con:[{t:'절벽 난간 주의', d:'해안가 쪽은 가파른 절벽이 있으므로 아이들 손을 잡고 지정 산책로로만 통행'}],
+   quote:'"채석강의 웅장함과는 또 다른 고즈넉한 매력이 있어요. 노을 질 때 붉은 암벽이 정말 감동적입니다."',
+   tip:'수성당 주차장에 차를 대고 언덕 꽃밭을 둘러본 뒤, 아래쪽 적벽강 자갈 해변으로 내려가면 완벽한 동선입니다.',
+   tags:['sunset','stroller','free','ocean']},
+
+  {id:'red-2', c:'red', n:'고사포해수욕장 & 곰솔 숲길', en:'Gosapo Beach & Pine Forest', e:'🌲', st:['recom'],
+   lat:35.6591, lng:126.4952,
+   dur:'1~1.5시간', cost:'무료', move:'숙소 차로 10분',
+   summary:['👶 쌍둥이: 솔방울 줍기 보물찾기 & 푹신한 솔잎 융단 밟기, 완만한 백사장','👫 부부: 수령 수백 년 된 울창한 해송(곰솔) 숲길 피톤치드 삼림욕','💡 핵심: 변산마실길 7코스 중 가장 평탄하고 그늘이 시원한 숲길 구간'],
+   pro:[{t:'경사 제로 완전 평지', d:'턱이나 계단이 전혀 없어 유모차나 어린아이들도 힘들이지 않고 여유롭게 산책'},
+        {t:'울창한 송림 그늘', d:'짙은 소나무 그늘 아래 돗자리 펴고 바다 보며 간식 먹기 최적'}],
+   con:[{t:'캠핑 구역 차량 주의', d:'국립공원 자동차 야영장이 조성되어 있어 차량 이동 시 서행 관찰 필요'}],
+   quote:'"솔숲 향기가 너무 상쾌해서 부모님도 아이들도 힐링 그 자체였습니다. 조용하게 바다 바라보기 좋아요."',
+   tip:'돗자리와 아이들 간식을 챙겨가면 솔숲 나무 그늘 아래에서 가을 소풍 기분을 만끽할 수 있습니다.',
+   tags:['stroller','ocean','free','kid']},
+
+  {id:'red-3', c:'red', n:'변산해수욕장 & 노을바라기 전망대', en:'Byeonsan Beach & Sunset Deck', e:'🛝', st:['confirmed','kids_pick'],
+   lat:35.6835, lng:126.5268, kidFav:true,
+   dur:'1.5~2시간', cost:'무료', move:'숙소 차로 13분',
+   summary:['👶 쌍둥이: 해변 대형 모래놀이터 & 어린이 조합놀이대 & 짚라인 대신호','👫 부부: 바다 위로 유려하게 뻗은 곡선형 해상 전망대(노을바라기) 산책','💡 핵심: 대한민국 1호 국립공원 지정 해변으로 최신 어린이 친화 시설 완비'],
+   pro:[{t:'어린이 특화 놀이시설', d:'모래놀이터, 그네, 미끄럼틀 등 만 5세 아이들이 뛰놀기 가장 좋은 야외 스팟'},
+        {t:'깨끗한 편의시설', d:'신축 화장실, 세족장, 쉼터 벤치가 잘 정비되어 있어 가족 동반에 쾌적'}],
+   con:[{t:'놀이터 그늘 부족', d:'한낮에는 햇볕이 강할 수 있으므로 아이들 모자와 선크림 필수'}],
+   quote:'"아이들이 모래놀이터와 짚라인에서 1시간 넘게 땀 흘리며 놀았어요. 해상 전망대 뷰도 정말 멋집니다."',
+   tip:'주차장에서 놀이터가 바로 연결됩니다. 여벌 옷과 물티슈를 챙겨가시면 모래놀이 후 수월하게 정리할 수 있습니다.',
+   tags:['kid','ocean','free','sunset']},
+
+  {id:'red-4', c:'red', n:'하섬 바닷길 조망쉼터', en:'Haseom Island Viewpoint', e:'🐢', st:['recom'],
+   lat:35.6661, lng:126.4977,
+   dur:'20분', cost:'무료', move:'숙소 차로 10분',
+   summary:['👶 쌍둥이: 바다 한가운데 둥둥 떠 있는 귀여운 거북이 모양 섬 발견하기','👫 부부: 음력 보름/그믐 간조 때 바다가 갈라지는 ‘모세의 기적’ 현장 조망','💡 핵심: 도로변 전망데크에 차 세우고 20분 만에 탁 트인 사진 남기는 뷰스팟'],
+   pro:[{t:'드라이브 코스 쉼터', d:'별도 트레킹 없이 도로변 주차공간에서 바로 파노라마 바다 뷰 감상'}],
+   con:[{t:'섬 내부 진입 금지', d:'조수간만의 차와 안전 문제로 섬 진입은 통제되므로 전망대에서만 조망'}],
+   quote:'"차 타고 지나가는 길에 잠깐 멈춰 서서 바다를 내려다보기 딱 좋은 뷰포인트입니다."',
+   tip:'고사포해수욕장에서 변산해수욕장으로 이동하는 해안도로(국도 30호선) 변에 위치해 있습니다.',
+   tags:['ocean','free']},
+
+  // 3. 내변산·문화
+  {id:'mountain-1', c:'mountain', n:'내소사 & 전나무 숲길', en:'Naesosa Temple & Fir Forest', e:'🌲', st:['confirmed','stroller'],
+   lat:35.6186, lng:126.5937,
+   dur:'1.5~2시간', cost:'입장료 무료 (주차 4,000원)', move:'숙소 차로 20분',
+   summary:['👶 쌍둥이: 흙길 밟으며 다람쥐와 도토리 찾기, 유모차 100% 가능한 무장애 평지길','👫 부부: ‘한국의 아름다운 길 100선’ 600m 전나무 숲길과 대웅보전 꽃창살 문살','💡 핵심: 1,000년 된 당산나무와 고즈넉한 산사 풍경이 주는 완벽한 가을 힐링'],
+   pro:[{t:'완벽한 평지 무장애길', d:'일주문부터 경내까지 계단이나 턱이 없어 유모차나 웨건을 밀고 가기 최적'},
+        {t:'피톤치드 힐링', d:'울창한 전나무 숲길의 시원하고 그윽한 나무 향기가 머리를 맑게 해줌'}],
+   con:[{t:'입구 식당가 호객', d:'주차장에서 일주문까지 식당가를 통과해야 함. 주말 점심 주차 대기 발생 가능'}],
+   quote:'"가족 모두 감탄한 최고의 힐링 코스였습니다. 유모차가 부드럽게 굴러가는 흙길이라 5세 쌍둥이도 칭얼대지 않고 잘 걸었어요."',
+   tip:'대웅보전의 못을 쓰지 않고 지은 전통 건축과 연꽃·국화 꽃창살 문살을 눈여겨보세요. 국보 백의관음보살좌본도 있습니다.',
+   tags:['stroller','kid','free']},
+
+  {id:'mountain-2', c:'mountain', n:'직소폭포 & 직소보 (호수길)', en:'Jikso Falls & Lake Path', e:'🏞️', st:['recom'],
+   lat:35.6482, lng:126.5744,
+   dur:'2~2.5시간', cost:'무료 (주차 4,000원)', move:'숙소 차로 22분',
+   summary:['👶 쌍둥이: 에메랄드빛 산중 호수(직소보)와 하트 모양 포토존, 계곡 물고기 관찰','👫 부부: 변산 8경 제1경! 병풍처럼 둘러싼 기암괴석과 30m 시원한 폭포수 절경','💡 핵심: 5세 아이 동반 시 무리해서 폭포 끝까지 가지 않고 ‘직소보 전망대’까지만 다녀와도 100점!'],
+   pro:[{t:'직소보 구간 평탄 데크', d:'실상사 터를 지나 직소보 전망대까지는 완만한 흙길과 목재 데크로 정비'},
+        {t:'압도적 산세와 호수 뷰', d:'선녀탕과 옥녀담, 직소보에 비치는 가을 산의 반영이 감탄을 자아냄'}],
+   con:[{t:'폭포 직전 돌계단', d:'직소보를 지나 폭포 바로 아래로 내려가는 구간은 돌계단이 있어 5세 아이에게 무리일 수 있음'}],
+   quote:'"직소보 전망대까지만 가볍게 산책했는데도 호수가 너무 맑고 경치가 예술이었습니다. 아이들과 걷기 적당해요."',
+   tip:'내변산분소 탐방지원센터에서 출발해 직소보 전망대까지만 왕복(약 1시간 20분)하는 코스를 강력 권장합니다.',
+   tags:['free']},
+
+  {id:'mountain-3', c:'mountain', n:'부안청자박물관', en:'Buan Celadon Museum', e:'🏺', st:['confirmed','kids_pick','indoor_alt'],
+   lat:35.6183, lng:126.6568, kidFav:true,
+   dur:'1.5~2시간', cost:'성인 3,000원 / 미취학 무료', move:'숙소 차로 25분',
+   summary:['👶 쌍둥이: 어린이 청자체험실, 퍼즐 맞추기, 나만의 도자기/머그컵 빚기 물레 체험','👫 부부: 고려 상감청자의 찬란한 비취색 유물 감상과 쾌적한 실내 문화 산책','💡 핵심: 비 오거나 바람 불 때 아이들과 방문하기 가장 좋은 전천후 국보급 실내 명소'],
+   pro:[{t:'유아 체험형 전시', d:'지하 어린이체험실에 상감기법 체험, 3D 영상, 터치스크린 등 아이 눈높이 시설 풍부'},
+        {t:'도예 체험 프로그램', d:'물레를 돌려 직접 흙을 빚거나 나만의 컵을 만드는 유료 체험(1만~1.5만) 인기'}],
+   con:[{t:'체험 사전 접수', d:'주말 도예 체험은 현장 인원 마감이 빠를 수 있으니 입장 즉시 예약 필수'}],
+   quote:'"미취학 아동은 입장료도 무료인데 내부가 너무 쾌적하고 어린이 체험실이 알차서 2시간이 훌쩍 지나갔습니다."',
+   tip:'도예 체험 완성품은 가마에 구워 한 달 뒤 집으로 택배 배송받을 수 있어 여행의 소중한 기념품이 됩니다.',
+   tags:['indoor','kid']},
+
+  {id:'mountain-4', c:'mountain', n:'부안영상테마파크', en:'Buan Movie Theme Park', e:'🏯', st:['recom'],
+   lat:35.6125, lng:126.4947,
+   dur:'1~1.5시간', cost:'성인 4,000원 / 소인 3,000원', move:'숙소 차로 6분',
+   summary:['👶 쌍둥이: 옛날 궁궐·양반집·저잣거리 뛰어놀기 & 전통 민속놀이(투호, 윷놀이)','👫 부부: 영화 《왕의 남자》, 《광해》, 드라마 《불멸의 이순신》 촬영지 산책','💡 핵심: 쏠비치에서 차로 6분 거리로 매우 가깝고 평지 위주의 넓은 오픈 스튜디오'],
+   pro:[{t:'숙소 초근접', d:'체크인 전후 자투리 시간에 가볍게 다녀오기 최적의 위치'},
+        {t:'넓은 평지 공간', d:'차가 다니지 않아 아이들이 자유롭게 뛰어다니며 옛 가옥 구경 가능'}],
+   con:[{t:'시설 일부 노후화', d:'세트장 특성상 일부 건물이 낡아 보일 수 있으니 사진 촬영과 산책 위주로 방문'}],
+   quote:'"리조트에서 정말 가까워서 점심 먹고 가볍게 들렀는데, 한옥 마당에서 투호 던지며 아이들이 즐거워했습니다."',
+   tip:'입구에서 한복 대여 체험을 이용하면 사극 속 주인공처럼 가족사진을 남길 수 있습니다.',
+   tags:['stroller','kid']},
+
+  {id:'mountain-5', c:'mountain', n:'개암사', en:'Gaeamsa Temple', e:'🍁', st:['recom'],
+   lat:35.6823, lng:126.6290,
+   dur:'1~1.5시간', cost:'무료 (주차 2,000원 내외)', move:'숙소 차로 28분',
+   summary:['👶 쌍둥이: 개암저수지 벚꽃길 흙길 산책과 우금산 자락 조용한 산사 탐방','👫 부부: 보물 제292호 대웅전과 고려 동종이 있는 백제고찰, 내소사보다 훨씬 한적한 가을 정취','💡 핵심: 내소사 인파가 부담스러울 때 선택하는 조용한 대체 사찰 코스'],
+   pro:[{t:'인파 없는 고즈넉함', d:'내소사 대비 방문객이 적어 아이와 느긋하게 경내를 둘러볼 수 있음'},
+        {t:'보물급 전통 건축', d:'634년 창건된 백제 고찰로 보물로 지정된 대웅전의 섬세한 목조 공예를 가까이서 관람'}],
+   con:[{t:'일부 돌계단 구간', d:'일주문에서 대웅전까지 완만하지만 돌계단과 경사가 섞여 있어 유모차보다 아이 손을 잡고 이동 추천'}],
+   quote:'"내소사만큼 유명하진 않지만 그만큼 조용하고 차분해서 아이와 두런두런 이야기하며 걷기 좋았어요."',
+   tip:'저수지 벚꽃길은 봄이 절정이지만, 가을에도 저수지에 비치는 우금산 반영과 단풍이 운치 있습니다.',
+   tags:['free']},
+
+  // 4. 곰소만·줄포
+  {id:'gomso-1', c:'gomso', n:'곰소염전 & 슬지제빵소', en:'Gomso Salt Pond & Seulji Bakery', e:'🥐', st:['confirmed','kids_pick'],
+   lat:35.5947, lng:126.6022, kidFav:true,
+   dur:'1.5시간', cost:'디저트 1인 6,000~10,000원', move:'숙소 차로 23분',
+   summary:['👶 쌍둥이: 곰소 소금빵 & 팥크림 찐빵, 소금 아이스크림 맛보기, 하얀 소금창고 구경','👫 부부: 바둑판 염전에 하늘이 비치는 반영 인생샷과 감성 베이커리 카페 휴식','💡 핵심: 부안 최고의 핫플레이스 카페! 우리밀과 국산 팥으로 만든 건강 디저트'],
+   pro:[{t:'아이 안심 건강빵', d:'농식품부 인증 100% 우리밀과 계약재배 팥으로 만들어 5세 아이 간식으로 안심'},
+        {t:'염전 뷰 테라스', d:'2층 테라스에서 염전을 내려다보며 여유롭게 커피를 마실 수 있는 세련된 인테리어'}],
+   con:[{t:'주말 대기 발생', d:'SNS 인기 명소라 주말 피크타임(14:00~16:00)에는 빵 구매 및 좌석 대기가 있을 수 있음'}],
+   quote:'"소금빵과 팥크림찐빵이 정말 예술입니다. 아이들이 소금 아이스크림을 너무 잘 먹었어요. 염전 포토존도 예쁩니다."',
+   tip:'내소사 탐방 후 점심 먹고 오후 1시 이전에 방문하시면 비교적 여유롭게 좋은 자리를 잡을 수 있습니다.',
+   tags:['food','sunset','kid']},
+
+  {id:'gomso-2', c:'gomso', n:'줄포만 갯벌생태공원', en:'Julpo Bay Mudflat Eco Park', e:'🚲', st:['confirmed','kids_pick','stroller'],
+   lat:35.5804, lng:126.6669, kidFav:true,
+   dur:'2~2.5시간', cost:'입장 무료 (가족자전거 1만 원대)', move:'숙소 차로 35분',
+   summary:['👶 쌍둥이: 4인승 온가족 전동 자전거 타기, 잔디밭 마음껏 달리기, 갯벌 생태체험관','👫 부부: 끝없이 펼쳐진 10월 가을 갈대숲과 억새 물결, 평화로운 해안 힐링로드','💡 핵심: 드라마 《프라하의 연인》 촬영 세트장(체코 프라하성)이 있는 숨은 보석'],
+   pro:[{t:'광활한 완전 평지', d:'턱과 오르막이 전혀 없어 아이들이 넘어져도 다치지 않는 폭신한 잔디밭과 산책로'},
+        {t:'가족 전동자전거', d:'페달을 밟지 않아도 스로틀로 편하게 달리는 다인승 자전거를 타면 온 가족 웃음꽃 만발'}],
+   con:[{t:'부지가 매우 넓음', d:'걸어서만 다니면 다리가 아플 수 있으니 입구에서 꼭 가족 자전거 대여 추천'}],
+   quote:'"이번 여행에서 아이들이 가장 신나했던 곳입니다! 전동 자전거 타고 갈대숲 사이를 달리는 기분이 최고였어요."',
+   tip:'생태관 뒤편 억새 미로밭과 갯벌 관찰데크는 가을 가족사진 명당입니다.',
+   tags:['stroller','kid','ocean','free']},
+
+  {id:'gomso-3', c:'gomso', n:'곰소 젓갈시장 & 젓갈백반 거리', en:'Gomso Fermented Seafood Market', e:'🍚', st:['recom'],
+   lat:35.5912, lng:126.6049,
+   dur:'1시간', cost:'젓갈정식 1인 1.3만~1.5만', move:'숙소 차로 23분',
+   summary:['👶 쌍둥이: 백반에 함께 나오는 생선구이, 미역국, 계란찜으로 든든한 점심식사','👫 부부: 낙지젓·명란젓·어리굴젓 등 10여 가지 젓갈로 밥 두 공기 비우는 밥도둑 체험','💡 핵심: 내소사나 슬지제빵소 다녀오는 길목 점심식사 코스로 가장 완벽한 동선'],
+   pro:[{t:'남도 밥도둑 진수', d:'곰소만 천일염으로 곰삭힌 전통 젓갈 10여 종과 푸짐한 남도 밑반찬'},
+        {t:'젓갈 포장 구매', d:'식사 후 마음에 든 젓갈을 저렴하게 포장 구매하여 집에서 반찬으로 활용'}],
+   con:[{t:'젓갈 특유의 짠맛', d:'젓갈은 아이들이 먹기 어려우므로 생선구이나 미역국이 함께 나오는 백반집 선택 필수'}],
+   quote:'"따뜻한 밥에 명란젓, 낙지젓 올려 먹으니 밥이 술술 들어갔어요. 아이들도 생선구이에 밥 한 공기 뚝딱 했습니다."',
+   tip:'식당마다 젓갈 리필이 자유로운 곳이 많습니다. 곰소항 방파제 주변에 무료 주차 공간이 넉넉합니다.',
+   tags:['food','stroller']},
+
+  // 5. 새만금·신재생
+  {id:'saemangeum-1', c:'saemangeum', n:'국립새만금간척박물관', en:'National Saemangeum Museum', e:'🏛️', st:['confirmed','kids_pick','indoor_alt'],
+   lat:35.6946, lng:126.5442, kidFav:true,
+   dur:'1.5시간', cost:'무료 (주차 무료)', move:'숙소 차로 15분',
+   summary:['👶 쌍둥이: 어린이 간척 체험 놀이터, 인터랙티브 미디어 영상, 모래 놀이 애니메이션','👫 부부: 2023년 개관한 최신 국립박물관의 쾌적한 시설과 간척의 역사 조망','💡 핵심: 모든 시설 무료! 날씨 상관없이 쾌적한 실내 에듀테인먼트 명소'],
+   pro:[{t:'최신 국립 시설', d:'냉난방 완벽, 유모차 대여, 수유실, 어린이 화장실 등 가족 편의시설 최고 수준'},
+        {t:'100% 무료 관람', d:'입장료와 주차료가 모두 무료이며, 수준 높은 체험형 인터랙티브 전시'}],
+   con:[{t:'어린이체험실 회차제', d:'주말 어린이체험실은 시간대별 선착순 운영될 수 있으니 도착 후 현장 예약 확인'}],
+   quote:'"새로 지어져서 시설이 정말 깨끗하고 아이들이 손으로 만지며 체험할 거리가 많아 아주 만족스러웠습니다."',
+   tip:'박물관 옥상 전망대에 올라가면 새만금 방조제 시작점과 탁 트인 바다가 한눈에 보입니다.',
+   tags:['indoor','kid','free']},
+
+  {id:'saemangeum-2', c:'saemangeum', n:'부안 신재생에너지테마파크', en:'Buan Renewable Energy Theme Park', e:'⚡', st:['recom','indoor_alt'],
+   lat:35.7001, lng:126.6092, kidFav:true,
+   dur:'1.5~2시간', cost:'성인 2,000원 / 유아 무료', move:'숙소 차로 20분',
+   summary:['👶 쌍둥이: 4D 특수효과 입체 애니메이션 관람 & 바람/태양 에너지 게임 캐릭터 체험','👫 부부: 미래 친환경 에너지(수소, 풍력, 태양광)를 알기 쉽게 배우는 에듀파크','💡 핵심: 넓은 야외 잔디광장과 실내 테마체험관이 어우러진 과학 놀이터'],
+   pro:[{t:'4D 영상관 인기', d:'바람이 불고 의자가 움직이는 4D 영상이 5세 아이들에게 큰 인기'},
+        {t:'우천 시 최고의 백업', d:'비 오거나 강풍 불 때 반나절을 알차게 보낼 수 있는 실내 코스'}],
+   con:[{t:'일부 전시 유아에겐 다소 난해', d:'초등학생 이상 타깃의 기술 설명 패널은 5세에겐 어려우므로 게임/체험 위주 관람'}],
+   quote:'"4D 영화도 재미있고 풍력발전기 돌리기 등 아이들이 버튼 누르고 조작하는 게임이 많아 좋아했어요."',
+   tip:'4D 영상관 상영 시간을 매표소에서 먼저 확인하고 체험관 동선을 짜시면 대기 없이 관람할 수 있습니다.',
+   tags:['indoor','kid']},
+
+  {id:'saemangeum-3', c:'saemangeum', n:'새만금 방조제 드라이브 (부안~신시도)', en:'Saemangeum Seawall Scenic Drive', e:'🚗', st:['recom'],
+   lat:35.8118, lng:126.4589,
+   dur:'왕복 1시간', cost:'무료', move:'숙소 차로 15분 진입',
+   summary:['👶 쌍둥이: 양옆으로 펼쳐진 바다 한가운데를 가로지르는 시원한 바다 고속 드라이브','👫 부부: 가력도항과 신시도 33센터 전망쉼터에서 서해 바다 지평선 감상','💡 핵심: 세계 최장 33.9km 기네스북 등재 방조제를 달리는 가을 드라이브 코스'],
+   pro:[{t:'막힘없는 시원한 도로', d:'신호등 없는 탁 트인 4차선 직선 도로를 달리며 차창 밖 가을 바다 만끽'},
+        {t:'신시도 휴게소 쉼터', d:'고군산군도 섬들을 배경으로 잠시 내려 바닷바람 쐬고 가족사진 촬영'}],
+   con:[{t:'강풍 주의', d:'바다 한가운데라 바람이 강할 수 있으므로 차 문 열고 닫을 때 주의'}],
+   quote:'"바다 위를 끝없이 달리는 기분이 상쾌했습니다. 신시도 휴게소에서 고군산군도 바라보는 뷰가 장관이에요."',
+   tip:'여행 마지막 날 체크아웃 후 부안에서 군산 방향으로 방조제를 타고 올라가며 귀가하는 동선으로 잡으면 완벽합니다.',
+   tags:['free','ocean']},
+
+  // 6. 고창 연계
+  {id:'gochang-1', c:'gochang', n:'고창 선운사 & 도솔암 숲길', en:'Seonunsa Temple & Forest Path', e:'🍁', st:['recom','stroller'],
+   lat:35.4996, lng:126.5786,
+   dur:'2시간', cost:'무료 (주차 2,000~3,000원)', move:'숙소 차로 40분',
+   summary:['👶 쌍둥이: 졸졸 흐르는 맑은 개울물 물고기 구경 & 평지 숲길 징검다리 건너기','👫 부부: 호남의 명찰 선운사 가을 숲길 산책 & 원기회복 풍천장어 구이 점심','💡 핵심: 곰소만 건너편 고창의 대표 명소로 가을 정취를 극대화할 수 있는 평지 코스'],
+   pro:[{t:'완만한 숲길 산책로', d:'매표소부터 사찰까지 경사가 완만한 평지 흙길로 정비되어 유모차 동반 수월'},
+        {t:'가을 단풍과 숲', d:'10월 초순 시원한 숲 그늘과 맑은 도솔천 계곡물이 어우러진 최고의 산책 코스'}],
+   con:[{t:'이동 거리 40분', d:'쏠비치 변산에서 편도 40분 정도 소요되므로 일정상 반나절을 온전히 배정해야 함'}],
+   quote:'"선운사 가는 도솔천 계곡 숲길이 너무나 평화로웠습니다. 산책 후 먹은 풍천장어도 꿀맛이었어요."',
+   tip:'선운사 입구 식당가에서 고창 명물 풍천장어구이로 가족 점심 식사를 연계하면 어른과 아이 모두 든든합니다.',
+   tags:['stroller','food','free']},
+
+  {id:'gochang-2', c:'gochang', n:'고창 상하농원 (파머스 빌리지)', en:'Sangha Farm Organic Agro-Park', e:'🐄', st:['confirmed','kids_pick'],
+   lat:35.4382, lng:126.4385, kidFav:true,
+   dur:'2.5~3.5시간', cost:'대인 9,000 / 소인 6,000', move:'숙소 차로 48분',
+   summary:['👶 쌍둥이: 젖소·양·염소 당근 먹이주기 & 송아지 우유주기, 동물 가족 교감 대만족','👫 부부: 유럽 시골 농원에 온 듯한 감성 건축물, 유기농 빵과 햄, 파머스 카페 휴식','💡 핵심: 만 5세 아이들에게는 이번 여행 만족도 1위가 될 수 있는 동물 복지 농장'],
+   pro:[{t:'청결한 동물 복지 농원', d:'일반 목장과 달리 악취가 거의 없고 매우 깨끗하게 관리되어 아이들과 쾌적한 체험'},
+        {t:'수제 공방 체험 & 먹거리', d:'소시지 만들기, 치즈 공방, 상하목장 유기농 아이스크림 등 고품질 먹거리 풍부'}],
+   con:[{t:'이동 거리 편도 48분', d:'변산 리조트에서 다소 거리가 있으므로 2일차 종일 코스로 잡거나 귀가길에 방문 권장'}],
+   quote:'"아이들이 동물 먹이주기를 너무 좋아해서 시간 가는 줄 몰랐습니다. 유럽풍 건물들도 너무 예쁘고 빵도 맛있어요."',
+   tip:'네이버 예약을 통해 입장권 및 소시지 만들기 공방 체험을 미리 예매하시면 더욱 편리합니다.',
+   tags:['kid','food']}
+];
+
+// ---------- 큐레이터 테마 정의 ----------
+const THEMES = [
+  {title:'👶 만 5세 쌍둥이 최애 픽', note:'동물 먹이주기, 따뜻한 워터파크, 모래놀이, 전동자전거 — 아이들이 가장 신나는 명소', picks:['cliff-5','gochang-2','gomso-2','red-3','gomso-1']},
+  {title:'🌲 유모차 & 평지 힐링 산책', note:'턱과 계단 없는 평지 코스 — 온 가족이 걷기 편안한 가을 피톤치드 숲길', picks:['mountain-1','red-2','gomso-2','gochang-1']},
+  {title:'🌅 서해 3대 낙조 & 인생샷', note:'서해 바다를 붉게 물들이는 환상적인 일몰과 지질 절벽 실루엣', picks:['cliff-1','red-1','cliff-7','cliff-4']},
+  {title:'🤫 사람 없는 숨은 명소', note:'채석강·내소사만큼 유명하진 않지만 그만큼 한적한 가을 숨은 코스', picks:['cliff-6','cliff-8','mountain-5','cliff-7']},
+  {title:'🏛️ 비·바람 와도 안심 실내체험', note:'비 오거나 쌀쌀할 때 완벽한 대체 코스 — 최신 시설과 인터랙티브 체험', picks:['saemangeum-1','mountain-3','saemangeum-2','cliff-5']},
+  {title:'🍜 부안 미식 & 디저트 성지', note:'우리밀 소금빵, 고소한 백합죽, 가을 제철 대하와 남도 젓갈백반', picks:['gomso-1','cliff-3','gomso-3','gochang-1']}
+];
+
+const byId = Object.fromEntries(DATA.map(d=>[d.id,d]));
+
+// ---------- 루트 렌더링 ----------
+function renderRoute(){
+  const el = document.getElementById('route');
+  el.innerHTML = CLUSTER_ORDER.map((c,i)=>{
+    const seg = i < CLUSTER_ORDER.length-1 ? '<div class="seg"></div>' : '';
+    return `<div class="stop">
+      <div class="dot" style="background:${CLUSTERS[c].c}"></div>
+      <div class="label" style="color:var(--ink);">${CLUSTERS[c].label}</div>
+      <div class="note">${CLUSTERS[c].sub.split('/')[0].trim()}</div>
+    </div>${seg}`;
+  }).join('');
+}
+
+// ---------- 테마 카드 렌더링 ----------
+function renderThemes(){
+  const el = document.getElementById('themeGrid');
+  el.innerHTML = THEMES.map(t=>`
+    <div class="theme-card${t.title.includes('쌍둥이') ? ' theme-card-kids' : ''}">
+      <div class="t-title">${t.title}</div>
+      <div class="t-note">${t.note}</div>
+      <div class="pick-list">
+        ${t.picks.map((id,i)=>{
+          const d = byId[id];
+          return `<button class="pick-btn" data-jump="${id}">
+            <span class="pick-rank">${i+1}</span>
+            <span>${d.e}</span>
+            <span style="font-weight:600;">${d.n}</span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  el.querySelectorAll('[data-jump]').forEach(btn=>{
+    btn.addEventListener('click', ()=>jumpTo(btn.dataset.jump));
+  });
+}
+
+function jumpTo(id){
+  resetFilters(false);
+  render();
+  requestAnimationFrame(()=>{
+    const node = document.getElementById(id);
+    if(!node) return;
+    node.scrollIntoView({behavior:'smooth', block:'center'});
+    node.classList.add('flash');
+    setTimeout(()=>node.classList.remove('flash'), 1600);
+  });
+}
+
+// ---------- 뷰 전환 ----------
+function switchView(view){
+  document.getElementById('catalogView').hidden = (view !== 'catalog');
+  document.getElementById('mapSection').hidden = (view !== 'map');
+  document.getElementById('tabCatalogBtn').setAttribute('aria-pressed', view === 'catalog');
+  document.getElementById('tabMapBtn').setAttribute('aria-pressed', view === 'map');
+  if(view === 'map') ensureMap();
+}
+document.getElementById('tabCatalogBtn').addEventListener('click', ()=>switchView('catalog'));
+document.getElementById('tabMapBtn').addEventListener('click', ()=>switchView('map'));
+
+function syncStickyOffset(){
+  const viewtabs = document.querySelector('.viewtabs');
+  const controls = document.getElementById('controls');
+  if(viewtabs && controls) controls.style.top = viewtabs.offsetHeight + 'px';
+}
+window.addEventListener('resize', syncStickyOffset);
+window.addEventListener('load', syncStickyOffset);
+
+// ---------- 필터 & 검색 상태 ----------
+let selectedCluster = 'all';
+let selectedPersp = null;
+let selectedStatus = null;
+let searchQuery = '';
+
+function renderControls(){
+  // 클러스터 탭
+  const cTabs = document.getElementById('clusterTabs');
+  cTabs.innerHTML = `
+    <button class="tab" data-cluster="all" aria-pressed="${selectedCluster==='all'}">전체 보기 (${DATA.length})</button>
+    ${CLUSTER_ORDER.map(c=>`
+      <button class="tab" data-cluster="${c}" aria-pressed="${selectedCluster===c}" style="${selectedCluster===c?`background:${CLUSTERS[c].c};color:#fff;border-color:${CLUSTERS[c].c};font-weight:700;`:''}">
+        ${CLUSTERS[c].label} (${DATA.filter(d=>d.c===c).length})
+      </button>
+    `).join('')}
+  `;
+  cTabs.querySelectorAll('[data-cluster]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      selectedCluster = btn.dataset.cluster;
+      render();
+    });
+  });
+
+  // 관점 칩
+  const pChips = document.getElementById('perspChips');
+  pChips.innerHTML = PERSPECTIVES.map(p=>`
+    <button class="chip" data-persp="${p.id}" aria-pressed="${selectedPersp===p.id}">
+      <span>${p.icon}</span> <span>${p.label}</span>
+    </button>
+  `).join('');
+  pChips.querySelectorAll('[data-persp]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      selectedPersp = selectedPersp === btn.dataset.persp ? null : btn.dataset.persp;
+      render();
+    });
+  });
+
+  // 상태 칩
+  const sChips = document.getElementById('statusChips');
+  sChips.innerHTML = STATUS_CHIPS.map(s=>`
+    <button class="chip" data-status="${s}" aria-pressed="${selectedStatus===s}">
+      <span>${STATUS_META[s].label}</span>
+    </button>
+  `).join('');
+  sChips.querySelectorAll('[data-status]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      selectedStatus = selectedStatus === btn.dataset.status ? null : btn.dataset.status;
+      render();
+    });
+  });
+}
+
+const qInput = document.getElementById('q');
+qInput.addEventListener('input', (e)=>{
+  searchQuery = e.target.value.trim().toLowerCase();
+  render();
+});
+
+document.getElementById('resetBtn').addEventListener('click', ()=>resetFilters(true));
+
+function resetFilters(rerender=true){
+  selectedCluster = 'all';
+  selectedPersp = null;
+  selectedStatus = null;
+  searchQuery = '';
+  qInput.value = '';
+  if(rerender) render();
+}
+
+// ---------- 카탈로그 메인 렌더링 ----------
+function filterData(){
+  return DATA.filter(d=>{
+    if(selectedCluster !== 'all' && d.c !== selectedCluster) return false;
+    if(selectedPersp && !d.tags.includes(selectedPersp)) return false;
+    if(selectedStatus && !d.st.includes(selectedStatus)) return false;
+    if(searchQuery){
+      const matchName = d.n.toLowerCase().includes(searchQuery);
+      const matchEn = d.en.toLowerCase().includes(searchQuery);
+      const matchSum = d.summary.some(s=>s.toLowerCase().includes(searchQuery));
+      const matchPro = d.pro.some(p=>(p.t+p.d).toLowerCase().includes(searchQuery));
+      const matchCon = d.con.some(c=>(c.t+c.d).toLowerCase().includes(searchQuery));
+      const matchTip = d.tip.toLowerCase().includes(searchQuery);
+      if(!matchName && !matchEn && !matchSum && !matchPro && !matchCon && !matchTip) return false;
+    }
+    return true;
+  });
+}
+
+function naverMapUrl(item){
+  return `https://map.naver.com/p/search/${encodeURIComponent(item.n)}`;
+}
+function kakaoMapUrl(item){
+  return `https://map.kakao.com/link/search/${encodeURIComponent(item.n)}`;
+}
+
+function renderCard(item){
+  const cluster = CLUSTERS[item.c];
+  const cardBg = `var(--c-${item.c}-bg)`;
+  const cardC = cluster.c;
+
+  return `
+    <article class="card" id="${item.id}" style="--card-bg:${cardBg}; --card-c:${cardC};">
+      <div class="banner">
+        <span class="ticket-no">${item.id.toUpperCase()} · ${cluster.label}</span>
+        <div class="emoji">${item.e}</div>
+        <div class="banner-info">
+          <h3>${item.n}</h3>
+          <div class="en">${item.en}</div>
+        </div>
+      </div>
+      <div class="perf"></div>
+
+      <div class="badges">
+        ${item.st.map(s=>`<span class="badge ${STATUS_META[s]?STATUS_META[s].cls:'b-recom'}">${STATUS_META[s]?STATUS_META[s].label:s}</span>`).join('')}
+        ${item.kidFav ? `<span class="badge b-kids">👶 쌍둥이 강력추천</span>` : ''}
+      </div>
+
+      <ul class="summary">
+        ${item.summary.map(s=>`<li>${s}</li>`).join('')}
+      </ul>
+
+      <div class="facts">
+        <div>
+          <span class="fact-label">⏱️ 권장 소요시간</span>
+          <span class="fact-val">${item.dur}</span>
+        </div>
+        <div>
+          <span class="fact-label">💰 예상 비용</span>
+          <span class="fact-val">${item.cost}</span>
+        </div>
+        <div>
+          <span class="fact-label">🚗 숙소 거리/이동</span>
+          <span class="fact-val">${item.move}</span>
+        </div>
+      </div>
+
+      <div class="lists">
+        <div class="pro">
+          <div class="list-h pro-h">✓ 가족 추천 포인트</div>
+          <ul>
+            ${item.pro.map(p=>`<li><b>${p.t}</b><span>${p.d}</span></li>`).join('')}
+          </ul>
+        </div>
+        <div class="con">
+          <div class="list-h con-h">▲ 체크포인트 & 주의사항</div>
+          <ul>
+            ${item.con.map(c=>`<li><b>${c.t}</b><span>${c.d}</span></li>`).join('')}
+          </ul>
+        </div>
+      </div>
+
+      ${item.quote ? `
+        <div class="quote">
+          <span class="qlabel">가족 여행객 생생 후기</span>
+          ${item.quote}
+        </div>
+      ` : ''}
+
+      <details>
+        <summary>탐방 팁 & 상세 가이드</summary>
+        <div class="tipbox">${item.tip}</div>
+      </details>
+
+      <div class="card-foot">
+        <div class="tags-mini">
+          ${item.tags.map(t=>`<span class="tag-pill">#${PERSPECTIVES.find(p=>p.id===t)?.label.split(' ')[1] || t}</span>`).join('')}
+        </div>
+        <div class="link-row">
+          <button class="card-link" onclick="showOnMap('${item.id}')">📍 지도에서 보기</button>
+          <a class="card-link" href="${naverMapUrl(item)}" target="_blank" rel="noopener">네이버지도</a>
+          <a class="card-link" href="${kakaoMapUrl(item)}" target="_blank" rel="noopener">카카오맵</a>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function render(){
+  renderControls();
+  const filtered = filterData();
+  document.getElementById('count').textContent = `검색 결과: ${filtered.length}개 / 전체 ${DATA.length}개`;
+
+  const main = document.getElementById('main');
+  if(filtered.length === 0){
+    main.innerHTML = `<div style="text-align:center; padding:60px 0; color:var(--ink-soft);">
+      <p style="font-size:1.1rem; margin-bottom:12px;">선택한 조건에 맞는 여행지가 없습니다.</p>
+      <button class="viewtab" onclick="resetFilters(true)">필터 전체 초기화</button>
+    </div>`;
+    return;
+  }
+
+  // 클러스터별로 그룹핑
+  const grouped = {};
+  filtered.forEach(item=>{
+    if(!grouped[item.c]) grouped[item.c] = [];
+    grouped[item.c].push(item);
+  });
+
+  const visibleClusters = CLUSTER_ORDER.filter(c=>grouped[c] && grouped[c].length > 0);
+
+  main.innerHTML = visibleClusters.map(c=>`
+    <section class="leg" style="--leg-c:${CLUSTERS[c].c}">
+      <div class="leg-head">
+        <span class="leg-no">${c.toUpperCase()}</span>
+        <h2>${CLUSTERS[c].label}</h2>
+        <span class="leg-sub">${CLUSTERS[c].sub}</span>
+        <span class="leg-note">${grouped[c].length}개 명소</span>
+      </div>
+      <div class="grid">
+        ${grouped[c].map(renderCard).join('')}
+      </div>
+    </section>
+  `).join('');
+}
+
+// ---------- Leaflet 인터랙티브 지도 ----------
+let mapInstance = null;
+const markerById = {};
+
+const RESORT_COORDS = [35.6263, 126.4716]; // 쏠비치 변산
+
+function popupHTML(item){
+  const s0 = item.summary && item.summary[0] ? item.summary[0] : '';
+  return `
+    <div class="popup-title">${item.e} ${item.n}</div>
+    <div class="popup-en">${item.en} · ${CLUSTERS[item.c].label}</div>
+    <div class="popup-line">${s0}</div>
+    <div class="popup-facts">⏱ ${item.dur} · 💰 ${item.cost} · 🚗 ${item.move}</div>
+    <div>
+      <button class="popup-btn" onclick="showInCatalog('${item.id}')">카탈로그 상세보기</button>
+      <a class="popup-btn secondary" href="${naverMapUrl(item)}" target="_blank" rel="noopener">네이버지도 길찾기</a>
+    </div>
+  `;
+}
+
+function ensureMap(){
+  if(mapInstance){
+    mapInstance.invalidateSize();
+    return;
+  }
+
+  // 지도 생성 (부안 변산반도 중심)
+  mapInstance = L.map('mapView', {scrollWheelZoom:true}).setView([35.63, 126.56], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:18,
+    attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  }).addTo(mapInstance);
+
+  // 1. 베이스캠프: 쏠비치 변산 특별 마커
+  const resortIcon = L.divIcon({
+    className: 'custom-resort-marker',
+    html: `<div style="background:#EC4899; color:#fff; width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; box-shadow:0 0 12px #EC4899; border:2px solid #fff;">🏨</div>`,
+    iconSize:[34,34],
+    iconAnchor:[17,17]
+  });
+  L.marker(RESORT_COORDS, {icon:resortIcon}).addTo(mapInstance)
+    .bindPopup(`
+      <div class="popup-title">🏨 쏠비치 변산 (소노벨 변산)</div>
+      <div class="popup-en">전북특별자치도 부안군 변산면 변산해변로 51</div>
+      <div class="popup-line">★ 2박 3일 여행의 베이스캠프! 채석강과 격포해변 바로 앞.</div>
+      <div class="popup-facts">오션플레이 워터파크 & 인피니티풀 보유</div>
+      <a class="popup-btn" href="https://map.naver.com/p/search/%EC%86%8C%EB%85%B8%EB%B2%A8%20%EB%B3%80%EC%82%B0" target="_blank" rel="noopener">네이버지도 보기</a>
+    `);
+
+  // 2. 관광지 마커 등록
+  DATA.forEach(item=>{
+    const hex = CLUSTERS[item.c].c;
+    const borderStyle = item.kidFav ? 'border:3px solid #FBBF24; box-shadow:0 0 8px #FBBF24;' : 'border:2px solid #fff; box-shadow:0 2px 5px rgba(0,0,0,0.4);';
+    const icon = L.divIcon({
+      className: 'custom-marker',
+      html: `<div style="background:${hex}; color:#fff; width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:15px; ${borderStyle}">${item.e}</div>`,
+      iconSize:[30,30],
+      iconAnchor:[15,15]
+    });
+
+    const m = L.marker([item.lat, item.lng], {icon}).addTo(mapInstance);
+    m.bindPopup(popupHTML(item));
+    markerById[item.id] = m;
+  });
+
+  // 지도 범례 생성
+  const legEl = document.getElementById('mapLegend');
+  legEl.innerHTML = `
+    <span><span class="legend-dot" style="background:#EC4899;"></span><strong>숙소 (쏠비치 변산)</strong></span>
+    ${CLUSTER_ORDER.map(c=>`
+      <span><span class="legend-dot" style="background:${CLUSTERS[c].c};"></span>${CLUSTERS[c].label}</span>
+    `).join('')}
+  `;
+}
+
+function showOnMap(id){
+  switchView('map');
+  const item = byId[id];
+  requestAnimationFrame(()=>{
+    mapInstance.flyTo([item.lat, item.lng], 13, {duration:0.6});
+    setTimeout(()=>{
+      if(markerById[id]) markerById[id].openPopup();
+    }, 650);
+  });
+}
+
+window.showInCatalog = function(id){
+  switchView('catalog');
+  jumpTo(id);
+};
+
+// ---------- 초기 실행 ----------
+renderRoute();
+renderThemes();
+render();
+syncStickyOffset();
+</script>
+</body>
+</html>
