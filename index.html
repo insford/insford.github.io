@@ -492,6 +492,11 @@
       --card-glow: rgba(245, 158, 11, 0.25);
     }
 
+    .portal-card.card-swim {
+      --card-accent: #0ea5e9;
+      --card-glow: rgba(14, 165, 233, 0.25);
+    }
+
     /* Card Top Bar */
     .card-top {
       display: flex;
@@ -934,6 +939,7 @@
           <button class="filter-btn" data-category="sydney">🦘 시드니 1년 살기</button>
           <button class="filter-btn" data-category="yacht">⛵ 요트 & 해양레저</button>
           <button class="filter-btn" data-category="travel">✈️ 가족여행 플래닝</button>
+          <button class="filter-btn" data-category="fitness">🏊‍♂️ 수영 & 피트니스</button>
         </div>
       </div>
     </section>
@@ -1181,6 +1187,54 @@
         </div>
       </a>
 
+      <!-- Card 6: Masters Swimming & Strength Training Lab -->
+      <a href="swim-training.html" class="portal-card card-swim" data-category="fitness" data-keywords="수영 헬스 웨이트 트레이닝 자유형 접영 2비트킥 한팔접영 가민 포러너 265 롤링 인터벌 swolf 러블리스위머 다래풀">
+        <div class="card-top">
+          <div class="card-icon-wrap">🏊‍♂️</div>
+          <div class="card-badge-group">
+            <span class="category-badge">Fitness & Lab</span>
+            <span class="status-pill live">
+              <span class="indicator-dot"></span>
+              2026.10 신설
+            </span>
+          </div>
+        </div>
+
+        <h3 class="card-title">마스터즈 수영 & 웨이트 트레이닝 실전 랩</h3>
+        <p class="card-desc">
+          점심 30분 수영(1,000~1,200m)과 22분 초압축 웨이트로 완성하는 장거리 자유형 지속력 & 접영 25m 완영 실전 대시보드
+        </p>
+
+        <ul class="feature-list">
+          <li class="feature-item">
+            <span class="feature-icon">🏊</span>
+            <span><strong>30분 점심수영 3대 루틴</strong>: 자유형 2비트 킥 & 어깨 롤링, 한팔 2-2-1 접영 드릴, 배영·평영 능동적 회복</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">🏋️</span>
+            <span><strong>22분 초압축 교차 슈퍼세트</strong>: 실측 21.9초 템포 반영 Day A/B 루틴 & 우선순위별 11대 운동 검증 영상</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-icon">⌚</span>
+            <span><strong>가민 포러너 265 연동</strong>: Back/Lap 원버튼 휴식 타이머, 드릴 로그, 실측 FIT 데이터 정밀 분석</span>
+          </li>
+        </ul>
+
+        <div class="card-tags">
+          <span class="tag">#점심30분수영</span>
+          <span class="tag">#22분초압축웨이트</span>
+          <span class="tag">#가민포러너265</span>
+          <span class="tag">#2비트킥&접영25m</span>
+        </div>
+
+        <div class="card-action">
+          <span class="action-btn">
+            트레이닝 랩 열기 <span class="arrow">→</span>
+          </span>
+          <span class="shortcut-badge">단축키 [6]</span>
+        </div>
+      </a>
+
       <!-- No search results fallback -->
       <div class="no-results" id="noResultsMsg">
         <p style="font-size: 1.5rem; margin-bottom: 0.5rem;">🔍</p>
@@ -1266,6 +1320,17 @@
           </div>
           <span class="doc-arrow">↗</span>
         </a>
+
+        <a href="swim-training.html" class="doc-item">
+          <div class="doc-info">
+            <span class="doc-icon">🏊‍♂️</span>
+            <div>
+              <div class="doc-name">수영 & 웨이트 트레이닝 실전 랩</div>
+              <div class="doc-meta">가민 FR265 연동 점심 30분 수영 & 22분 웨이트 대시보드</div>
+            </div>
+          </div>
+          <span class="doc-arrow">→</span>
+        </a>
       </div>
     </section>
 
@@ -1281,6 +1346,7 @@
         <a href="/yacht-license-guide/" id="footerYachtLink">요트 면허 & 가족 세일링</a>
         <a href="la_catalog.html">가족여행 카탈로그</a>
         <a href="byeonsan_catalog.html">쏠비치 변산 카탈로그</a>
+        <a href="swim-training.html">수영 & 웨이트 랩</a>
       </div>
       <div class="keyboard-bar">
         <span>단축키: <span class="kbd">1</span> 주식대시보드</span>
@@ -1288,6 +1354,7 @@
         <span><span class="kbd">3</span> 요트마스터가이드</span>
         <span><span class="kbd">4</span> 가족여행카탈로그</span>
         <span><span class="kbd">5</span> 쏠비치변산카탈로그</span>
+        <span><span class="kbd">6</span> 수영트레이닝랩</span>
         <span><span class="kbd">/</span> 검색창 이동</span>
         <span><span class="kbd">ESC</span> 검색 초기화</span>
       </div>
@@ -1475,6 +1542,8 @@
         window.location.href = 'la_catalog.html';
       } else if (e.key === '5') {
         window.location.href = 'byeonsan_catalog.html';
+      } else if (e.key === '6') {
+        window.location.href = 'swim-training.html';
       } else if (e.key === '/') {
         e.preventDefault();
         searchInput.focus();

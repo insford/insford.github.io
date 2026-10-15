@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>수영 & 웨이트 트레이닝 실전 연구소 | 가민 포러너 265 연동 가이드</title>
+  
+  <meta name="description" content="점심 30분 수영(1,000~1,200m)과 22분 초압축 웨이트 트레이닝을 결합한 자유형 장거리 스피드 및 접영 25m 완영 실전 가이드">
+  <meta name="author" content="Swim & Strength Lab">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+KR:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Theme - Dark Default */
+      --bg: #090d16;
+      --bg-surface: #0f172a;
+      --bg-surface-elevated: #1e293b;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-border-hover: rgba(56, 189, 248, 0.4);
+      --card-inner: rgba(15, 23, 42, 0.6);
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --accent-cyan: #38bdf8;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-purple: #a855f7;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+
+      --badge-bg: rgba(56, 189, 248, 0.1);
+      --badge-border: rgba(56, 189, 248, 0.25);
+      --tag-bg: rgba(255, 255, 255, 0.05);
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 26px;
+
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.5);
+
+      --font-heading: 'Outfit', sans-serif;
+      --font-kr: 'Noto Sans KR', -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #f8fafc;
+      --bg-surface: #ffffff;
+      --bg-surface-elevated: #f1f5f9;
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-border: rgba(226, 232, 240, 0.9);
+      --card-border-hover: rgba(2, 132, 199, 0.5);
+      --card-inner: rgba(241, 245, 249, 0.7);
+
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-dim: #94a3b8;
+
+      --accent-cyan: #0284c7;
+      --accent-blue: #2563eb;
+      --accent-emerald: #059669;
+      --accent-purple: #7c3aed;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+
+      --badge-bg: rgba(2, 132, 199, 0.08);
+      --badge-border: rgba(2, 132, 199, 0.2);
+      --tag-bg: rgba(15, 23, 42, 0.04);
+
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      font-family: var(--font-kr);
+      line-height: 1.6;
+      padding-bottom: 80px;
+      min-height: 100vh;
+      background-image: 
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(168, 85, 247, 0.07) 0%, transparent 40%);
+      background-attachment: fixed;
+    }
+
+    /* Container */
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    /* Top Nav */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-block: 12px 20px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent-cyan);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .back-link:hover {
+      transform: translateX(-3px);
+    }
+
+    .theme-toggle {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 100px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+    .theme-toggle:hover {
+      border-color: var(--accent-cyan);
+    }
+
+    /* Hero */
+    .hero {
+      text-align: center;
+      padding: 24px 10px 32px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
+      color: var(--accent-cyan);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .hero-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.8rem, 4.5vw, 2.7rem);
+      font-weight: 800;
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #ffffff 40%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    [data-theme="light"] .hero-title {
+      background: linear-gradient(135deg, #0f172a 40%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 760px;
+      margin: 0 auto 20px;
+    }
+
+    /* Data Highlights Pill Bar */
+    .data-pills {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .data-pill {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      padding: 6px 14px;
+      border-radius: 100px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .data-pill b {
+      color: var(--text-main);
+      font-family: var(--font-mono);
+    }
+    .data-pill.highlight {
+      border-color: var(--accent-cyan);
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--accent-cyan);
+    }
+
+    /* Tab Navigation */
+    .tab-bar {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      background: var(--card-inner);
+      padding: 6px;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--card-border);
+      position: sticky;
+      top: 12px;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      margin-bottom: 28px;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 100px;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      background: var(--accent-cyan);
+      color: #090d16;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(56, 189, 248, 0.35);
+    }
+
+    /* Tab Content Panes */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease-out forwards;
+    }
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Section Cards */
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--tag-bg);
+      border: 1px solid var(--card-border);
+      color: var(--accent-cyan);
+    }
+
+    /* Mobile Cheat Sheet Table */
+    .table-wrap {
+      overflow-x: auto;
+      margin-top: 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--card-border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      text-align: left;
+    }
+
+    th {
+      background: var(--bg-surface-elevated);
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--card-border);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .cue-pill {
+      display: inline-block;
+      font-size: 0.8rem;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-cyan);
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      font-weight: 500;
+    }
+
+    .badge-cycle {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-amber);
+      font-weight: 600;
+    }
+
+    /* Video Card Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .item-card {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s;
+    }
+    .item-card:hover {
+      border-color: var(--card-border-hover);
+      transform: translateY(-2px);
+    }
+
+    .item-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .item-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .item-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .item-cue {
+      background: rgba(0, 0, 0, 0.2);
+      border-left: 3px solid var(--accent-cyan);
+      padding: 8px 10px;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.84rem;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+    [data-theme="light"] .item-cue {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .video-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .video-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+    }
+
+    /* Timer Widget */
+    .timer-card {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.08) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: clamp(2.5rem, 8vw, 4rem);
+      font-weight: 700;
+      color: var(--accent-emerald);
+      margin: 12px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .timer-btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .timer-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 100px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .timer-btn:hover {
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+    }
+    .timer-btn.primary {
+      background: var(--accent-emerald);
+      color: #090d16;
+      border-color: var(--accent-emerald);
+    }
+    .timer-btn.primary:hover {
+      background: #059669;
+    }
+
+    /* Garmin Box */
+    .garmin-box {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(59, 130, 246, 0.05) 100%);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      margin-top: 16px;
+    }
+
+    .garmin-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--accent-cyan);
+      margin-bottom: 10px;
+    }
+
+    .garmin-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .garmin-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .garmin-list li::before {
+      content: "✔";
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    /* Routine Details Accordion */
+    details.routine-detail {
+      background: var(--card-inner);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-md);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    details.routine-detail summary {
+      padding: 14px 18px;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 0.98rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      background: var(--card-bg);
+    }
+    details.routine-detail[open] summary {
+      border-bottom: 1px solid var(--card-border);
+      color: var(--accent-cyan);
+    }
+    .routine-body {
+      padding: 16px 18px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 40px;
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--card-border);
+      margin-top: 40px;
+    }
+
+    @media (max-width: 640px) {
+      .hero-title { font-size: 1.7rem; }
+      .section-card { padding: 16px; }
+      .tab-btn { padding: 8px 14px; font-size: 0.85rem; }
+      table { font-size: 0.82rem; }
+      th, td { padding: 8px 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    
+    <!-- Top Navigation -->
+    <header class="top-bar">
+      <a href="index.html" class="back-link">
+        <span>←</span> 통합 포털로 돌아가기
+      </a>
+      <button class="theme-toggle" id="themeToggleBtn" aria-label="테마 전환">
+        <span id="themeIcon">☀️</span> <span id="themeText">라이트 모드</span>
+      </button>
+    </header>
+
+    <!-- Hero Header -->
+    <div class="hero">
+      <div class="hero-badge">Garmin Forerunner 265 Synchronized</div>
+      <h1 class="hero-title">마스터즈 수영 & 웨이트 트레이닝 랩</h1>
+      <p class="hero-desc">
+        점심 30분 수영(1,000~1,200m)과 22분 초압축 웨이트로 완성하는 <b>장거리 자유형 지속력 & 접영 25m 완영</b> 통합 실전 대시보드
+      </p>
+
+      <!-- Verified Data Pills -->
+      <div class="data-pills">
+        <div class="data-pill highlight">⌚ <b>Garmin Forerunner 265</b></div>
+        <div class="data-pill">🏊 실측 <b>1,025m / 29분 45초 (심박 138)</b></div>
+        <div class="data-pill">🏋️ 실측 <b>27세트 / 21.9초 템포 휴식</b></div>
+        <div class="data-pill">⚡ 최고 속도 <b>25m 17.6초 (1:10/100m)</b></div>
+      </div>
+    </div>
+
+    <!-- Sticky Tab Bar -->
+    <nav class="tab-bar" role="tablist">
+      <button class="tab-btn active" role="tab" aria-selected="true" data-tab="tab-swim">
+        🏊 점심 30분 수영 (3대 루틴)
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="tab-gym">
+        🏋️ 22분 초압축 웨이트 (주 2회)
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="tab-data">
+        📊 실측 데이터 & 주간 매트릭스
+      </button>
+      <button class="tab-btn" role="tab" aria-selected="false" data-tab="tab-timer">
+        ⏱️ 인터벌 스톱워치
+      </button>
+    </nav>
+
+    <!-- ========================================== -->
+    <!-- TAB 1: SWIMMING TRAINING                   -->
+    <!-- ========================================== -->
+    <div id="tab-swim" class="tab-pane active" role="tabpanel">
+
+      <!-- 1분 모바일 치트시트 -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">📱 [수영장 데크] 1분 모바일 치트시트</h2>
+          <span class="section-tag">Pool Deck Cheat Sheet</span>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">
+          💡 수영장 입장 전 30초 만에 훑어보는 10블록 루틴입니다. 터치 직후 가민 <b>Back/Lap 버튼</b>을 눌러 15~20초 휴식 후 출발하세요!
+        </p>
+
+        <!-- Routine A -->
+        <h3 style="font-size:1.05rem; margin-block:16px 8px; color:var(--accent-cyan);">
+          🟢 [루틴 A] 자유형 장거리 지구력 & 페이스 빌드업 (총 1,150m / 10블록)
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>블록</th>
+                <th>거리</th>
+                <th>종목 및 드릴 구성</th>
+                <th>페이스 / 휴식</th>
+                <th>핵심 동작 큐 (Key Cue)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>B 1</b></td>
+                <td>200m</td>
+                <td>자유형 웜업</td>
+                <td>이지 (논스톱)</td>
+                <td>긴 글라이딩, 호흡 리듬 정렬</td>
+              </tr>
+              <tr>
+                <td><b>B 2</b></td>
+                <td>150m</td>
+                <td>드릴 (주먹 50m ➡️ 지퍼 50m ➡️ 2비트 50m)</td>
+                <td>드릴로그 / 20초</td>
+                <td>하이엘보 캐치 감각 & 엉덩이 띄우기</td>
+              </tr>
+              <tr>
+                <td><b>B 3~4</b></td>
+                <td>400m</td>
+                <td><b>[자유형 150m + 배영 50m 회복] × 2회</b></td>
+                <td>롱 페이스 / 논스톱</td>
+                <td><span class="cue-pill">2비트 킥</span> 길게 돌고 배영으로 산소 충전</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>-</td>
+                <td>호흡 가다듬기 (완전 휴식)</td>
+                <td>가민 랩 / 1분</td>
+                <td>심박수 Zone 2(125~135 bpm) 안정화</td>
+              </tr>
+              <tr>
+                <td><b>B 5~7</b></td>
+                <td>300m</td>
+                <td><b>[자유형 75m 템포 + 평영 25m 글라이딩] × 3회</b></td>
+                <td><span class="badge-cycle">2분 10초 사이클</span></td>
+                <td>자유형 템포 올리고 평영 2초 글라이딩 회복</td>
+              </tr>
+              <tr>
+                <td><b>B 8</b></td>
+                <td>100m</td>
+                <td>쿨다운 (배영 또는 느린 자유형)</td>
+                <td>이지 (논스톱)</td>
+                <td>어깨 근육 이완 및 젖산 배출</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Routine B -->
+        <h3 style="font-size:1.05rem; margin-block:24px 8px; color:var(--accent-purple);">
+          🟣 [루틴 B] 접영 25m 완영 돌파 & 자유형 인터벌 (총 1,050m / 10블록)
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>블록</th>
+                <th>거리</th>
+                <th>종목 및 드릴 구성</th>
+                <th>페이스 / 휴식</th>
+                <th>핵심 동작 큐 (Key Cue)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>B 1</b></td>
+                <td>200m</td>
+                <td>웜업 (자유형 100m + 배영 50m + 평영 50m)</td>
+                <td>이지 (논스톱)</td>
+                <td>전신 관절 및 어깨 외회전 워밍업</td>
+              </tr>
+              <tr>
+                <td><b>B 2</b></td>
+                <td>50m</td>
+                <td>잠영 돌핀킥 25m × 2회</td>
+                <td>30초 휴식</td>
+                <td>벽 강하게 차고 유선형 15m 지점 출수</td>
+              </tr>
+              <tr>
+                <td><b>B 3</b></td>
+                <td>100m</td>
+                <td>한팔접영 (우 2회 / 좌 2회) 25m × 4회</td>
+                <td>드릴로그 / 20초</td>
+                <td>자유형처럼 <b>사이드(옆) 호흡</b>으로 머리 낮추기</td>
+              </tr>
+              <tr>
+                <td><b>B 4</b></td>
+                <td>100m</td>
+                <td><b>2-2-1 드릴 (우2-좌2-양팔1) 25m × 4회</b></td>
+                <td>드릴로그 / 20초</td>
+                <td><span class="cue-pill">양팔 1회 시 무호흡!</span> 턱 물에 붙이고 쑥 통과</td>
+              </tr>
+              <tr>
+                <td><b>B 5~8</b></td>
+                <td>200m</td>
+                <td><b>[접영 25m 완영 도전 ➡️ 자유형 25m] × 4회</b></td>
+                <td><span class="badge-cycle">1분 30초 사이클</span></td>
+                <td><b>2스트로크 1호흡</b> 도전 (힘들면 한팔접영)</td>
+              </tr>
+              <tr>
+                <td><b>B 9</b></td>
+                <td>225m</td>
+                <td>[자유형 50m 전력 대쉬 + 배영 25m 이지] × 3회</td>
+                <td><span class="badge-cycle">1분 45초 사이클</span></td>
+                <td>웨이트 풀업 파워 100% 쏟아붓기</td>
+              </tr>
+              <tr>
+                <td><b>B 10</b></td>
+                <td>100m</td>
+                <td>쿨다운 (배영 100m)</td>
+                <td>이지 (논스톱)</td>
+                <td>가슴 활짝 펴고 어깨 피로 완전 리셋</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- 3대 핵심 기술 & 한국어 유튜브 영상 -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">📺 3대 핵심 기술 한국어 레슨 & 실전 큐</h2>
+          <span class="section-tag">Korean Video Lessons</span>
+        </div>
+
+        <div class="grid-3">
+          <!-- Card 1 -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">자유형 2비트 킥</span>
+                <span class="item-badge">장거리 체력 세이브</span>
+              </div>
+              <p class="item-desc">
+                다리를 쉼 없이 차면(6비트 킥) 하체 근육이 산소의 70%를 태워버립니다. 1스트로크당 반대쪽 발을 딱 1번만 툭 차줍니다.
+              </p>
+              <div class="item-cue">
+                👉 <b>타이밍</b>: 오른손 물에 찌를 때 ➡️ 왼발 툭! / 왼손 찌를 때 ➡️ 오른발 툭!
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <a href="https://www.youtube.com/watch?v=n2BnHI9pzdM" target="_blank" rel="noopener" class="video-btn">
+                ▶ 이지스윔 - 투비트킥 연습법 보기
+              </a>
+              <a href="https://www.youtube.com/watch?v=3gjWQW2ubpA" target="_blank" rel="noopener" class="video-btn" style="background:rgba(59,130,246,0.12); color:#60a5fa; border-color:rgba(59,130,246,0.3);">
+                ▶ 러블리스위머 - 부드러운 2비트킥
+              </a>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">자유형 45도 롤링</span>
+                <span class="item-badge">가민 평영 오인 방지</span>
+              </div>
+              <p class="item-desc">
+                어깨가 평평하면 물의 저항을 온몸으로 받고 가민이 평영으로 착각합니다. 몸통을 45도씩 좌우로 굴려 물을 가릅니다.
+              </p>
+              <div class="item-cue">
+                👉 <b>핵심 큐</b>: 고개만 돌리지 말고 어깨와 골반 축이 함께 자연스럽게 회전!
+              </div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=wSFqB5beqWs" target="_blank" rel="noopener" class="video-btn">
+              ▶ 틈새수영 - 롤링 3가지 교정법
+            </a>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">접영 2-2-1 드릴</span>
+                <span class="item-badge">양팔 25m 완영 치트키</span>
+              </div>
+              <p class="item-desc">
+                오른팔 2번 ➡️ 왼팔 2번 후 양팔 1번을 넘깁니다. 양팔을 돌릴 때 절대 머리를 들지 않는 것이 유일한 핵심입니다.
+              </p>
+              <div class="item-cue">
+                👉 <b>핵심 큐</b>: 턱을 물에 바짝 붙이고 시선은 바닥! 몸 전체로 파도를 타며 통과!
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <a href="https://www.youtube.com/watch?v=o43uKyq-l8o" target="_blank" rel="noopener" class="video-btn">
+                ▶ 다래풀(정다래) - 한팔접영 기초
+              </a>
+              <a href="https://www.youtube.com/watch?v=7rffCVA7ljI" target="_blank" rel="noopener" class="video-btn" style="background:rgba(168,85,247,0.12); color:#c084fc; border-color:rgba(168,85,247,0.3);">
+                ▶ 밥 보우먼(펠프스 스승) - 2-2-2 드릴
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Garmin Tips Box -->
+        <div class="garmin-box">
+          <div class="garmin-header">
+            <span>⌚</span> 가민 포러너 265 수영장 필수 세팅 (10초 점검)
+          </div>
+          <ul class="garmin-list">
+            <li><b>손목 착용 방향 확인</b>: 시계 왼쪽 UP 버튼 길게 ➡️ [시스템] ➡️ [사용자 프로필] ➡️ [손목]에서 실제 찬 손(왼손/오른손) 일치시키기 (자유형을 평영으로 오인하는 현상 방지).</li>
+            <li><b>원버튼 휴식 화면 (Back/Lap)</b>: 벽 터치 즉시 우측 하단 Back/Lap 클릭 ➡️ 흑백 반전 화면에서 휴식 초(15~20초) 확인 후 재클릭 출발.</li>
+            <li><b>한팔접영/발차기 시 드릴 로그</b>: 팔을 젓지 않는 구간은 좌측 Down 버튼으로 [드릴 로그] 화면으로 넘겨 수행 후 수동 거리(100m, 150m) 입력.</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: GYM & STRENGTH TRAINING             -->
+    <!-- ========================================== -->
+    <div id="tab-gym" class="tab-pane" role="tabpanel">
+
+      <!-- 1분 모바일 치트시트 -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">📱 [헬스장 기구 앞] 1분 모바일 치트시트</h2>
+          <span class="section-tag">Gym Floor Cheat Sheet</span>
+        </div>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:12px;">
+          ⚡ 실제 측정된 <b>21.9초 템포</b>에 맞춘 22분 완성 슈퍼세트입니다. 종목 1 직후 종목 2를 연달아 하고 22초만 쉬고 반복하세요!
+        </p>
+
+        <!-- Day A -->
+        <h3 style="font-size:1.05rem; margin-block:16px 8px; color:var(--accent-emerald);">
+          🟢 [Day A] 자유형 장거리 지구력 & 코어 강성 (총 22분 / 27세트)
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>순서</th>
+                <th>종목 구성</th>
+                <th>목표 횟수</th>
+                <th>세트수</th>
+                <th>세트간 휴식</th>
+                <th>수영 연계 효과</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>웜업</b></td>
+                <td><b>페이스 풀</b></td>
+                <td>15회</td>
+                <td>2세트</td>
+                <td>20초</td>
+                <td>어깨 충돌 방지 & 회전근개 각성</td>
+              </tr>
+              <tr>
+                <td><b>SS 1</b></td>
+                <td><b>풀업</b> ⚡ <b>점프 스쿼트</b></td>
+                <td>5~8회 / 5회</td>
+                <td>4세트</td>
+                <td><span class="badge-cycle">22초</span></td>
+                <td>스트로크당 추진력(DPS) + 턴 벽차기</td>
+              </tr>
+              <tr>
+                <td><b>SS 2</b></td>
+                <td><b>스트레이트 암 풀다운</b> ⚡ <b>AB 휠</b></td>
+                <td>10~12회 / 8~10회</td>
+                <td>4세트</td>
+                <td><span class="badge-cycle">22초</span></td>
+                <td>하이엘보 물잡기 지구력 + 유선형 허리 유지</td>
+              </tr>
+              <tr>
+                <td><b>피니셔</b></td>
+                <td><b>행잉 레그레이즈</b></td>
+                <td>12회</td>
+                <td>3세트</td>
+                <td>20초</td>
+                <td>하복부 & 장요근 코어 스냅</td>
+              </tr>
+              <tr>
+                <td><b>쿨다운</b></td>
+                <td>광배근 폼롤러 스트레칭</td>
+                <td>좌우 1분</td>
+                <td>-</td>
+                <td>-</td>
+                <td>광배근 단축 방지 (스트림라인 유지)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Day B -->
+        <h3 style="font-size:1.05rem; margin-block:24px 8px; color:var(--accent-rose);">
+          🔵 [Day B] 접영 25m 출수 파워 & 피니시 삼두 (총 22분 / 27세트)
+        </h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>순서</th>
+                <th>종목 구성</th>
+                <th>목표 횟수</th>
+                <th>세트수</th>
+                <th>세트간 휴식</th>
+                <th>수영 연계 효과</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>웜업</b></td>
+                <td><b>프론 Y-T-W 레이즈</b></td>
+                <td>각 8~10회</td>
+                <td>2세트</td>
+                <td>20초</td>
+                <td>접영 양팔 리커버리 어깨 가동역 확보</td>
+              </tr>
+              <tr>
+                <td><b>SS 1</b></td>
+                <td><b>트랩바 데드리프트</b> ⚡ <b>딥스(Dips)</b></td>
+                <td>5~6회 / 8~10회</td>
+                <td>4세트</td>
+                <td><span class="badge-cycle">22초</span></td>
+                <td>돌핀킥 후면 사슬 파워 + 출수 피니시 삼두 락아웃</td>
+              </tr>
+              <tr>
+                <td><b>SS 2</b></td>
+                <td><b>바벨 힙 쓰러스트</b> ⚡ <b>팔로프 프레스</b></td>
+                <td>8~10회 / 각 10회</td>
+                <td>4세트</td>
+                <td><span class="badge-cycle">22초</span></td>
+                <td>접영 제2킥 상체 띄우기 + 몸통 뒤틀림 방지</td>
+              </tr>
+              <tr>
+                <td><b>피니셔</b></td>
+                <td><b>케이블 삼두 푸시다운</b></td>
+                <td>12회</td>
+                <td>3세트</td>
+                <td>20초</td>
+                <td>자유형·접영 물 밀어내기 삼두 고립</td>
+              </tr>
+              <tr>
+                <td><b>쿨다운</b></td>
+                <td>흉추 신전 & 가슴 스트레칭</td>
+                <td>2분</td>
+                <td>-</td>
+                <td>-</td>
+                <td>라운드숄더 방지 및 흉곽 호흡각 회복</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 11대 운동 검증 영상 갤러리 -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">🏆 우선순위별 11대 운동 & 폼 가이드</h2>
+          <span class="section-tag">Exercise Library</span>
+        </div>
+
+        <div class="grid-3">
+          <!-- Pull-up -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">1. 풀업 (Pull-Up)</span>
+                <span class="item-badge">추진력 DPS 1위</span>
+              </div>
+              <p class="item-desc">광배근·대원근 최대 출력. 자유형/접영 입수 후 강한 물잡기의 절대적 기반.</p>
+              <div class="item-cue">👉 견갑골을 먼저 내리고 가슴을 바에 닿듯이 당김!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=CBfaACAGVxE" target="_blank" rel="noopener" class="video-btn">
+              ▶ Calisthenicmovement 가이드
+            </a>
+          </div>
+
+          <!-- Straight-arm pulldown -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">2. 스트레이트암 풀다운</span>
+                <span class="item-badge">수영 궤적 100% 일치</span>
+              </div>
+              <p class="item-desc">팔꿈치를 살짝 굽혀 고정하고 허벅지 앞까지 호를 그리며 광배근으로 내림.</p>
+              <div class="item-cue">👉 하이엘보 캐치에서 피니시까지의 궤적과 동일!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=dfHvbsjJdRQ" target="_blank" rel="noopener" class="video-btn">
+              ▶ Forward Swimming 영상
+            </a>
+          </div>
+
+          <!-- Ab rollout -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">3. AB 휠 롤아웃</span>
+                <span class="item-badge">유선형 코어 끝판왕</span>
+              </div>
+              <p class="item-desc">어깨를 앞으로 뻗은 유선형 자세에서 몸통이 꺾이지 않게 버티는 코어 강성 형성.</p>
+              <div class="item-cue">👉 엉덩이가 빠지지 않게 둔근 조이고 복근으로 롤아웃!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=CxS10wcWq2s" target="_blank" rel="noopener" class="video-btn">
+              ▶ Ab Wheel Rollout 테크닉
+            </a>
+          </div>
+
+          <!-- Hip thrust -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">4. 바벨 힙 쓰러스트</span>
+                <span class="item-badge">접영 25m 완영 핵심</span>
+              </div>
+              <p class="item-desc">대둔근 고립. 접영 돌핀킥 출수 시 골반을 위로 강하게 튕겨 상체를 수면 위로 띄움.</p>
+              <div class="item-cue">👉 턱을 당기고 상단에서 엉덩이를 1초간 강하게 수축!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=hCm-70-9_XE" target="_blank" rel="noopener" class="video-btn">
+              ▶ Bret Contreras 정석 폼
+            </a>
+          </div>
+
+          <!-- Dips -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">5. 딥스 (Dips)</span>
+                <span class="item-badge">피니시 락아웃 삼두</span>
+              </div>
+              <p class="item-desc">스트로크 마지막 물을 뒤로 완전히 밀어내며 몸을 튕겨 나가게 하는 삼두근 파워.</p>
+              <div class="item-cue">👉 팔꿈치 각도 45도 유지, 끝까지 팔을 펴며 락아웃!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=KoS_NMmuxMM" target="_blank" rel="noopener" class="video-btn">
+              ▶ FitnessFAQs 딥스 튜토리얼
+            </a>
+          </div>
+
+          <!-- Trap bar deadlift -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">6. 트랩바 데드리프트</span>
+                <span class="item-badge">스타트 & 돌핀킥 파워</span>
+              </div>
+              <p class="item-desc">둔근·햄스트링 전체 후면 사슬 강화. 스타트 및 턴 시 수직 출력 극대화.</p>
+              <div class="item-cue">👉 발바닥 전체로 바닥을 밀어내며 폭발적으로 기립!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=1a7WNMgKIZQ" target="_blank" rel="noopener" class="video-btn">
+              ▶ Trap Bar Deadlift 가이드
+            </a>
+          </div>
+
+          <!-- Jump Squat -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">7. 점프 스쿼트</span>
+                <span class="item-badge">턴 벽차기 순발력</span>
+              </div>
+              <p class="item-desc">턴 직후 벽을 강하게 차고 나오는 반발력(Push-off) 향상 플라이오메트릭 운동.</p>
+              <div class="item-cue">👉 얕게 앉았다가 삼중 신전으로 최고 높이까지 점프!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=H4mVcGRmQhI" target="_blank" rel="noopener" class="video-btn">
+              ▶ 점프 스쿼트 정석 폼
+            </a>
+          </div>
+
+          <!-- Pallof press -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">8. 팔로프 프레스</span>
+                <span class="item-badge">몸통 항회전 제어</span>
+              </div>
+              <p class="item-desc">자유형 롤링 시 골반 축은 잡고 상체만 회전할 수 있는 코어 회전 안정성 제공.</p>
+              <div class="item-cue">👉 케이블이 몸을 돌리려는 회전력에 복사근으로 저항!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=LA6Uc5yIV1c" target="_blank" rel="noopener" class="video-btn">
+              ▶ Pallof Press 테크닉
+            </a>
+          </div>
+
+          <!-- Face pull -->
+          <div class="item-card">
+            <div>
+              <div class="item-title-row">
+                <span class="item-title">9. 페이스 풀 (Face Pull)</span>
+                <span class="item-badge">매 루틴 필수 웜업</span>
+              </div>
+              <p class="item-desc">외회전근(극하근/소원근) 강화로 수영인의 최대적인 어깨충돌증후군 원천 예방.</p>
+              <div class="item-cue">👉 로프를 눈썹 쪽으로 당기며 엄지손가락을 뒤로 넘김!</div>
+            </div>
+            <a href="https://www.youtube.com/watch?v=YScRResBWuo" target="_blank" rel="noopener" class="video-btn">
+              ▶ Face Pull 어깨 재활 폼
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: DATA & WEEKLY PLAN                  -->
+    <!-- ========================================== -->
+    <div id="tab-data" class="tab-pane" role="tabpanel">
+
+      <!-- 실측 데이터 비교 분석 -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">📊 오늘 운동 FIT 실측 정밀 분석</h2>
+          <span class="section-tag">24728803535 / 24733137774</span>
+        </div>
+
+        <div class="grid-2">
+          <!-- Swim Data Card -->
+          <div class="item-card" style="border-left:4px solid var(--accent-cyan);">
+            <div class="item-title" style="color:var(--accent-cyan); margin-bottom:10px;">
+              🏊 오늘 수영 실측치 (24728803535_ACTIVITY.fit)
+            </div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.9rem; color:var(--text-muted);">
+              <li>⏱️ <b>총 시간</b>: 29분 45초 (순수 수영 25.2분 / 휴식 4.5분)</li>
+              <li>📏 <b>총 거리</b>: 1,025m (25m × 41개 레인 완영)</li>
+              <li>🧱 <b>인터벌</b>: 10개 블록 (175m, 150m, 100m 등 연속 수영 검증)</li>
+              <li>💓 <b>심박수</b>: 평균 138 bpm / 최고 157 bpm (Zone 3 52.3%)</li>
+              <li>⚡ <b>최고 페이스</b>: 25m 17.6초 (100m 환산 시 1분 10초 대쉬!)</li>
+              <li>💡 <b>진단</b>: 장거리 심폐 엔진 이미 완성됨 ➡️ 2비트 킥만 장착 시 500m 논스톱 즉시 가능.</li>
+            </ul>
+          </div>
+
+          <!-- Gym Data Card -->
+          <div class="item-card" style="border-left:4px solid var(--accent-emerald);">
+            <div class="item-title" style="color:var(--accent-emerald); margin-bottom:10px;">
+              🏋️ 오늘 헬스 실측치 (24733137774_ACTIVITY.fit)
+            </div>
+            <ul style="list-style:none; display:flex; flex-direction:column; gap:8px; font-size:0.9rem; color:var(--text-muted);">
+              <li>⏱️ <b>총 시간</b>: 26분 50초 (운동 17.0분 / 휴식 9.9분)</li>
+              <li>🔢 <b>총 세트</b>: 54세트 (액티브 27세트 + 휴식 27세트)</li>
+              <li>🔄 <b>반복수</b>: 총 301회 (세트당 평균 11.1회)</li>
+              <li>⏱️ <b>평균 휴식</b>: <b>21.9초</b> (엄청난 집중력과 서킷 템포)</li>
+              <li>💓 <b>심박수</b>: 평균 109 bpm / 최고 136 bpm (Zone 1~2 안정적)</li>
+              <li>💡 <b>진단</b>: 21초 휴식 템포를 유지하되 교차 슈퍼세트로 묶어 추진력 파워 극대화.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 주간 통합 스케줄 -->
+      <section class="section-card">
+        <div class="section-header">
+          <h2 class="section-title">📅 주간 통합 라이프사이클 (수영 3~4회 + 웨이트 2회)</h2>
+          <span class="section-tag">Weekly Schedule</span>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>요일</th>
+                <th>🌞 점심시간 (30분 수영)</th>
+                <th>🌙 퇴근 후/저녁 (22분 웨이트)</th>
+                <th>훈련 포인트</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><b>월</b></td>
+                <td>🏊 <b>[루틴 A]</b> 자유형 장거리 2비트 킥 (1,150m)</td>
+                <td>푹 쉬기 (식사 & 완충)</td>
+                <td>2비트 킥으로 안 쉬고 롱 페이스 완성</td>
+              </tr>
+              <tr>
+                <td><b>화</b></td>
+                <td>🍱 일반 점심 식사 & 가벼운 산책</td>
+                <td>🏋️ <b>[Day A]</b> 추진력 & 유선형 코어 (22분)</td>
+                <td>풀업 + 점프스쿼트 + AB휠</td>
+              </tr>
+              <tr>
+                <td><b>수</b></td>
+                <td>🏊 <b>[루틴 B]</b> 접영 25m 도전 2-2-1 (1,050m)</td>
+                <td>푹 쉬기 (식사 & 완충)</td>
+                <td>웨이트 각성 상태에서 25m 접영 완영 도전</td>
+              </tr>
+              <tr>
+                <td><b>목</b></td>
+                <td>🌿 완전 휴식 (산책/휴식)</td>
+                <td>폼롤러 스트레칭 (가동성)</td>
+                <td>피로 누적 원천 차단</td>
+              </tr>
+              <tr>
+                <td><b>금</b></td>
+                <td>🏊 <b>[루틴 C]</b> 자유형 대쉬 & 4영법 리셋 (1,100m)</td>
+                <td>🏋️ <b>[Day B]</b> 피니시 & 돌핀킥 힙파워 (22분)</td>
+                <td>데드리프트 + 딥스 + 힙쓰러스트</td>
+              </tr>
+              <tr>
+                <td><b>토</b></td>
+                <td>🏊 <b>주말 자유 수영 (30~40분)</b></td>
+                <td>자율 휴식</td>
+                <td>여유로운 페이스주 또는 기록 측정</td>
+              </tr>
+              <tr>
+                <td><b>일</b></td>
+                <td>🌿 완전 휴식</td>
+                <td>🌿 완전 휴식</td>
+                <td>다음 주를 위한 완충 리셋</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 4: INTERVAL STOPWATCH / TIMER          -->
+    <!-- ========================================== -->
+    <div id="tab-timer" class="tab-pane" role="tabpanel">
+      
+      <section class="section-card timer-card">
+        <h2 style="font-size:1.3rem; font-weight:700; color:var(--text-main);">⏱️ 실전 인터벌 휴식 타이머</h2>
+        <p style="color:var(--text-muted); font-size:0.9rem; margin-top:4px;">
+          헬스장 세트 간 <b>22초/45초 휴식</b> 또는 수영장 <b>15초/20초 인터벌</b> 타이머로 바로 활용하세요.
+        </p>
+
+        <div class="timer-display" id="timerDisplay">00:22</div>
+
+        <div class="timer-btn-group">
+          <button class="timer-btn primary" id="timerStartBtn">타이머 시작</button>
+          <button class="timer-btn" id="timerResetBtn">리셋</button>
+          <button class="timer-btn" onclick="setTimerDuration(15)">15초 (수영)</button>
+          <button class="timer-btn" onclick="setTimerDuration(20)">20초 (수영)</button>
+          <button class="timer-btn" onclick="setTimerDuration(22)">22초 (웨이트 실측)</button>
+          <button class="timer-btn" onclick="setTimerDuration(45)">45초 (슈퍼세트)</button>
+        </div>
+      </section>
+
+      <div class="section-card">
+        <h3 style="font-size:1.1rem; margin-bottom:12px; font-weight:700;">💡 현장 실전 활용 팁</h3>
+        <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.6;">
+          스마트폰 화면을 켜둔 채 헬스장 랙이나 매트 옆에 올려두고, 세트가 끝나자마자 <b>22초 버튼</b>을 누르면 카운트다운이 시작됩니다. 시간이 끝나면 화면 깜빡임과 알림음(지원 시)으로 즉시 알려주어 스마트워치를 볼 필요 없이 세트에만 몰입할 수 있습니다.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>Workspace Portal • Masters Swimming & Strength Lab</p>
+      <p style="margin-top:6px; font-size:0.78rem;">Garmin Forerunner 265 • Dual-Engine Training Protocol</p>
+    </footer>
+
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Tab Switching
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabBtns.forEach(b => {
+          b.classList.remove('active');
+          b.setAttribute('aria-selected', 'false');
+        });
+        tabPanes.forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        btn.setAttribute('aria-selected', 'true');
+        const target = btn.getAttribute('data-tab');
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    // Theme Toggle
+    const themeBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const themeText = document.getElementById('themeText');
+    const htmlEl = document.documentElement;
+
+    themeBtn.addEventListener('click', () => {
+      const current = htmlEl.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      htmlEl.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      updateThemeUI(next);
+    });
+
+    function updateThemeUI(theme) {
+      if (theme === 'dark') {
+        themeIcon.textContent = '☀️';
+        themeText.textContent = '라이트 모드';
+      } else {
+        themeIcon.textContent = '🌙';
+        themeText.textContent = '다크 모드';
+      }
+    }
+
+    // Load Saved Theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    htmlEl.setAttribute('data-theme', savedTheme);
+    updateThemeUI(savedTheme);
+
+    // Interval Timer Widget
+    let countdownInterval = null;
+    let currentSeconds = 22;
+    let initialSeconds = 22;
+    let isRunning = false;
+    const timerDisplay = document.getElementById('timerDisplay');
+    const timerStartBtn = document.getElementById('timerStartBtn');
+    const timerResetBtn = document.getElementById('timerResetBtn');
+
+    function formatTime(s) {
+      const mins = Math.floor(s / 60);
+      const secs = s % 60;
+      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function updateTimerDisplay() {
+      timerDisplay.textContent = formatTime(currentSeconds);
+    }
+
+    function setTimerDuration(s) {
+      clearInterval(countdownInterval);
+      isRunning = false;
+      timerStartBtn.textContent = '타이머 시작';
+      initialSeconds = s;
+      currentSeconds = s;
+      updateTimerDisplay();
+      timerDisplay.style.color = 'var(--accent-emerald)';
+    }
+
+    timerStartBtn.addEventListener('click', () => {
+      if (isRunning) {
+        clearInterval(countdownInterval);
+        isRunning = false;
+        timerStartBtn.textContent = '계속 진행';
+      } else {
+        if (currentSeconds <= 0) currentSeconds = initialSeconds;
+        isRunning = true;
+        timerStartBtn.textContent = '일시 정지';
+        countdownInterval = setInterval(() => {
+          currentSeconds--;
+          updateTimerDisplay();
+          if (currentSeconds <= 3 && currentSeconds > 0) {
+            timerDisplay.style.color = 'var(--accent-amber)';
+          }
+          if (currentSeconds <= 0) {
+            clearInterval(countdownInterval);
+            isRunning = false;
+            timerStartBtn.textContent = '다시 시작';
+            timerDisplay.textContent = 'GO! 출발!';
+            timerDisplay.style.color = 'var(--accent-rose)';
+            // Beep audio feedback
+            try {
+              const ctx = new (window.AudioContext || window.webkitAudioContext)();
+              const osc = ctx.createOscillator();
+              osc.type = 'sine';
+              osc.frequency.setValueAtTime(880, ctx.currentTime);
+              osc.connect(ctx.destination);
+              osc.start();
+              osc.stop(ctx.currentTime + 0.3);
+            } catch(e) {}
+          }
+        }, 1000);
+      }
+    });
+
+    timerResetBtn.addEventListener('click', () => {
+      clearInterval(countdownInterval);
+      isRunning = false;
+      timerStartBtn.textContent = '타이머 시작';
+      currentSeconds = initialSeconds;
+      updateTimerDisplay();
+      timerDisplay.style.color = 'var(--accent-emerald)';
+    });
+  </script>
+</body>
+</html>
