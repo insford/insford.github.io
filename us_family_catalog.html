@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>2027 미국 3세대 가족여행 모바일 카탈로그</title>
+<style>
+:root {
+  --bg: #F8F9FA;
+  --surface: #FFFFFF;
+  --surface-sub: #F1F4F8;
+  --text-main: #1A1F2C;
+  --text-sub: #4A5568;
+  --text-muted: #718096;
+  --border: #E2E8F0;
+  
+  --primary: #1A365D;
+  --primary-light: #EBF8FF;
+  --gold: #D69E2E;
+  --gold-bg: #FEFCBF;
+  --green: #22543D;
+  --green-bg: #C6F6D5;
+  --blue: #2B6CB0;
+  --blue-bg: #BEE3F8;
+  
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+  background-color: var(--bg);
+  color: var(--text-main);
+  line-height: 1.65;
+  font-size: 17px;
+  padding-bottom: 90px;
+  letter-spacing: -0.02em;
+}
+
+/* 상단 프리미엄 헤더 */
+header {
+  background: linear-gradient(135deg, #1A365D 0%, #2A4365 100%);
+  color: #FFFFFF;
+  padding: 30px 20px 24px;
+  text-align: center;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.top-nav-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.nav-home-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 100px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.nav-share-btn {
+  background: rgba(255, 255, 255, 0.15);
+  color: #FEFCBF;
+  border: 1px solid rgba(254, 252, 191, 0.4);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 100px;
+  cursor: pointer;
+}
+
+.header-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.18);
+  color: #FEFCBF;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(254, 252, 191, 0.4);
+}
+
+header h1 {
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  letter-spacing: -0.03em;
+}
+
+header p {
+  font-size: 15px;
+  color: #E2E8F0;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+.summary-pill-wrap {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+}
+
+.summary-pill {
+  background: rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #EDF2F7;
+}
+
+/* 필터 컨트롤 바 (상단 고정) */
+.filter-container {
+  position: sticky;
+  top: 0;
+  background: rgba(248, 249, 250, 0.96);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 100;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.city-nav {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+.city-nav::-webkit-scrollbar { display: none; }
+
+.city-btn {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--text-sub);
+  padding: 9px 16px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.city-btn.active {
+  background: var(--primary);
+  color: #FFFFFF;
+  border-color: var(--primary);
+  box-shadow: 0 4px 10px rgba(26, 54, 93, 0.25);
+}
+
+.type-toggle-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.type-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text-sub);
+  cursor: pointer;
+}
+
+.type-btn.active {
+  background: #2D3748;
+  color: #FFFFFF;
+  border-color: #2D3748;
+}
+
+/* 메인 리스트 컨테이너 */
+.content-wrap {
+  padding: 20px 16px;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.section-title-box {
+  margin: 28px 0 16px;
+  padding-left: 6px;
+  border-left: 5px solid var(--primary);
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.section-sub {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* 장소 카드 */
+.place-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+}
+
+.place-card.confirmed {
+  border-left: 6px solid #D69E2E;
+}
+
+.place-card.candidate {
+  border-left: 6px solid #3182CE;
+}
+
+.card-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.badge-group {
+  display: flex;
+  gap: 6px;
+}
+
+.badge {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: -0.01em;
+}
+
+.badge-confirmed {
+  background: var(--gold-bg);
+  color: #744210;
+  border: 1px solid #ECC94B;
+}
+
+.badge-candidate {
+  background: var(--blue-bg);
+  color: #2B6CB0;
+  border: 1px solid #90CDF4;
+}
+
+.badge-city {
+  background: var(--surface-sub);
+  color: var(--text-muted);
+}
+
+.card-title-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.place-emoji {
+  font-size: 38px;
+  line-height: 1;
+  flex-shrink: 0;
+  background: var(--surface-sub);
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+
+.title-wrap h2 {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.3;
+}
+
+.title-wrap .en-name {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.headline-box {
+  background: #F7FAFC;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #2D3748;
+  border: 1px dashed #CBD5E0;
+}
+
+/* 3세대 맞춤 포인트 박스 (큰 글씨) */
+.points-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.point-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  align-items: flex-start;
+}
+
+.point-elder {
+  background: #FFFDF5;
+  border: 1px solid #F6E05E;
+}
+
+.point-kids {
+  background: #F0FFF4;
+  border: 1px solid #9AE6B4;
+}
+
+.point-icon {
+  font-size: 22px;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.point-text {
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text-main);
+}
+
+.point-label {
+  font-weight: 800;
+  display: block;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.point-elder .point-label { color: #975A16; }
+.point-kids .point-label { color: #22543D; }
+
+/* 카드 하단 정보 & 상세 버튼 */
+.card-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+}
+
+.meta-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.meta-tag {
+  background: var(--surface-sub);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.btn-detail {
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(26, 54, 93, 0.2);
+}
+
+/* 상세정보 모달 팝업 */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: none;
+  align-items: flex-end;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-sheet {
+  background: var(--surface);
+  width: 100%;
+  max-height: 88vh;
+  border-top-left-radius: 28px;
+  border-top-right-radius: 28px;
+  padding: 24px 20px 40px;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease-out;
+  box-shadow: 0 -10px 30px rgba(0,0,0,0.25);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.modal-emoji {
+  font-size: 34px;
+}
+
+.modal-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.modal-close {
+  background: #EDF2F7;
+  border: none;
+  font-size: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #4A5568;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section-title {
+  font-size: 17px;
+  font-weight: 800;
+  color: #2D3748;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modal-desc-box {
+  background: var(--surface-sub);
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-main);
+}
+
+.tip-box {
+  background: #FFF5F5;
+  border: 1px solid #FEB2B2;
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-top: 10px;
+}
+
+.tip-box-title {
+  color: #C53030;
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+
+.tip-box-desc {
+  font-size: 15px;
+  color: #742A2A;
+  line-height: 1.5;
+}
+
+.btn-close-large {
+  width: 100%;
+  background: var(--primary);
+  color: #FFFFFF;
+  border: none;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.stats-banner {
+  background: #EDF2F7;
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  color: var(--text-sub);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="top-nav-bar">
+    <a href="index.html" class="nav-home-btn">← 메인 포털</a>
+    <button class="nav-share-btn" onclick="copyPageUrl()">🔗 링크 복사</button>
+  </div>
+  <span class="header-badge">3세대 6인 가족 맞춤 가이드</span>
+  <h1>2027 미국 서부 여행<br>관광지 종합 카탈로그</h1>
+  <p>장인어른·장모님과 우리 쌍둥이를 위한<br>안전하고 여유로운 맞춤 명소 안내서</p>
+  
+  <div class="summary-pill-wrap">
+    <span class="summary-pill">📅 1월 28일 ~ 2월 14일 (17박 18일)</span>
+    <span class="summary-pill">👨‍👩‍👧‍👦 총 6인 가족</span>
+    <span class="summary-pill">♿ 휠체어/평지 완벽 검증</span>
+  </div>
+</header>
+
+<div class="filter-container">
+  <div class="city-nav">
+    <button class="city-btn active" onclick="filterCity('all', this)">전체 보기</button>
+    <button class="city-btn" onclick="filterCity('vegas', this)">1. 라스베이거스 (4박)</button>
+    <button class="city-btn" onclick="filterCity('sd', this)">2. 샌디에이고 (3박)</button>
+    <button class="city-btn" onclick="filterCity('la', this)">3. LA/패서디나 (3박)</button>
+    <button class="city-btn" onclick="filterCity('oc', this)">4. 오렌지카운티 (7박)</button>
+  </div>
+  
+  <div class="type-toggle-row">
+    <button class="type-btn active" onclick="filterType('all', this)">전체 (34곳)</button>
+    <button class="type-btn" onclick="filterType('confirmed', this)">✅ 기본 확정 코스</button>
+    <button class="type-btn" onclick="filterType('candidate', this)">⭐ 추가 추천 후보</button>
+  </div>
+</div>
+
+<main class="content-wrap">
+  <div class="stats-banner">
+    <span id="list-count-text">총 34개 추천 명소</span>
+    <span style="font-size:13px; color:var(--text-muted);">카드를 누르면 상세 꿀팁 확인</span>
+  </div>
+
+  <div id="places-list"></div>
+</main>
+
+<!-- 상세정보 바텀시트 모달 -->
+<div class="modal-overlay" id="detailModal" onclick="closeModal(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <span class="modal-emoji" id="modalEmoji">🌴</span>
+        <div>
+          <h2 class="modal-title" id="modalTitle">장소명</h2>
+          <span style="font-size:13px; color:var(--text-muted);" id="modalEnTitle">English Name</span>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">✨ 핵심 관람 포인트</div>
+      <div class="modal-desc-box" id="modalDesc">내용</div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">👴 70대 어르신을 위한 맞춤 배려</div>
+      <div class="modal-desc-box" style="background:#FFFDF5; border:1px solid #ECC94B;" id="modalElder">내용</div>
+    </div>
+
+    <div class="modal-section">
+      <div class="modal-section-title">👶 7세 손주(쌍둥이) 환호 포인트</div>
+      <div class="modal-desc-box" style="background:#F0FFF4; border:1px solid #9AE6B4;" id="modalKids">내용</div>
+    </div>
+
+    <div class="modal-section" id="modalReviewSection">
+      <div class="modal-section-title">💬 실제 방문자 생생 후기</div>
+      <div class="modal-desc-box" style="font-style: italic; color:#4A5568;" id="modalReview">후기 내용</div>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-box-title">🚨 이동 및 화장실 필수 체크포인트</div>
+      <div class="tip-box-desc" id="modalTip">팁 내용</div>
+    </div>
+
+    <button class="btn-close-large" onclick="closeModal()">확인 완료 (창 닫기)</button>
+  </div>
+</div>
+
+<script>
+const PLACES = [
+  // ================= 1. 라스베이거스 (vegas) =================
+  {
+    id: 'v1',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'confirmed',
+    emoji: '🚁',
+    name: '그랜드캐년 웨스트림 헬기투어',
+    enName: 'Papillon Grand Celebration Helicopter Tour',
+    headline: '14시간 버스 대신 4.5시간 전용 헬기로 협곡 바닥 착륙 피크닉!',
+    elder: '차량 피로 제로! 호텔에서 픽업 후 헬기를 타고 1,000m 협곡 바닥에 내려 앉아 샴페인/주스를 마시는 효도 투어의 정점입니다.',
+    kids: '하늘을 나는 헬리콥터를 직접 타고 후버댐과 콜로라도 강을 내려다보는 평생 잊지 못할 신기한 비행 체험입니다.',
+    meta: ['⏱ 4~4.5시간 소요', '💺 보행 거의 없음 (착석)', '💰 럭셔리 효도 투어'],
+    desc: '볼더시티 터미널에서 전용 헬기를 타고 미드호와 후버댐 상공을 지나, 그랜드캐년 1,000m 바닥에 착륙하여 30분간 피크닉을 즐기는 최고급 코스입니다.',
+    review: '“70대 부모님 모시고 14시간 버스투어 갔으면 큰일 날 뻔했습니다. 헬기투어는 어르신들 무릎에 무리도 전혀 없고 협곡 바닥이 따뜻해서 최고였습니다.”',
+    tip: '바람이 불면 날짜가 바뀔 수 있어 베가스 4박 중 초반(Day 3 토요일)에 배치해 두었습니다. 기내 소음 방지용 헤드셋이 지급됩니다.'
+  },
+  {
+    id: 'v2',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'confirmed',
+    emoji: '⛲',
+    name: '벨라지오 분수쇼 & 실내 온실정원',
+    enName: 'Bellagio Conservatory & Fountains',
+    headline: '세계 최대 음악 분수쇼와 화려한 설날 생화 실내정원 산책',
+    elder: '계단이 전혀 없는 완벽한 평지 실내입니다. 1~2월은 설날(춘절) 테마로 거대한 생화 꽃장식이 펼쳐져 어르신 꽃구경에 최고입니다.',
+    kids: '음악에 맞춰 호텔 건물보다 높게 솟구치는 거대한 물줄기 분수쇼를 바로 코앞 호숫가에서 신나게 구경합니다.',
+    meta: ['⏱ 1~1.5시간', '🚶 완벽한 평지', '💸 완전 무료'],
+    desc: '벨라지오 호텔 앞 거대 호수에서 매 15~30분마다 펼쳐지는 분수쇼와 호텔 로비 안쪽의 웅장한 유리 돔 온실정원입니다.',
+    review: '“밤에 호숫가 난간에서 분수쇼 보고 바로 안으로 들어가 꽃정원 걸으니 어르신도 아이도 너무 좋아하셨어요. 비용도 무료라 부담 없습니다.”',
+    tip: '밤에는 사막 바람이 불어 기온이 5℃ 안팎으로 떨어지니 경량 패딩이나 따뜻한 외투를 걸치고 나가시면 좋습니다.'
+  },
+  {
+    id: 'v3',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'confirmed',
+    emoji: '🛶',
+    name: '베네시안 호텔 운하 & 패션쇼 몰',
+    enName: 'Venetian Canals & Fashion Show Mall',
+    headline: '실내 파란 하늘 아래 곤돌라가 떠다니는 이탈리아풍 산책길',
+    elder: '사막의 추위나 바람과 상관없이 24시간 쾌적한 실내 온도를 유지하는 완벽한 평지 산책 코스입니다.',
+    kids: '실내 건물 2층에 흐르는 강 위로 곤돌라 배가 지나가고, 뱃사공 아저씨가 오페라 노래를 불러주어 마법 같습니다.',
+    meta: ['⏱ 2~3시간', '🚶 실내 평지', '🛍 쇼핑 & 카페'],
+    desc: '이탈리아 베네치아를 그대로 옮겨놓은 실내 인공 하늘과 운하 거리입니다. 길 건너 패션쇼 몰과 구름다리로 연결되어 있습니다.',
+    review: '“시차 적응할 때 낮잠 자고 오후에 설렁설렁 걸으며 커피 한잔 마시기에 이만한 곳이 없습니다.”',
+    tip: '호텔 로비와 쇼핑몰 곳곳에 벤치와 고급 화장실이 많아 어르신들이 쉬어가시기 매우 편안합니다.'
+  },
+  {
+    id: 'v4',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'candidate',
+    emoji: '🎡',
+    name: '하이롤러 대관람차',
+    enName: 'High Roller at The LINQ',
+    headline: '높이 168m 거대 통유리 캐빈에 앉아서 즐기는 360도 야경',
+    elder: '단 한 걸음도 걷지 않고 넓고 푹신한 소파에 앉아서 라스베이거스 스트립 전체의 불빛 야경을 감상합니다 (멀미 제로).',
+    kids: '40명이 타는 거대한 우주선 같은 통유리 캡슐을 타고 하늘 높이 올라가 아래를 내려다봅니다.',
+    meta: ['⏱ 30분 탑승', '💺 보행 제로 (착석)', '🌃 화려한 야경'],
+    desc: '세계에서 2번째로 높은 초대형 관람차로, 천천히 30분 동안 1바퀴를 회전하며 베가스 도시 전체를 파노라마로 조망합니다.',
+    review: '“어르신 모시고 야경 보기에 이보다 편한 곳이 없습니다. 캐빈이 흔들림 없이 아주 부드럽습니다.”',
+    tip: '해 질 무렵(오후 5시 30분경) 탑승하시면 붉은 노을과 반짝이는 밤거리 조명을 동시에 보실 수 있습니다.'
+  },
+  {
+    id: 'v5',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'candidate',
+    emoji: '🌐',
+    name: '스피어 (Sphere Las Vegas)',
+    enName: 'Sphere Las Vegas',
+    headline: '지구상 최대 157m 거대 LED 공! 라스베이거스 최첨단 신상 랜드마크',
+    elder: '외관 전체가 거대한 지구본, 달, 이모티콘으로 1초마다 바뀌는 모습을 차 안이나 광장에서 편안히 감상합니다.',
+    kids: '거대한 눈동자나 우주 행성으로 변하는 마법 같은 거대 공을 보며 아이들이 눈을 떼지 못합니다.',
+    meta: ['⏱ 외관 30분', '🚗 드라이브 조망 가능', '📸 필수 인증샷'],
+    desc: '2023년 말 개장한 세계 최대의 구형 건축물로, 외벽 전체가 초고화질 LED 스크린으로 덮여 있습니다.',
+    review: '“실내 공연은 티켓이 비싸지만, 밤에 렌트카나 택시 타고 외관만 한 바퀴 돌아봐도 감탄이 절로 나옵니다.”',
+    tip: '실내 몰입형 미디어아트는 어르신에게 약간의 어지럼증이 있을 수 있어, 외관 야경 관람을 우선 추천합니다.'
+  },
+  {
+    id: 'v6',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'candidate',
+    emoji: '🥤',
+    name: '코카콜라 스토어 & M&M 월드',
+    enName: 'Coca-Cola Store & M&M’s World',
+    headline: '알록달록 캐릭터와 초콜릿 타워! 아이들의 최고 인기 코스',
+    elder: '실내 4층 건물 전체에 엘리베이터가 완비되어 있고, 귀여운 굿즈 구경과 따뜻한 실내 휴식을 즐길 수 있습니다.',
+    kids: '벽면 가득 채워진 무지개색 초콜릿과 전 세계 코카콜라 시음 트레이, 무료 3D 애니메이션 영화를 즐깁니다.',
+    meta: ['⏱ 1~1.5시간', '🚶 실내 평지', '🎁 기념품 쇼핑'],
+    desc: '스트립 남부 중심가에 나란히 위치한 브랜드 테마 스토어로, 거대한 코카콜라 병과 북극곰 인형이 반겨줍니다.',
+    review: '“아이들이 초콜릿 고르느라 너무 신나 했고, 3층 무료 3D 영화도 재미있게 봤습니다.”',
+    tip: '벨라지오 호텔에서 차로 5분 거리이며, 유모차를 끌고 들어가기에 아주 쾌적합니다.'
+  },
+  {
+    id: 'v7',
+    city: 'vegas',
+    cityName: '라스베이거스 (4박)',
+    type: 'candidate',
+    emoji: '🦈',
+    name: '샤크 리프 아쿠아리움',
+    enName: 'Shark Reef Aquarium at Mandalay Bay',
+    headline: '사막 한가운데서 만나는 난파선 해저 터널과 바다거북',
+    elder: '실내 전 구역이 완만한 경사로와 엘리베이터로 연결되어 휠체어나 유모차 이동 피로가 전혀 없습니다.',
+    kids: '머리 위로 지나다니는 거대한 상어 100여 마리와 가오리, 바다거북을 보며 탐험가가 된 기분을 느낍니다.',
+    meta: ['⏱ 1.5시간', '🚶 100% 실내 평지', '🐠 해양 생태'],
+    desc: '맨덜레이 베이 호텔 내에 위치한 AZA 인증 대형 수족관으로, 난파선 컨셉의 터널 수조가 인상적입니다.',
+    review: '“라스베이거스에서 아이들과 갈 수 있는 가장 조용하고 쾌적한 실내 명소입니다.”',
+    tip: '오전에 방문하시면 한산하여 어르신들이 의자에 앉아 상어를 여유롭게 관람하시기 좋습니다.'
+  },
+
+  // ================= 2. 샌디에이고 (sd) =================
+  {
+    id: 's1',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'confirmed',
+    emoji: '🦭',
+    name: '라호야 코브 (야생 바다사자)',
+    enName: 'La Jolla Cove',
+    headline: '진짜 태평양 파도 바위 위에서 낮잠 자는 야생 바다사자 직관!',
+    elder: '바위로 내려갈 필요 없이, 난간이 쳐진 완벽한 평지 해안 산책로 벤치에 앉아서 태평양 절경과 바다사자를 관람합니다.',
+    kids: '동물원 철창이 아니라 진짜 자연에서 컹컹 짖고 다이빙하는 야생 바다사자와 아기 물개들을 3m 코앞에서 봅니다.',
+    meta: ['⏱ 1.5~2시간', '🌊 평지 해안 산책', '💸 완전 무료'],
+    desc: '샌디에이고 최고 부촌 라호야 해안의 천연 바위 서식지로, 수십 마리의 야생 바다사자와 물개가 서식합니다.',
+    review: '“자연 다큐멘터리 속에 들어온 기분이었습니다. 70대 부모님도 이번 여행에서 가장 감동적이었다고 하셨어요.”',
+    tip: '★젖은 갯바위는 미끄러우니 절대 내려가지 마시고 상부 콘크리트 데크 안전 난간에서 편안히 조망하세요.'
+  },
+  {
+    id: 's2',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'confirmed',
+    emoji: '🦁',
+    name: '샌디에이고 동물원 (자이언트 판다)',
+    enName: 'San Diego Zoo (Balboa Park)',
+    headline: '세계 1위 명성! 판다 먹방 직관 & 2층 버스 타고 편안한 관람',
+    elder: '입장권에 포함된 35분 가이드 2층 버스를 타면 무릎에 전혀 무리 없이 앉아서 동물원의 70%를 편안하게 관람합니다.',
+    kids: '2024년 미국에 복귀한 진짜 귀여운 자이언트 판다 2마리가 대나무를 먹고 장난치는 모습을 눈앞에서 봅니다.',
+    meta: ['⏱ 3~4시간 (반나절)', '🚌 2층 투어버스 포함', '🐼 자이언트 판다'],
+    desc: '40만㎡(12만 평) 아열대 우림에 조성된 세계 최고 동물원으로, 코알라, 북극곰, 판다 등 3,700여 마리가 서식합니다.',
+    review: '“언덕이 좀 있지만 2층 버스와 하늘 케이블카(Skyfari)를 타니 70대 부모님도 하나도 안 힘들어하셨습니다.”',
+    tip: '개장 직후(오전 9시) 입장하자마자 판다 구역(Panda Ridge)으로 가시면 대기 없이 활발하게 노는 판다를 봅니다.'
+  },
+  {
+    id: 's3',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'confirmed',
+    emoji: '🌺',
+    name: '발보아 파크 (스페인 궁전 정원)',
+    enName: 'Balboa Park & Lily Pond',
+    headline: '스페인 궁전풍 건축물과 연꽃 연못 앞 대가족 인생 사진 명소',
+    elder: '계단이 전혀 없는 완벽한 평지 공원입니다. 웅장한 아치형 회랑 그늘 벤치에 앉아 바람을 쐬며 대화하기 좋습니다.',
+    kids: '연꽃 연못 속 거대한 잉어와 거북이를 구경하고, 야외 대형 파이프오르간 광장을 마음껏 뛰어다닙니다.',
+    meta: ['⏱ 1.5~2시간', '🚶 완벽한 평지 산책', '📸 대가족 사진 1위'],
+    desc: '1915년 박람회를 위해 지어진 스페인 식민지풍 건축물과 분수대, 정원이 어우러진 미국 최대의 도시 문화 공원입니다.',
+    review: '“건물이 너무 예뻐서 여기서 찍은 대가족 사진을 거실에 액자로 걸어두었습니다. 평지라 걷기도 편합니다.”',
+    tip: '샌디에이고 동물원 바로 옆에 붙어 있어 동물원 관람 후 늦은 오후에 들러 산책하기 가장 좋습니다.'
+  },
+  {
+    id: 's4',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'confirmed',
+    emoji: '🌮',
+    name: '올드타운 주립역사공원',
+    enName: 'Old Town San Diego State Historic Park',
+    headline: '흥겨운 멕시코 마리아치 음악과 정통 타코 가족 외식',
+    elder: '19세기 초 멕시코 전통 단층 가옥들이 옹기종기 모여 있는 완만한 평지 민속촌으로 볼거리가 풍부합니다.',
+    kids: '전통 의상을 입은 밴드의 경쾌한 음악 연주와 수공예 사탕, 기념품 구경에 푹 빠집니다.',
+    meta: ['⏱ 1.5~2시간', '🍽 점심/저녁 외식', '🌮 타코 & 파히타'],
+    desc: '캘리포니아가 처음 시작된 유서 깊은 발상지로, 멕시코 문화와 미국 서부 개척 역사가 공존하는 역사공원입니다.',
+    review: '“분위기가 너무 흥겹고 야외 테라스에서 먹은 파히타와 키즈 타코가 정말 맛있었습니다.”',
+    tip: '입장료는 무료이며 공원 내 유명 레스토랑(Fiesta de Reyes)에서 식사하시면 편안한 가족 만찬이 됩니다.'
+  },
+  {
+    id: 's5',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'candidate',
+    emoji: '🏖',
+    name: '코로나도 섬 & 호텔 델 코로나도',
+    enName: 'Coronado Island & Hotel del Coronado',
+    headline: '1888년 붉은 지붕 목조 리조트와 은빛 모래사장의 품격',
+    elder: '차로 다리를 건너 호텔 정원에 바로 도착하며, 바다를 바라보는 야자수 벤치에서 커피를 즐기기 최적입니다.',
+    kids: '조개껍데기가 반짝이는 새하얗고 고운 백사장에서 맨발로 파도를 밟으며 모래놀이를 즐깁니다.',
+    meta: ['⏱ 1.5~2시간', '🚗 다리 드라이브', '☕ 고급 해변 티타임'],
+    desc: '역대 미국 대통령들과 마릴린 먼로가 머물렀던 유서 깊은 빅토리안 리조트와 미국 최고로 꼽히는 해변입니다.',
+    review: '“샌디에이고 시내에서 다리 하나만 건너면 완전히 다른 고급 휴양지가 펼쳐집니다. 어르신들 대만족 코스!”',
+    tip: '코로나도 다리를 건널 때 차창 밖으로 보이는 샌디에이고 다운타운 스카이라인 전망이 일품입니다.'
+  },
+  {
+    id: 's6',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'candidate',
+    emoji: '🐠',
+    name: '버치 아쿠아리움',
+    enName: 'Birch Aquarium at Scripps',
+    headline: '라호야 절벽 위 수족관! 불가사리·성게를 직접 만지는 체험',
+    elder: '라호야 코브에서 차로 단 5분 거리! 아담한 규모에 실내 평지라 어르신 다리에 전혀 부담이 없습니다.',
+    kids: '야외 테라스 풀에서 살아있는 불가사리와 작은 상어를 손으로 직접 만져보는 오감 만족 터치탱크가 있습니다.',
+    meta: ['⏱ 1.5시간', '🌊 절벽 위 오션뷰', '🖐 터치탱크 체험'],
+    desc: '세계적인 스크립스 해양연구소 부속 수족관으로, 거대한 켈프 숲 수조와 해안 절벽 전망 테라스를 갖추고 있습니다.',
+    review: '“아이들이 불가사리 만지느라 집에 안 가려고 했어요. 테라스에서 바라보는 태평양 바다 전망도 끝내줍니다.”',
+    tip: '라호야 코브에서 야생 바다사자를 보고 난 뒤 바로 연계해서 방문하기 가장 좋은 반나절 코스입니다.'
+  },
+  {
+    id: 's7',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'candidate',
+    emoji: '⚓',
+    name: 'USS 미드웨이 항공모함 박물관',
+    enName: 'USS Midway Museum',
+    headline: '실제 바다를 누비던 300m 초대형 항공모함과 전투기 조종석 체험',
+    elder: '거대한 배 내부에 엘리베이터가 잘 갖춰져 있고, 친절한 참전용사 할아버지 자원봉사자들이 따뜻하게 맞이합니다.',
+    kids: '갑판 위에 늘어선 수십 대의 실제 제트 전투기 조종석에 직접 올라타 조종간을 잡아봅니다.',
+    meta: ['⏱ 2시간', '🛗 엘리베이터 완비', '✈ 전투기 조종석'],
+    desc: '2차 대전부터 걸프전까지 활약했던 전설적인 미국 항공모함을 개조한 세계 최대 해양 항공 박물관입니다.',
+    review: '“남자아이들과 아빠는 물론이고, 배가 워낙 거대해서 어르신들도 스케일에 놀라워하셨습니다.”',
+    tip: '갑판 위는 바닷바람이 다소 강하게 불 수 있으니 겉옷이나 바람막이를 챙겨 올라가세요.'
+  },
+  {
+    id: 's8',
+    city: 'sd',
+    cityName: '샌디에이고 (3박)',
+    type: 'candidate',
+    emoji: '🌊',
+    name: '카브리요 국립기념지',
+    enName: 'Cabrillo National Monument',
+    headline: '샌디에이고 반도 끝 절벽에서 360도 바다와 고래 관측',
+    elder: '미니밴을 타고 정상 주차장까지 편안하게 올라가서, 걷지 않고도 망망대해를 조망할 수 있습니다.',
+    kids: '1~2월은 알래스카에서 내려오는 거대한 회색고래가 지나가는 시기라 망원경으로 고래 숨구멍을 찾아봅니다.',
+    meta: ['⏱ 1~1.5시간', '🚗 차량 정상 직행', '🐋 겨울 고래 관측'],
+    desc: '1542년 유럽인이 캘리포니아에 첫발을 디딘 역사적인 절벽 끝자락으로, 올드 롬바 등대와 탁 트인 전망이 장관입니다.',
+    review: '“샌디에이고 전경과 태평양이 한눈에 내려다보이는 최고의 전망 포인트입니다.”',
+    tip: '국립공원 차량 입장료($20)가 있으며, 날씨가 맑은 날 방문하시면 멕시코 티후아나 땅까지 보입니다.'
+  },
+
+  // ================= 3. LA 북부 / 패서디나 (la) =================
+  {
+    id: 'l1',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'confirmed',
+    emoji: '🌿',
+    name: '헌팅턴 가든 & 식물원',
+    enName: 'The Huntington Library & Botanical Gardens',
+    headline: '15만 평 대저택 정원! 70대 부모님 만족도 압도적 1위 힐링 명소',
+    elder: '★이번 여행 최고의 효도 코스! 무료 휠체어와 셔틀버스가 완비되어 호숫가 중국 정원 누각에서 차 한잔 마시며 힐링합니다.',
+    kids: '어린이 정원에서 뿜어져 나오는 신기한 미스트 분수와 물 도랑, 대나무 숲 잉어 먹이주기에 신이 납니다.',
+    meta: ['⏱ 3~4시간 (반나절)', '♿ 무료 휠체어/셔틀', '🏆 어르신 만족 1위'],
+    desc: '철도 재벌 헨리 헌팅턴의 저택에 조성된 세계 최고 수준의 정원으로, 미국 최대의 중국식 정원과 일본 분재원이 압권입니다.',
+    review: '“부모님이 여행 내내 헌팅턴 가든 이야기를 하실 정도로 너무 좋아하셨습니다. 정자가 그림 같습니다.”',
+    tip: '화요일 정기 휴무입니다. 부지가 광활하므로 [중국 정원 + 어린이 정원 + 일본 정원] 3곳 위주로 편안히 둘러보세요.'
+  },
+  {
+    id: 'l2',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'confirmed',
+    emoji: '🎬',
+    name: '유니버설 스튜디오 할리우드',
+    enName: 'Universal Studios Hollywood',
+    headline: '60분 착석 영화세트장 트램투어 & 아이들 최애 닌텐도 월드',
+    elder: '대형 트램에 60분간 편안히 앉아서 실제 영화 세트장(홍수, 지진, 비행기 추락)을 관람하는 스튜디오 투어가 인기 최고입니다.',
+    kids: '게임 속으로 들어온 듯한 슈퍼 닌텐도 월드에서 마리오 모자를 쓰고 카트 레이싱을 직접 운전합니다.',
+    meta: ['⏱ 종일 코스', '💺 트램투어 착석 관람', '🍄 마리오 카트'],
+    desc: '100년 역사의 실제 영화 촬영장 위에 세워진 테마파크로, 워터월드 스턴트 쇼와 해리포터 성이 함께 있습니다.',
+    review: '“어르신들은 트램투어와 워터월드 쇼를 편안히 보시고, 아이들은 마리오 카트에 열광해서 가족 모두 대만족이었습니다.”',
+    tip: '입구 바로 앞 선호 주차장(Preferred Parking)을 이용하시면 어르신 보행 거리를 크게 줄일 수 있습니다.'
+  },
+  {
+    id: 'l3',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'confirmed',
+    emoji: '🔭',
+    name: '그리피스 천문대',
+    enName: 'Griffith Observatory',
+    headline: '영화 〈라라랜드〉 왈츠 촬영지! LA 시내 파노라마 석양과 야경',
+    elder: '엘리베이터와 경사로가 완비되어 있으며, 오렌지빛으로 물드는 LA 석양과 반짝이는 밤 풍경을 난간에서 편안히 감상합니다.',
+    kids: '산 위에 우뚝 선 하얀 천문대 돔과 거대한 천체 망원경, 그리고 할리우드 사인을 배경으로 사진을 찍습니다.',
+    meta: ['⏱ 2~2.5시간', '🌇 환상적인 일몰/야경', '🎬 라라랜드 명소'],
+    desc: 'LA 시내와 태평양이 한눈에 내려다보이는 도심 정상의 천문대로, 영화 〈라라랜드〉 속 별빛 왈츠 씬의 실제 배경입니다.',
+    review: '“LA 야경의 끝판왕입니다. 해 지기 1시간 전에 올라가서 낮 풍경부터 야경까지 보고 내려오면 완벽합니다.”',
+    tip: '정상 주차장은 붐비므로, 어르신과 아이를 천문대 로터리에 먼저 내려드리고 운전자만 주차하고 합류하시면 좋습니다.'
+  },
+  {
+    id: 'l4',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'confirmed',
+    emoji: '🏛',
+    name: '올드타운 패서디나',
+    enName: 'Old Town Pasadena',
+    headline: '붉은 벽돌의 고풍스러운 부촌 거리 & 딘타이펑 딤섬 만찬',
+    elder: 'LA 중심가와 달리 노숙자가 전혀 없는 깨끗하고 안전한 보행자 거리로, 편안하게 걸으며 유럽풍 거리를 만끽합니다.',
+    kids: '치즈케이크 팩토리와 달콤한 디저트 카페, 아기자기한 서점과 분수 광장을 구경합니다.',
+    meta: ['⏱ 1.5~2시간', '🚶 안전한 평지 거리', '🥟 딘타이펑 딤섬'],
+    desc: '19세기 건축물이 그대로 보존된 LA 최고 부촌 패서디나의 중심가로, 고급 상점과 세계 각국의 맛집이 밀집해 있습니다.',
+    review: '“LA에서 가장 마음 편하게 가족들과 저녁 산책을 즐겼던 동네입니다. 딘타이펑 만두도 너무 맛있었어요.”',
+    tip: '숙소에서 차로 5~10분 거리이므로, 일정 후 저녁 식사를 하고 가볍게 걸어서 숙소로 귀가하기 좋습니다.'
+  },
+  {
+    id: 'l5',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'candidate',
+    emoji: '🏛',
+    name: '게티 센터 (The Getty Center)',
+    enName: 'The Getty Center (Brentwood)',
+    headline: '언덕 위 백색 대리석 궁전 미술관 & 고흐·모네 명화 관람',
+    elder: '무료 휠체어 완비! 주차장에서 정상까지 무료 무인 트램을 타고 올라가며, 태평양이 내려다보이는 정원 벤치가 훌륭합니다.',
+    kids: '언덕 위로 올라가는 신기한 미래형 케이블 트램 탑승과 야외 선인장 미로 정원을 신나게 구경합니다.',
+    meta: ['⏱ 2~2.5시간', '🚊 무료 트램 탑승', '💸 입장료 무료'],
+    desc: '석유 재벌 폴 게티의 유산으로 지어진 세계적인 미술관으로, 반 고흐의 명작 〈아이리스〉와 아름다운 정원을 보유하고 있습니다.',
+    review: '“입장료가 무료라는 게 믿기지 않을 정도로 웅장하고 아름답습니다. 건물 자체와 정원만 봐도 힐링입니다.”',
+    tip: '입장료는 무료이지만 공식 홈페이지에서 사전 시간 예약(Timed-entry)이 필수입니다 (차량 주차비 $20).'
+  },
+  {
+    id: 'l6',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'candidate',
+    emoji: '🥐',
+    name: '더 그로브 & 오리지널 파머스 마켓',
+    enName: 'The Grove & Farmers Market',
+    headline: '90년 전통 시장 푸드코트 & 낭만적인 야외 쇼핑 트램',
+    elder: '완전 평지 보도! 파머스 마켓 안에는 한식, 따뜻한 국수, 브라질 바비큐 등 골라 먹는 재미가 있어 입맛 맞추기 좋습니다.',
+    kids: '녹색 클래식 2층 트램을 무료로 타고 쇼핑몰 거리를 통과하며 춤추는 분수대를 구경합니다.',
+    meta: ['⏱ 1.5~2시간', '🚃 무료 클래식 트램', '🍜 다양한 푸드코트'],
+    desc: '1934년부터 이어진 전통 시장과 현대적인 야외 유럽풍 쇼핑몰이 연결된 곳으로, 활기차고 맛있는 간식이 가득합니다.',
+    review: '“게티 센터 보고 그리피스 천문대 가기 전에 딱 중간에서 점심 먹고 커피 마시기에 최고의 동선입니다.”',
+    tip: '파머스 마켓 파킹랏에 주차하시고 상점에서 주차 도장을 받으시면 할인이 적용됩니다.'
+  },
+  {
+    id: 'l7',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'candidate',
+    emoji: '🌲',
+    name: '데스칸소 가든',
+    enName: 'Descanso Gardens',
+    headline: '20만 평 울창한 참나무 숲과 숲속 미니 기차 탑승',
+    elder: '80% 이상이 참나무 숲 그늘로 덮여 있어 시원하며, 2월에는 붉은 동백꽃이 활짝 피어 삼림욕 산책에 안성맞춤입니다.',
+    kids: '아이들이 직접 탈 수 있는 숲속 미니 증기 기차(Enchanted Railroad, $5)를 타고 숲 한 바퀴를 돕니다.',
+    meta: ['⏱ 2시간', '🚂 숲속 미니기차', '🌺 동백꽃 힐링숲'],
+    desc: '패서디나 인근 산자락에 위치한 고요하고 자연 친화적인 수목원으로, 헌팅턴 가든보다 덜 붐비고 아늑합니다.',
+    review: '“조용하고 새소리 들리는 평화로운 숲입니다. 손주와 기차 타고 할머니는 꽃길 걸으시니 참 좋았어요.”',
+    tip: '헌팅턴 가든과 분위기가 비슷하므로, 두 곳 중 일정 여유에 맞춰 한 곳을 선택하시기에 좋습니다.'
+  },
+  {
+    id: 'l8',
+    city: 'la',
+    cityName: 'LA/패서디나 (3박)',
+    type: 'candidate',
+    emoji: '🌴',
+    name: '베벌리힐스 로데오 드라이브',
+    enName: 'Beverly Hills Rodeo Drive',
+    headline: '세계 최고급 명품 거리와 야자수 가로수길 가족사진',
+    elder: '경찰이 상시 순찰하는 치안 1위 지역으로, 대리석 평지 보도와 야자수 그늘 아래 쾌적하게 산책합니다.',
+    kids: '영화에 나오는 거대한 야자수 가로수와 베벌리 가든스 파크의 커다란 ‘Beverly Hills’ 입간판 앞에서 기념사진을 찍습니다.',
+    meta: ['⏱ 1~1.5시간', '🅿️ 2시간 무료 주차', '📸 인생 사진 명소'],
+    desc: '영화 〈귀여운 여인〉의 배경이 된 세계적인 럭셔리 거리로, 고급스러운 유럽풍 분수 계단과 야자수가 장관입니다.',
+    review: '“공영 주차장에 2시간 무료로 차 대고 1시간 딱 예쁜 거리 걷고 사진 찍고 나오니 부담 없고 좋았습니다.”',
+    tip: '438 N Beverly Dr 공영 주차장을 이용하시면 영수증 없이도 최초 2시간 완전 무료 주차가 가능합니다.'
+  },
+
+  // ================= 4. 오렌지카운티 (oc) =================
+  {
+    id: 'o1',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'confirmed',
+    emoji: '💒',
+    name: '사촌 결혼식 참석 (2/13 토)',
+    enName: "Cousin's Wedding (Crossline Church, Laguna Hills)",
+    headline: '이번 여행의 아름다운 피날레! 미국 채플 예식과 친척 만찬',
+    elder: '숙소(어바인)에서 차로 단 15~20분 거리! 정장 구김이나 차 막힘 걱정 없이 여유롭게 단장하고 참석합니다.',
+    kids: '단정한 셔츠를 입고 미국 교회 채플에서 삼촌·이모들과 만나 예쁜 대가족 기념사진을 남깁니다.',
+    meta: ['⏱ 11:00 ~ 15:00', '💒 핵심 고정 행사', '🚗 숙소에서 15분'],
+    desc: '사우스 오렌지카운티 라구나 힐스에 위치한 아름다운 호숫가 미국 교회 채플에서 열리는 사촌의 감동적인 결혼식입니다.',
+    review: '“여행 마지막 주말에 친척들과 다 함께 모여 축하하고 저녁 가족 만찬을 나누는 가장 뜻깊은 날입니다.”',
+    tip: '식장 바로 옆에 넓은 지상 주차장이 완비되어 있어 어르신 하차 및 이동이 매우 수월합니다.'
+  },
+  {
+    id: 'o2',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'confirmed',
+    emoji: '🎡',
+    name: '디즈니랜드 파크 (오리지널)',
+    enName: 'Disneyland Park (Anaheim)',
+    headline: '1955년 월트 디즈니가 만든 원조 마법의 왕국 & 불꽃놀이',
+    elder: '★사전 배송 전동스쿠터(ECV)를 타고 편안히 이동! 평일 화요일 방문으로 대기 시간을 최소화합니다.',
+    kids: '스타워즈 우주선 조종, 피터팬 비행, 미키마우스 캐릭터 퍼레이드와 밤하늘 불꽃쇼에 눈이 휘둥그레집니다.',
+    meta: ['⏱ 종일 (낮잠 2h)', '🛵 전동스쿠터 필수', '🎆 야간 불꽃놀이'],
+    desc: '전 세계 디즈니랜드의 시초이자 원조로, 동화 속 판타지랜드와 스타워즈 갤럭시스 엣지가 공존하는 테마파크입니다.',
+    review: '“부모님 전동스쿠터 빌려드린 게 신의 한 수였습니다. 하루 종일 하나도 안 힘들어하시고 퍼레이드 명당까지 편히 보셨어요.”',
+    tip: '오후 1시~4시 인파가 몰릴 때는 숙소로 돌아와 2시간 낮잠을 푹 자고, 오후 5시에 재입장해야 밤 불꽃놀이까지 완주합니다.'
+  },
+  {
+    id: 'o3',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'confirmed',
+    emoji: '🎢',
+    name: '디즈니 캘리포니아 어드벤처',
+    enName: 'Disney California Adventure (DCA)',
+    headline: '쌍둥이 최애 1위 카스랜드 & 어르신 대감탄 4D 비행 소어린',
+    elder: '행글라이더를 타고 전 세계 명소를 하늘에서 내려다보는 감동 라이드 ‘소어린(Soarin)’은 어르신들이 가장 감탄하십니다.',
+    kids: '영화 〈카(Cars)〉 속 마을을 실물 크기로 재현한 카스랜드에서 맥퀸 자동차를 타고 신나게 레이싱합니다.',
+    meta: ['⏱ 종일 (낮잠 2h)', '🏎 카스랜드 레이서', '🌊 분수 레이저쇼'],
+    desc: '디즈니랜드 바로 맞은편의 자매 파크로, 픽사 애니메이션과 마블 어벤져스 캠퍼스, 웅장한 호수 분수쇼가 펼쳐집니다.',
+    review: '“카스랜드는 어른인 저도 소름 돋을 정도로 영화랑 똑같았습니다. 아이들에겐 평생 잊지 못할 추억입니다.”',
+    tip: '카스랜드 레이서는 키 102cm 이상이면 만 6세 쌍둥이 모두 탑승 가능하며 격렬하지 않아 온 가족이 함께 탈 수 있습니다.'
+  },
+  {
+    id: 'o4',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'confirmed',
+    emoji: '⛵',
+    name: '발보아 아일랜드 미니 페리',
+    enName: 'Balboa Island Ferry & Newport Beach',
+    headline: '자동차를 탄 채 3분간 바다 건너기 & 평지 해안 마을 산책',
+    elder: '계단이 전혀 없는 바닷가 평지 보행로를 걸으며 예쁜 별장 정원을 구경하고 벤치에서 커피를 즐깁니다.',
+    kids: '미니밴을 탄 채로 둥둥 떠가는 귀여운 통근 페리를 타는 것 자체가 신나는 놀이기구 체험입니다.',
+    meta: ['⏱ 1.5~2시간', '🚗 차 타고 배 타기', '🍦 수제 발보아 바'],
+    desc: '100년 역사를 지닌 작은 카페리로, 차 3대만 싣고 바다를 건너 아기자기한 부촌 섬마을로 들어가는 낭만 코스입니다.',
+    review: '“배 타고 3분 건너는 게 별거 아닌 것 같아도 아이들이 너무 신기해했고 마을도 평화로워서 힐링 그 자체였습니다.”',
+    tip: '섬에 도착하면 유명한 초콜릿 코팅 바나나 아이스크림(Balboa Bar)을 하나씩 사 드시며 산책하세요.'
+  },
+  {
+    id: 'o5',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'confirmed',
+    emoji: '🍲',
+    name: '부에나파크 한식 타운 & H Mart',
+    enName: 'Buena Park The Source Mall & H Mart',
+    headline: '설날 명절 떡국 장보기 & 70대 부모님을 위한 따뜻한 한식 보급',
+    elder: '기름진 현지식으로 지친 속을 달래줄 뜨끈한 설렁탕, 갈비탕, 순두부, 죽 전문 식당들이 모여 있습니다.',
+    kids: '한국 간식, 붕어빵, 과일과 함께 깨끗한 실내 몰을 구경하며 설날 떡국 끓일 소고기와 떡을 장봅니다.',
+    meta: ['⏱ 1.5~2시간', '🛒 설날 장보기', '🍚 든든한 한식당'],
+    desc: '미국 서부 최대의 한인 상권 중 하나로, 초대형 H마트와 현대적인 복합 쇼핑몰 ‘더 소스 몰’이 위치해 있습니다.',
+    review: '“해외여행 중에 부모님 입맛 챙겨드리기 최고의 오아시스 같은 곳입니다. 한국 마트보다 더 푸짐합니다.”',
+    tip: '오렌지카운티 숙소 체크인 당일 들러 7박 동안 먹을 생수, 쌀, 과일, 김, 떡국 재료를 한 번에 장보시면 편합니다.'
+  },
+  {
+    id: 'o6',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'confirmed',
+    emoji: '🚀',
+    name: '캘리포니아 사이언스 센터',
+    enName: 'California Science Center',
+    headline: '실제 우주를 비행한 거대 우주왕복선 ‘엔데버호’ 실물 관람',
+    elder: '실내 냉난방 완비 평지 시설로 쾌적하며, 인류 역사를 바꾼 실제 우주왕복선의 거대한 크기에 감탄합니다.',
+    kids: '책에서만 보던 거대한 진짜 로켓과 우주선을 머리 위로 올려다보고 다양한 과학 원리를 손으로 만져봅니다.',
+    meta: ['⏱ 2시간', '🛸 우주선 실물 전시', '✈️ 귀국일 낮 코스'],
+    desc: 'LA 다운타운 인근에 위치한 주립 과학관으로, 퇴역한 진짜 우주왕복선 엔데버호 실물이 보존 전시된 곳입니다.',
+    review: '“귀국하는 날 낮 시간에 공항 가기 전 들렀는데 아이들도 너무 좋아하고 실내라 쾌적해서 완벽했습니다.”',
+    tip: '여행 마지막 날(2/14 일요일) 체크아웃 후 공항(LAX)으로 가기 전 낮 시간에 경유하기에 가장 이상적인 코스입니다.'
+  },
+  {
+    id: 'o7',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'candidate',
+    emoji: '🌳',
+    name: '어바인 그레이트 파크',
+    enName: 'Orange County Great Park',
+    headline: '아파트 10층 높이 무료 주황색 헬륨 열기구 탑승 체험',
+    elder: '계단이 전혀 없는 광활한 평지 잔디밭 공원으로, 휠체어나 유모차를 끌고 따스한 햇살을 받으며 산책하기 좋습니다.',
+    kids: '거대한 주황색 헬륨 열기구를 무료로 타고 수직으로 하늘 높이 올라가 아래를 내려다봅니다.',
+    meta: ['⏱ 1.5~2시간', '🎈 무료 열기구 탑승', '🎠 클래식 회전목마'],
+    desc: '과거 해병대 비행장을 초대형 시민 공원으로 개조한 곳으로, 회전목마와 잔디밭, 주황색 거대 열기구가 상징입니다.',
+    review: '“어바인 숙소 바로 옆이라 테마파크 다녀온 다음 날 여유롭게 바람 쐬러 가기에 최고였습니다.”',
+    tip: '열기구 탑승은 현장 선착순 무료 등록이며, 바람이 잔잔한 오전 일찍이나 늦은 오후에 운행 확률이 높습니다.'
+  },
+  {
+    id: 'o8',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'candidate',
+    emoji: '🎨',
+    name: '라구나 비치 & 헤이슬러 파크',
+    enName: 'Heisler Park & Laguna Beach',
+    headline: '에메랄드빛 해안 절벽을 따라 핀 꽃길 평지 산책로',
+    elder: '절벽 위에 조성된 헤이슬러 파크는 계단이 전혀 없는 완벽한 평지 꽃길로, 파도 소리를 들으며 힐링합니다.',
+    kids: '아래쪽 맑은 바닷물에서 헤엄치는 물고기를 난간에서 내려다보고 조각 공원 잔디밭을 산책합니다.',
+    meta: ['⏱ 1.5~2시간', '🌸 절벽 위 꽃길', '💒 결혼식장 인근'],
+    desc: '예술가들이 모여 사는 아름다운 해안 마을로, 사촌 결혼식장(Laguna Hills)에서 차로 불과 15분 거리에 있습니다.',
+    review: '“캘리포니아에서 가본 바닷가 공원 중 가장 아름다웠습니다. 꽃길 벤치에 앉아만 있어도 행복합니다.”',
+    tip: '사촌 결혼식 전날(금요일) 오후에 6인 가족이 가볍게 드라이브 겸 바람을 쐬러 다녀오기에 최적입니다.'
+  },
+  {
+    id: 'o9',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'candidate',
+    emoji: '🐬',
+    name: '다나 포인트 돌고래 & 고래 크루즈',
+    enName: 'Dana Point Whale Watching',
+    headline: '세계 돌고래의 수도! 대형 쌍동선 타고 수백 마리 돌고래 점프 관찰',
+    elder: '흔들림이 적고 실내 좌석과 화장실이 완비된 대형 카타마란(쌍동선) 유람선에 편안히 앉아 관람합니다.',
+    kids: '배 바로 옆 파도를 가르며 수십 수백 마리의 야생 돌고래 떼가 높이 점프하는 장관을 직관합니다.',
+    meta: ['⏱ 2시간 승선', '🐬 야생 돌고래 떼', '🐋 2월 회색고래'],
+    desc: '세계에서 가장 돌고래 밀도가 높은 해역으로, 2월은 거대한 회색고래가 이동하는 황금 시즌입니다.',
+    review: '“수족관 돌고래 쇼와는 차원이 다릅니다. 야생 돌고래 수백 마리가 배를 따라오는 모습에 온 가족이 환호했습니다.”',
+    tip: '멀미 걱정이 있으신 어르신이나 아이는 탑승 30분 전 어린이/성인용 멀미약을 복용하시면 더욱 안심입니다.'
+  },
+  {
+    id: 'o10',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'candidate',
+    emoji: '🌊',
+    name: '크리스탈 코브 주립공원',
+    enName: 'Crystal Cove State Park',
+    headline: '태평양 해안 절벽 드라이브 & 파도 앞 오두막 레스토랑',
+    elder: '해변으로 내려갈 필요 없이, 고속도로변 절벽 전망대 벤치에서 탁 트인 파란 태평양 파도를 감상합니다.',
+    kids: '1930년대 지어진 유서 깊은 해변 오두막 마을과 바다 바로 앞 백사장을 구경합니다.',
+    meta: ['⏱ 1.5~2시간', '🌊 해안도로 드라이브', '🍽 해변 브런치'],
+    desc: '남가주에서 가장 잘 보존된 자연 해안선 주립공원으로, 바다 바로 앞의 비치코머(The Beachcomber) 카페가 유명합니다.',
+    review: '“바다 바로 앞에서 파도 소리를 들으며 먹는 팬케이크와 커피 맛은 평생 잊지 못할 추억입니다.”',
+    tip: '해변으로 내려가는 길에 계단이 있으므로, 어르신은 셔틀 카트를 이용하시거나 상부 전망대 위주로 즐기세요.'
+  },
+  {
+    id: 'o11',
+    city: 'oc',
+    cityName: '오렌지카운티 (7박)',
+    type: 'candidate',
+    emoji: '🛍',
+    name: '사우스 코스트 플라자',
+    enName: 'South Coast Plaza (Costa Mesa)',
+    headline: '미국 서부 최대 럭셔리 실내몰 & 딘타이펑 딤섬 (비 올 때 백업)',
+    elder: '완벽한 냉난방과 카펫 바닥, 고급 소파 쉼터가 곳곳에 있어 비가 오거나 쌀쌀한 날 가장 안전한 실내 평지 코스입니다.',
+    kids: '회전목마와 레고 스토어, 장난감 매장, 넓은 실내 분수를 구경합니다.',
+    meta: ['⏱ 2시간', '☔ 우천 시 백업 1위', '🥟 딘타이펑 딤섬'],
+    desc: '미국 서부에서 가장 큰 최고급 실내 쇼핑몰로, 날씨에 구애받지 않고 여유로운 가족 나들이와 외식이 가능합니다.',
+    review: '“2월에 하루 비가 와서 걱정했는데, 여기서 딘타이펑 딤섬 먹고 실내 산책하니 어르신들이 정말 좋아하셨어요.”',
+    tip: '겨울철 혹시라도 비가 스쳐 지나갈 때 야외 일정 대신 1순위로 교체하기에 가장 완벽한 백업 장소입니다.'
+  }
+];
+
+let currentCity = 'all';
+let currentType = 'all';
+
+function renderPlaces() {
+  const listEl = document.getElementById('places-list');
+  const countText = document.getElementById('list-count-text');
+  
+  const filtered = PLACES.filter(p => {
+    const cityMatch = (currentCity === 'all') || (p.city === currentCity);
+    const typeMatch = (currentType === 'all') || (p.type === currentType);
+    return cityMatch && typeMatch;
+  });
+
+  countText.innerText = `총 ${filtered.length}개 추천 명소 (선택 가능)`;
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = '<div style="text-align:center; padding:40px; color:#718096;">조건에 맞는 장소가 없습니다.</div>';
+    return;
+  }
+
+  let html = '';
+  let lastCity = '';
+
+  filtered.forEach(p => {
+    if (p.cityName !== lastCity && currentCity === 'all') {
+      lastCity = p.cityName;
+      html += `
+        <div class="section-title-box">
+          <div class="section-title">${p.cityName}</div>
+          <div class="section-sub">3세대 가족을 위해 엄선된 핵심 명소</div>
+        </div>
+      `;
+    }
+
+    const typeBadge = p.type === 'confirmed' 
+      ? '<span class="badge badge-confirmed">✅ 기본 확정 코스</span>'
+      : '<span class="badge badge-candidate">⭐ 추가 추천 후보</span>';
+
+    html += `
+      <div class="place-card ${p.type}" onclick="openDetail('${p.id}')">
+        <div class="card-top-row">
+          <div class="badge-group">
+            ${typeBadge}
+            <span class="badge badge-city">${p.cityName.split(' ')[0]}</span>
+          </div>
+          <span style="font-size:13px; color:var(--text-muted); font-weight:700;">상세보기 ❯</span>
+        </div>
+
+        <div class="card-title-row">
+          <div class="place-emoji">${p.emoji}</div>
+          <div class="title-wrap">
+            <h2>${p.name}</h2>
+            <div class="en-name">${p.enName}</div>
+          </div>
+        </div>
+
+        <div class="headline-box">
+          💡 ${p.headline}
+        </div>
+
+        <div class="points-container">
+          <div class="point-item point-elder">
+            <span class="point-icon">👴</span>
+            <div class="point-text">
+              <span class="point-label">70대 부모님 안심 포인트</span>
+              ${p.elder}
+            </div>
+          </div>
+          <div class="point-item point-kids">
+            <span class="point-icon">👶</span>
+            <div class="point-text">
+              <span class="point-label">7세 손주 환호 포인트</span>
+              ${p.kids}
+            </div>
+          </div>
+        </div>
+
+        <div class="card-bottom-row">
+          <div class="meta-tags">
+            ${p.meta.map(m => `<span class="meta-tag">${m}</span>`).join('')}
+          </div>
+          <button class="btn-detail" onclick="event.stopPropagation(); openDetail('${p.id}')">
+            꿀팁 보기 ❯
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  listEl.innerHTML = html;
+}
+
+function filterCity(city, btn) {
+  currentCity = city;
+  document.querySelectorAll('.city-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPlaces();
+}
+
+function filterType(type, btn) {
+  currentType = type;
+  document.querySelectorAll('.type-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPlaces();
+}
+
+function openDetail(id) {
+  const p = PLACES.find(item => item.id === id);
+  if (!p) return;
+
+  document.getElementById('modalEmoji').innerText = p.emoji;
+  document.getElementById('modalTitle').innerText = p.name;
+  document.getElementById('modalEnTitle').innerText = p.enName;
+  document.getElementById('modalDesc').innerText = p.desc;
+  document.getElementById('modalElder').innerText = p.elder;
+  document.getElementById('modalKids').innerText = p.kids;
+  document.getElementById('modalReview').innerText = p.review || '방문자 만족도가 매우 높은 추천 명소입니다.';
+  document.getElementById('modalTip').innerText = p.tip;
+
+  const modal = document.getElementById('detailModal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(event) {
+  const modal = document.getElementById('detailModal');
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function copyPageUrl() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    alert('웹페이지 링크가 복사되었습니다! 카카오톡에 붙여넣어 공유하세요.');
+  }).catch(() => {
+    prompt('이 링크를 복사하세요:', window.location.href);
+  });
+}
+
+// 초기 실행
+renderPlaces();
+</script>
+
+</body>
+</html>
